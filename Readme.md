@@ -22,7 +22,7 @@ Goto firmware/src and type make
 Credits
 ----------
 This work is based  on:
-1) Espressif SDK (http://bbs.espressif.com/viewforum.php?f=5)
-2) Sprite_tm's Webserver (http://www.esp8266.com/viewtopic.php?f=6&t=376)
-3) Heatshrink by atomicobject (https://github.com/atomicobject/heatshrink)
+- Espressif SDK (http://bbs.espressif.com/viewforum.php?f=5)
+- Sprite_tm's Webserver (http://www.esp8266.com/viewtopic.php?f=6&t=376)
+- Heatshrink by atomicobject (https://github.com/atomicobject/heatshrink)
 Due to frequent major changes in the code---especially in the SDK---everything is copied into this repo.
