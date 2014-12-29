@@ -160,6 +160,15 @@ sinclude $(PDIR)Makefile
 $(BINODIR)/%.bin: $(IMAGEODIR)/%.out
 	@mkdir -p $(BINODIR)
 	$(OBJCOPY) -O binary $< $@
+	$(OBJCOPY) --only-section .irom0.text -O binary $< $(@:.bin=.irom0text.bin)
+	esptool -eo $< -bo $(@:.bin=.flash.bin) -bs .text -bs .data -bs .rodata -bc -ec
+	@echo "Size irom0.text: `wc -c < $(@:.bin=.irom0text.bin)` byte"
+	@echo "Size flash: `wc -c < $(@:.bin=.flash.bin)` byte"
+
+#todo: look for app1
+flash: all
+	esptool.py --port /dev/ttyUSB0 write_flash 0x00000 $(BINODIR)/$(GEN_BINS:.bin=.flash.bin) 0x10000 $(BINODIR)/$(GEN_BINS:.bin=.irom0text.bin)
+
 
 .PHONY: FORCE
 FORCE:
