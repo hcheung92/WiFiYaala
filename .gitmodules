@@ -1,0 +1,3 @@
+[submodule "firmware-lua"]
+	path = firmware-lua
+	url = https://github.com/nodemcu/nodemcu-firmware.git
