@@ -34,7 +34,8 @@ SUBDIRS=    \
 	smart 	\
 	wofs 	\
 	modules	\
-	spiffs
+	spiffs  \
+	led
 
 endif # } PDIR
 
@@ -79,8 +80,9 @@ COMPONENTS_eagle.app.v6 = \
 	lua/liblua.a 	\
 	smart/smart.a 	\
 	wofs/wofs.a 	\
-	spiffs/spiffs.a 	\
-	modules/libmodules.a
+	spiffs/spiffs.a \
+	led/libled.a	\
+	modules/libmodules.a 
 
 LINKFLAGS_eagle.app.v6 = \
 	-L../lib        \

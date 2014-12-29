@@ -82,7 +82,25 @@
 #include "lwip/dns.h"
 #include "netif/etharp.h"
 
+//sid
+#include "espmissingincludes.h"
+
 #include <string.h>
+
+
+//Evil hack in order not to change struct netif, which seems to be redefined within the closed sources
+char *hostname = NULL;
+
+void dhcp_set_hostname(char *name)
+{
+  hostname = name;
+}
+
+char* dhcp_get_hostname(void)
+{
+  return hostname;
+}
+
 
 /** Default for DHCP_GLOBAL_XID is 0xABCD0000
  * This can be changed by defining DHCP_GLOBAL_XID and DHCP_GLOBAL_XID_HEADER, e.g.
@@ -305,6 +323,17 @@ dhcp_select(struct netif *netif)
           dhcp_option_byte(dhcp, *p++);
         }
       }
+    }
+#else
+    if (hostname != NULL) {
+     const char *p = (const char*)hostname;
+     u8_t namelen = (u8_t)strlen(p);
+     if (namelen > 0) {
+       dhcp_option(dhcp, DHCP_OPTION_HOSTNAME, namelen);
+       while (*p) {
+         dhcp_option_byte(dhcp, *p++);
+       }
+     }
     }
 #endif /* LWIP_NETIF_HOSTNAME */
 
@@ -1044,6 +1073,18 @@ dhcp_renew(struct netif *netif)
         }
       }
     }
+#else
+    if (hostname != NULL) {
+     const char *p = (const char*)hostname;
+     os_printf("%s\n", p);
+     u8_t namelen = (u8_t)strlen(p);
+     if (namelen > 0) {
+       dhcp_option(dhcp, DHCP_OPTION_HOSTNAME, namelen);
+       while (*p) {
+         dhcp_option_byte(dhcp, *p++);
+       }
+     }
+    }
 #endif /* LWIP_NETIF_HOSTNAME */
 
 #if 0
@@ -1106,6 +1147,17 @@ dhcp_rebind(struct netif *netif)
           dhcp_option_byte(dhcp, *p++);
         }
       }
+    }
+#else
+    if (hostname != NULL) {
+     const char *p = (const char*)hostname;
+     u8_t namelen = (u8_t)strlen(p);
+     if (namelen > 0) {
+       dhcp_option(dhcp, DHCP_OPTION_HOSTNAME, namelen);
+       while (*p) {
+         dhcp_option_byte(dhcp, *p++);
+       }
+     }
     }
 #endif /* LWIP_NETIF_HOSTNAME */
 

@@ -206,7 +206,7 @@ _BEGIN_STD_C
 #endif
 
 #ifdef __XTENSA__
-#if __XTENSA_WINDOWED_ABI__
+#if defined(__XTENSA_WINDOWED_ABI__) && __XTENSA_WINDOWED_ABI__
 
 /* The jmp_buf structure for Xtensa windowed ABI holds the following
    (where "proc" is the procedure that calls setjmp): 4-12 registers
