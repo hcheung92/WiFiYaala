@@ -93,7 +93,11 @@ char *hostname = NULL;
 
 void dhcp_set_hostname(char *name)
 {
-  hostname = name;
+	if(hostname != NULL)
+		os_free(hostname);
+	hostname = os_malloc(os_strlen(name));
+	if(hostname != NULL)
+		os_strcpy(hostname, name);
 }
 
 char* dhcp_get_hostname(void)

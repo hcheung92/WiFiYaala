@@ -77,6 +77,23 @@
 #define ROM_MODULES_ADC
 #endif
 
+#if defined(LUA_USE_MODULES_HOSTNAME)
+#define MODULES_HOSTNAME   "hostname"
+#define ROM_MODULES_HOSTNAME   \
+    _ROM(MODULES_HOSTNAME, luaopen_hostname, hostname_map)
+#else
+#define ROM_MODULES_HOSTNAME
+#endif
+
+#if defined(LUA_USE_MODULES_LED)
+#define MODULES_LED       "led"
+#define ROM_MODULES_LED   \
+    _ROM(MODULES_LED, luaopen_led, led_map)
+#else
+#define ROM_MODULES_LED
+#endif
+
+
 #if defined(LUA_USE_MODULES_UART)
 #define MODULES_UART       "uart"
 #define ROM_MODULES_UART   \
@@ -103,7 +120,6 @@
 
 #define LUA_MODULES_ROM      \
         ROM_MODULES_GPIO    \
-        ROM_MODULES_PWM		\
         ROM_MODULES_WIFI	\
         ROM_MODULES_I2C     \
         ROM_MODULES_TMR     \
@@ -113,7 +129,11 @@
         ROM_MODULES_ADC     \
         ROM_MODULES_UART    \
         ROM_MODULES_OW      \
-        ROM_MODULES_BIT
+        ROM_MODULES_BIT	    \
+        ROM_MODULES_HOSTNAME \
+        ROM_MODULES_LED
+//        ROM_MODULES_PWM		timer used otherwise
+
 
 #endif
 

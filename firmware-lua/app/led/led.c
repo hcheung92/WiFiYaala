@@ -7,23 +7,26 @@
 #include "os_type.h"
 #include "user_interface.h"
 #include "espmissingincludes.h"
+#include "mem.h"
 
 #include "led/led.h"
 #include "pca9685.h"
 #include "apa102.h"
 
-led_t led[LED_MAX];
+led_t *led = NULL;
+unsigned int leds = 0;
 
 os_event_t    procTaskQueue[1];
 //int i=0;
 
 void inline led_refresh(void)
 {
+	uint32_t apastate =0;
 	uint32_t loop;
 
-	apa102_start();
 
-	for(loop=0; loop<LED_MAX; loop++)
+
+	for(loop=0; loop<leds; loop++)
 	{
 		if(led[loop].steps)
 		{
@@ -44,56 +47,66 @@ void inline led_refresh(void)
 			pca9685_set32(led[loop].misc.channel, red, grn, blu);
 			break;
 		case LED_APA102:
+			if(!apastate)
+			{
+				apa102_start();
+				apastate++;
+			}
 			apa102_set32(red, grn, blu);
 			break;
-		default:
-			os_printf("LED%u: unknown hardware\n", (unsigned int)loop);
+		//default:
+			//os_printf("LED%u: unknown hardware\n", (unsigned int)loop);
 		}
 
 
 	}
 
-	apa102_stop(LED_MAX);
+	if(apastate)
+		apa102_stop(LED_MAX);
 }
 
 static void ICACHE_FLASH_ATTR procTask(os_event_t *events)
 {
-//	if(i>1)
-//		os_printf("!");
-//	i=0;
-	led_refresh();
+	if(leds)
+		led_refresh();
 
 }
 
 LOCAL void tim1_intr_handler(void)
 {
 	RTC_CLR_REG_MASK(FRC1_INT_ADDRESS, FRC1_INT_CLR_MASK);
-	RTC_REG_WRITE(FRC1_LOAD_ADDRESS, US_TO_RTC_TIMER_TICKS(LED_INTERVALL_MS*1000));
-	system_os_post(USER_TASK_PRIO_1, 0, '0');
-//	i++;
+	if(leds)
+	{
+		RTC_REG_WRITE(FRC1_LOAD_ADDRESS, US_TO_RTC_TIMER_TICKS(LED_INTERVALL_MS*1000));
+		system_os_post(USER_TASK_PRIO_1, 0, '0');
+	}
 }
 
 
 //public
 
-void led_init(void)
+void led_deinit(void)
 {
+	leds = 0;
+	if(led != NULL)
+		os_free(led);
+
+}
+
+int led_init(int newLeds)
+{
+	if(leds || led != NULL)
+		led_deinit();
+
+	led = os_malloc(sizeof(led_t) * newLeds);
+	if(led == NULL)
+		return 0;
+	leds = newLeds;
+
 	pca9685_init();
-	apa102_init(LED_MAX);
+	apa102_init(leds);
 
-	//can be automated (dynamic)
-	led[0].type = LED_PCA9685;
-	led[0].dim = 0;
-	led[0].misc.channel = 0;
-	led[1].type = LED_PCA9685;
-	led[1].dim = 0;
-	led[1].misc.channel = 1;
-	led[2].type = LED_PCA9685;
-	led[2].dim = 0;
-	led[2].misc.channel = 2;
-	led[3].type = LED_APA102;
-	led[3].dim = 0;
-
+	os_memset(led, 0, sizeof(led_t)*leds);
 
 	system_os_task(procTask, USER_TASK_PRIO_1, procTaskQueue, 1);
 
@@ -104,12 +117,39 @@ void led_init(void)
 	RTC_REG_WRITE(FRC1_CTRL_ADDRESS, DIVDED_BY_16 | FRC1_ENABLE_TIMER | TM_EDGE_INT);
 	RTC_REG_WRITE(FRC1_LOAD_ADDRESS, US_TO_RTC_TIMER_TICKS(LED_INTERVALL_MS*1000));
 
+	return leds;
 }
 
-void led_set(uint32_t channel, rgb8_t ledValue, uint32_t ms)
+int led_setTypeApa102(unsigned int from, unsigned int to)
+{
+	if(to >= leds || from >= leds)
+		return 0;
+
+	unsigned int i;
+	for(i=from; i<=to; i++)
+	{
+		led[i].type = LED_APA102;
+	}
+
+	return to-from+1;
+}
+
+int led_setTypePca9685(unsigned int ledidx, unsigned int channel)
+{
+	if(ledidx >= leds)
+		return 0;
+
+	led[ledidx].type = LED_PCA9685;
+	led[ledidx].misc.channel = channel;
+
+	return 1;
+}
+
+
+int led_set(uint32_t channel, rgb8_t ledValue, uint32_t ms)
 {
 	if(channel >= LED_MAX)
-		return;
+		return 0;
 
 	sint32_t targetRed = ledValue.red<<23 | 0x00400000;
 	sint32_t targetGrn = ledValue.grn<<23 | 0x00400000;
@@ -132,14 +172,16 @@ void led_set(uint32_t channel, rgb8_t ledValue, uint32_t ms)
 		//os_printf("led%d: stepCol=%d target=%d col=%d\n", (int)channel, (int)led[channel].colorStep.red,(int)targetRed, (int)led[channel].color.red);
 	}
 
+	return 1;
 
 }
 
-void led_setDim(uint32_t channel, uint8_t value)
+int led_setDim(uint32_t channel, uint8_t value)
 {
 	if(channel >= LED_MAX)
-		return;
+		return 0;
 
 	led[channel].dim = value & 0x0F;
+	return 1;
 }
 

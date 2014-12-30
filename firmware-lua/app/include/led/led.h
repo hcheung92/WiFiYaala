@@ -117,9 +117,13 @@ typedef enum {
 } TIMER_INT_MODE;
 
 
-void led_init(void);
-void led_set(uint32_t channel, rgb8_t ledValue, uint32_t ms);
-void led_setDim(uint32_t channel, uint8_t value);
+void led_deinit(void);
+int led_init(int newLeds);
+int led_set(uint32_t channel, rgb8_t ledValue, uint32_t ms);
+int led_setDim(uint32_t channel, uint8_t value);
+
+int led_setTypeApa102(unsigned int from, unsigned int to);
+int led_setTypePca9685(unsigned int ledidx, unsigned int channel);
 
 
 #endif /* LED_H_ */

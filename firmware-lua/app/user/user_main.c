@@ -152,18 +152,18 @@ void user_init(void)
     task_init();
     system_os_post(USER_TASK_PRIO_0,SIG_LUA,'s');
 
-	led_init();
+//	led_init();
 	//Disarm timer
-	os_timer_disarm(&some_timer);
+//	os_timer_disarm(&some_timer);
 
 	//Setup timer
-	os_timer_setfn(&some_timer, (os_timer_func_t *) some_timerfunc, NULL);
+//	os_timer_setfn(&some_timer, (os_timer_func_t *) some_timerfunc, NULL);
 
 	//Arm the timer
 	//1000 is the fire time in ms
 	//0 for once and 1 for repeating
-	some_timerfunc(NULL);
-	some_timerfunc(NULL);
-	some_timerfunc(NULL);
-	os_timer_arm(&some_timer, 1000, 1);
+//	some_timerfunc(NULL);
+//	some_timerfunc(NULL);
+//	some_timerfunc(NULL);
+//	os_timer_arm(&some_timer, 1000, 1);
 }
