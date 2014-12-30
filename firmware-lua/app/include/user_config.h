@@ -1,7 +1,7 @@
 #ifndef __USER_CONFIG_H__
 #define __USER_CONFIG_H__
 
-#define NODE_VERSION	"NodeMcu 0.9.4"
+#define NODE_VERSION	"Yaala 0.9.4"
 #define BUILD_DATE	"build 20141230"
 #define FLASH_512K
 // #define FLASH_1M
