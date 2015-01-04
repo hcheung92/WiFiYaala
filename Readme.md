@@ -1,3 +1,6 @@
+This file needs to be revised!!! We've changed everything...
+
+
 WiFi Yaala
 ==========
 Yaala = Yet Another Ambient Light Approach    using a ESP8622 chip
