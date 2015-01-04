@@ -41,7 +41,7 @@ void ICACHE_FLASH_ATTR spi_master_init(uint8 spi_no)
 	WRITE_PERI_REG(SPI_FLASH_USER(spi_no), regvalue);
 	WRITE_PERI_REG(SPI_FLASH_CTRL1(spi_no), 0); //reduces time between transmissions by 1us
 	//fastest:    WRITE_PERI_REG(SPI_FLASH_CLOCK(spi_no), (0<<SPI_CLKDIV_PRE_S) | (5<<SPI_CLKCNT_N_S) | (0<<SPI_CLKCNT_H_S) | (4<<SPI_CLKCNT_L_S)); //clear bit 31,set SPI clock div
-	WRITE_PERI_REG(SPI_FLASH_CLOCK(spi_no), (0<<SPI_CLKDIV_PRE_S) | (8<<SPI_CLKCNT_N_S) | (0<<SPI_CLKCNT_H_S) | (4<<SPI_CLKCNT_L_S)); //clear bit 31,set SPI clock div
+	WRITE_PERI_REG(SPI_FLASH_CLOCK(spi_no), (0<<SPI_CLKDIV_PRE_S) | (10<<SPI_CLKCNT_N_S) | (0<<SPI_CLKCNT_H_S) | (5<<SPI_CLKCNT_L_S)); //clear bit 31,set SPI clock div
 }
 
 void ICACHE_FLASH_ATTR spi_master_16bit_write(uint8 spi_no, uint8_t lowFirstByte, uint8 highLastByte)

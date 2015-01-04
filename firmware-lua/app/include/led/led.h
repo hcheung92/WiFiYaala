@@ -8,7 +8,6 @@
 #ifndef LED_H_
 #define LED_H_
 
-#define LED_MAX			4
 #define LED_INTERVALL_MS	15			//min 2
 
 enum

@@ -17,7 +17,6 @@ led_t *led = NULL;
 unsigned int leds = 0;
 
 os_event_t    procTaskQueue[1];
-//int i=0;
 
 void inline led_refresh(void)
 {
@@ -62,7 +61,7 @@ void inline led_refresh(void)
 	}
 
 	if(apastate)
-		apa102_stop(LED_MAX);
+		apa102_stop(leds);
 }
 
 static void ICACHE_FLASH_ATTR procTask(os_event_t *events)
@@ -148,7 +147,7 @@ int led_setTypePca9685(unsigned int ledidx, unsigned int channel)
 
 int led_set(uint32_t channel, rgb8_t ledValue, uint32_t ms)
 {
-	if(channel >= LED_MAX)
+	if(channel >= leds)
 		return 0;
 
 	sint32_t targetRed = ledValue.red<<23 | 0x00400000;
@@ -178,7 +177,7 @@ int led_set(uint32_t channel, rgb8_t ledValue, uint32_t ms)
 
 int led_setDim(uint32_t channel, uint8_t value)
 {
-	if(channel >= LED_MAX)
+	if(channel >= leds)
 		return 0;
 
 	led[channel].dim = value & 0x0F;
