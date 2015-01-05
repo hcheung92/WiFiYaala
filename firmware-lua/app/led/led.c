@@ -81,7 +81,6 @@ LOCAL void tim1_intr_handler(void)
 	}
 }
 
-
 //public
 
 void led_deinit(void)
