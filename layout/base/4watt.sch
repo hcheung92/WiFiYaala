@@ -10785,7 +10785,11 @@ Marquardt, RAFI, ITT, TYCO and others&lt;p&gt;
 <junction x="193.04" y="134.62"/>
 <pinref part="U2" gate="G$1" pin="#OE"/>
 <wire x1="198.12" y1="142.24" x2="193.04" y2="142.24" width="0.1524" layer="91"/>
-<wire x1="193.04" y1="142.24" x2="193.04" y2="134.62" width="0.1524" layer="91"/>
+<wire x1="193.04" y1="142.24" x2="193.04" y2="137.16" width="0.1524" layer="91"/>
+<pinref part="U2" gate="G$1" pin="EXTCLK"/>
+<wire x1="193.04" y1="137.16" x2="193.04" y2="134.62" width="0.1524" layer="91"/>
+<wire x1="198.12" y1="137.16" x2="193.04" y2="137.16" width="0.1524" layer="91"/>
+<junction x="193.04" y="137.16"/>
 </segment>
 <segment>
 <pinref part="GND10" gate="1" pin="GND"/>
