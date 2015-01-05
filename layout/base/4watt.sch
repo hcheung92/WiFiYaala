@@ -10455,17 +10455,17 @@ Marquardt, RAFI, ITT, TYCO and others&lt;p&gt;
 <part name="T3" library="transistor" deviceset="BC848" device=""/>
 <part name="T4" library="transistor" deviceset="BC848" device=""/>
 <part name="T5" library="transistor" deviceset="BC848" device=""/>
-<part name="R8" library="rcl-2" deviceset="R-EU_" device="M1206" value="3,3-3,9"/>
-<part name="R9" library="rcl-2" deviceset="R-EU_" device="M1206" value="3,3-3,9"/>
-<part name="R6" library="rcl-2" deviceset="R-EU_" device="M1206" value="3,3-3,9"/>
-<part name="R7" library="rcl-2" deviceset="R-EU_" device="M1206" value="3,3-3,9"/>
-<part name="R10" library="rcl-2" deviceset="R-EU_" device="M1206" value="3,3-3,9"/>
-<part name="R11" library="rcl-2" deviceset="R-EU_" device="M1206" value="3,3-3,9"/>
-<part name="R5" library="rcl-2" deviceset="R-EU_" device="M1206" value="3,3-3,9"/>
-<part name="R12" library="rcl-2" deviceset="R-EU_" device="M1206" value="3,3-3,9"/>
-<part name="R13" library="rcl-2" deviceset="R-EU_" device="R0603" value="1k5"/>
-<part name="R14" library="rcl-2" deviceset="R-EU_" device="R0603" value="1k5"/>
-<part name="R15" library="rcl-2" deviceset="R-EU_" device="R0603" value="1k5"/>
+<part name="R8" library="rcl-2" deviceset="R-EU_" device="M1206" value="3R6"/>
+<part name="R9" library="rcl-2" deviceset="R-EU_" device="M1206" value="3R6"/>
+<part name="R6" library="rcl-2" deviceset="R-EU_" device="M1206" value="3R6"/>
+<part name="R7" library="rcl-2" deviceset="R-EU_" device="M1206" value="3R6"/>
+<part name="R10" library="rcl-2" deviceset="R-EU_" device="M1206" value="3R6"/>
+<part name="R11" library="rcl-2" deviceset="R-EU_" device="M1206" value="3R6"/>
+<part name="R5" library="rcl-2" deviceset="R-EU_" device="M1206" value="3R6"/>
+<part name="R12" library="rcl-2" deviceset="R-EU_" device="M1206" value="3R6"/>
+<part name="R13" library="rcl-2" deviceset="R-EU_" device="R0603" value="360"/>
+<part name="R14" library="rcl-2" deviceset="R-EU_" device="R0603" value="360"/>
+<part name="R15" library="rcl-2" deviceset="R-EU_" device="R0603" value="360"/>
 <part name="GND14" library="supply1" deviceset="GND" device=""/>
 <part name="GND17" library="supply1" deviceset="GND" device=""/>
 <part name="GND22" library="supply1" deviceset="GND" device=""/>
@@ -10479,9 +10479,9 @@ Marquardt, RAFI, ITT, TYCO and others&lt;p&gt;
 <part name="LED1" library="sid" deviceset="JH-4RGBW14G30-E2A" device=""/>
 <part name="Q4" library="transistor-fet" deviceset="IRF7413" device=""/>
 <part name="T6" library="transistor" deviceset="BC848" device=""/>
-<part name="R16" library="rcl-2" deviceset="R-EU_" device="M1206" value="3,3-3,9"/>
-<part name="R17" library="rcl-2" deviceset="R-EU_" device="M1206" value="3,3-3,9"/>
-<part name="R18" library="rcl-2" deviceset="R-EU_" device="R0603" value="1k5"/>
+<part name="R16" library="rcl-2" deviceset="R-EU_" device="M1206" value="3R6"/>
+<part name="R17" library="rcl-2" deviceset="R-EU_" device="M1206" value="3R6"/>
+<part name="R18" library="rcl-2" deviceset="R-EU_" device="R0603" value="360"/>
 <part name="GND16" library="supply1" deviceset="GND" device=""/>
 <part name="GND19" library="supply1" deviceset="GND" device=""/>
 <part name="GND21" library="supply1" deviceset="GND" device=""/>
@@ -10517,6 +10517,8 @@ Marquardt, RAFI, ITT, TYCO and others&lt;p&gt;
 <part name="SV1" library="sid" deviceset="1X2SMD-2.54LIEGEND" device=""/>
 <part name="SV2" library="sid" deviceset="1X4SMD-2.54LIEGEND" device=""/>
 <part name="GND30" library="supply1" deviceset="GND" device=""/>
+<part name="C9" library="rcl" deviceset="C-EU" device="C0603" value="100n"/>
+<part name="GND31" library="supply1" deviceset="GND" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -10531,8 +10533,6 @@ Marquardt, RAFI, ITT, TYCO and others&lt;p&gt;
 <text x="104.14" y="109.22" size="1.778" layer="94">Button</text>
 <text x="7.62" y="7.62" size="1.778" layer="94">UART</text>
 <text x="167.64" y="27.94" size="1.778" layer="94">ESP8266</text>
-<text x="177.8" y="12.7" size="1.778" layer="91">TODO Btn+ poti?</text>
-<text x="177.8" y="10.16" size="1.778" layer="91">todo: power connector</text>
 </plain>
 <instances>
 <instance part="GND1" gate="1" x="73.66" y="15.24"/>
@@ -10597,6 +10597,8 @@ Marquardt, RAFI, ITT, TYCO and others&lt;p&gt;
 <instance part="SV1" gate="G$1" x="127" y="149.86" rot="R180"/>
 <instance part="SV2" gate="G$1" x="22.86" y="53.34" rot="R180"/>
 <instance part="GND30" gate="1" x="30.48" y="15.24"/>
+<instance part="C9" gate="G$1" x="243.84" y="45.72"/>
+<instance part="GND31" gate="1" x="243.84" y="33.02"/>
 </instances>
 <busses>
 </busses>
@@ -10822,6 +10824,11 @@ Marquardt, RAFI, ITT, TYCO and others&lt;p&gt;
 <wire x1="25.4" y1="50.8" x2="30.48" y2="50.8" width="0.1524" layer="91"/>
 <wire x1="30.48" y1="50.8" x2="30.48" y2="17.78" width="0.1524" layer="91"/>
 </segment>
+<segment>
+<pinref part="C9" gate="G$1" pin="2"/>
+<pinref part="GND31" gate="1" pin="GND"/>
+<wire x1="243.84" y1="35.56" x2="243.84" y2="40.64" width="0.1524" layer="91"/>
+</segment>
 </net>
 <net name="N$12" class="0">
 <segment>
@@ -10959,6 +10966,8 @@ Marquardt, RAFI, ITT, TYCO and others&lt;p&gt;
 <wire x1="243.84" y1="71.12" x2="246.38" y2="71.12" width="0.1524" layer="91"/>
 <wire x1="243.84" y1="71.12" x2="243.84" y2="86.36" width="0.1524" layer="91"/>
 <junction x="243.84" y="71.12"/>
+<pinref part="C9" gate="G$1" pin="1"/>
+<wire x1="243.84" y1="71.12" x2="243.84" y2="48.26" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="GPIO0" class="0">
@@ -11108,6 +11117,10 @@ Marquardt, RAFI, ITT, TYCO and others&lt;p&gt;
 </sheet>
 <sheet>
 <plain>
+<text x="30.48" y="86.36" size="1.778" layer="94">3.0V</text>
+<text x="93.98" y="86.36" size="1.778" layer="94">3.0V</text>
+<text x="154.94" y="86.36" size="1.778" layer="94">3.0V</text>
+<text x="215.9" y="86.36" size="1.778" layer="94">3.0V</text>
 </plain>
 <instances>
 <instance part="Q2" gate="G$1" x="53.34" y="86.36"/>
