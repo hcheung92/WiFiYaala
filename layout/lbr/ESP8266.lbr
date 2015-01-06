@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="7.2.0">
+<eagle version="6.5.0">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -206,6 +206,8 @@
 <smd name="CH_PD" x="12.3" y="0.3" dx="2.54" dy="1.27" layer="1" rot="R90"/>
 <smd name="ADC" x="10.3" y="0.3" dx="2.54" dy="1.27" layer="1" rot="R90"/>
 <smd name="RESET" x="8.3" y="0.3" dx="2.54" dy="1.27" layer="1" rot="R90"/>
+<text x="10.16" y="8.89" size="1.27" layer="25">&gt;Name</text>
+<text x="10.16" y="6.35" size="1.27" layer="27">&gt;Value</text>
 </package>
 </packages>
 <symbols>
@@ -265,7 +267,7 @@
 </symbol>
 </symbols>
 <devicesets>
-<deviceset name="MOD-WIFI-ESP8266-DEV" prefix="U">
+<deviceset name="MOD-WIFI-ESP8266-DEV" prefix="IC">
 <description>Olimex Development board&lt;BR&gt;
 &lt;A HREF="https://www.olimex.com/Products/Modules/Ethernet/MOD-WIFI-ESP8266-DEV/open-source-hardware#"&gt;Online Shop&lt;/A&gt;</description>
 <gates>
