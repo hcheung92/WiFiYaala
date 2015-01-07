@@ -22,7 +22,6 @@
 #include "driver/uart.h"
 #include "mem.h"
 
-
 #define SIG_LUA 0
 #define TASK_QUEUE_LEN 4
 os_event_t *taskQueue;
