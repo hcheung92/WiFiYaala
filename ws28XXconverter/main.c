@@ -15,6 +15,9 @@
 #define CLK	B,0
 
 
+//todo optinal: change latter r16 to r18 and tell gcc that we use those.
+//todo: enable pin change on switcher and reset device on interrupt
+
 int main(void)
 {
 	INPUT(IN);
