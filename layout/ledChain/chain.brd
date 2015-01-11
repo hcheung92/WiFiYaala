@@ -147,6 +147,9 @@
 <vertex x="74.4728" y="51.6636"/>
 <vertex x="75.4888" y="51.6636"/>
 </polygon>
+<text x="75.3872" y="60.7568" size="0.9144" layer="48" font="vector" ratio="18" rot="MR0">+</text>
+<text x="75.4126" y="49.8348" size="0.9144" layer="48" font="vector" ratio="18" rot="MR0">-</text>
+<text x="52.6542" y="59.3598" size="0.9144" layer="48" font="vector" ratio="18" rot="MR0">v1.0</text>
 </plain>
 <libraries>
 <library name="rcl-2">
