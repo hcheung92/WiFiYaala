@@ -41,13 +41,13 @@ endif # } PDIR
 APPDIR = .
 LDDIR = ../ld
 
-CCFLAGS += -Os
 
 TARGET_LDFLAGS =		\
 	-nostdlib		\
 	-Wl,-EL \
 	--longcalls \
 	--text-section-literals
+
 
 ifeq ($(FLAVOR),debug)
     TARGET_LDFLAGS += -g -O2
@@ -157,10 +157,18 @@ sinclude $(PDIR)Makefile
 #  generate bin file
 #
 
+ifeq ($(OS),Windows_NT)
+	PORT = com1
+else
+	PORT = /dev/ttyUSB0
+endif
+
 $(BINODIR)/%.bin: $(IMAGEODIR)/%.out
 	@mkdir -p $(BINODIR)
-	$(OBJCOPY) -O binary $< $@
+	../tools/esptool.py elf2image $< -o $(FIRMWAREDIR)
+
+flash:
+	../tools/esptool.py -p $(PORT) write_flash 0x00000 ../bin/0x00000.bin 0x10000 ../bin/0x10000.bin
 
 .PHONY: FORCE
 FORCE:
-
