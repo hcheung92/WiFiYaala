@@ -284,17 +284,17 @@ Source: http://www.leotronics.co.uk/Conexcon/Data%20Sheets/sec.%20A/1296ing.pdf<
 <text x="5.08" y="-2.54" size="1.27" layer="27" rot="R90">&gt;VALUE</text>
 </package>
 <package name="5PIN_STIFTLEISTE_1,27MM">
-<pad name="1" x="0" y="0" drill="0.8" diameter="1.1" shape="square" rot="R180"/>
-<pad name="2" x="1.27" y="0" drill="0.8" diameter="1.1" rot="R90"/>
-<pad name="3" x="2.54" y="0" drill="0.8" diameter="1.1" rot="R90"/>
-<pad name="4" x="3.81" y="0" drill="0.8" diameter="1.1" rot="R90"/>
+<pad name="1" x="0" y="0" drill="0.75" diameter="1.07" shape="square" rot="R180"/>
+<pad name="2" x="1.27" y="0" drill="0.75" diameter="1.05" rot="R90"/>
+<pad name="3" x="2.54" y="0" drill="0.75" diameter="1.05" rot="R90"/>
+<pad name="4" x="3.81" y="0" drill="0.75" diameter="1.05" rot="R90"/>
 <text x="1.5" y="0.8" size="0.8" layer="25">&gt;NAME</text>
 <text x="1.5" y="-1.6" size="0.8" layer="27">&gt;VALUE</text>
 <wire x1="-0.635" y1="0.635" x2="5.715" y2="0.635" width="0.127" layer="21"/>
 <wire x1="5.715" y1="0.635" x2="5.715" y2="-0.635" width="0.127" layer="21"/>
 <wire x1="5.715" y1="-0.635" x2="-0.635" y2="-0.635" width="0.127" layer="21"/>
 <wire x1="-0.635" y1="-0.635" x2="-0.635" y2="0.635" width="0.127" layer="21"/>
-<pad name="5" x="5.08" y="0" drill="0.8" diameter="1.1" rot="R90"/>
+<pad name="5" x="5.08" y="0" drill="0.75" diameter="1.05" rot="R90"/>
 <rectangle x1="-0.238125" y1="-0.238125" x2="0.238125" y2="0.238125" layer="51"/>
 <rectangle x1="1.031875" y1="-0.238125" x2="1.508125" y2="0.238125" layer="51"/>
 <rectangle x1="2.301875" y1="-0.238125" x2="2.778125" y2="0.238125" layer="51"/>
