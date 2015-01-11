@@ -168,6 +168,8 @@ endif
 $(BINODIR)/%.bin: $(IMAGEODIR)/%.out
 	@mkdir -p $(BINODIR)
 	../tools/esptool.py elf2image $< -o $(FIRMWAREDIR)
+	@echo "Size irom0.text: `wc -c < $(FIRMWAREDIR)/0x00000.bin` byte"
+	@echo "Size flash: `wc -c < $(FIRMWAREDIR)/0x10000.bin` byte"
 
 ##old stuff:
 # 	$(OBJCOPY) -O binary $< $@
