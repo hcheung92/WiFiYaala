@@ -8,7 +8,7 @@
 </settings>
 <grid distance="0.1" unitdist="mm" unit="mm" style="lines" multiple="1" display="yes" altdistance="0.025" altunitdist="inch" altunit="inch"/>
 <layers>
-<layer number="1" name="Top" color="4" fill="1" visible="no" active="yes"/>
+<layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
 <layer number="2" name="Route2" color="1" fill="3" visible="no" active="no"/>
 <layer number="3" name="Route3" color="4" fill="3" visible="no" active="no"/>
 <layer number="4" name="Route4" color="1" fill="4" visible="no" active="no"/>
@@ -28,9 +28,9 @@
 <layer number="18" name="Vias" color="2" fill="1" visible="yes" active="yes"/>
 <layer number="19" name="Unrouted" color="6" fill="1" visible="yes" active="yes"/>
 <layer number="20" name="Dimension" color="15" fill="1" visible="yes" active="yes"/>
-<layer number="21" name="tPlace" color="7" fill="1" visible="no" active="yes"/>
+<layer number="21" name="tPlace" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="22" name="bPlace" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="23" name="tOrigins" color="15" fill="1" visible="no" active="yes"/>
+<layer number="23" name="tOrigins" color="15" fill="1" visible="yes" active="yes"/>
 <layer number="24" name="bOrigins" color="15" fill="1" visible="yes" active="yes"/>
 <layer number="25" name="tNames" color="7" fill="1" visible="no" active="yes"/>
 <layer number="26" name="bNames" color="7" fill="1" visible="no" active="yes"/>
@@ -53,12 +53,12 @@
 <layer number="43" name="vRestrict" color="2" fill="10" visible="no" active="yes"/>
 <layer number="44" name="Drills" color="7" fill="1" visible="no" active="yes"/>
 <layer number="45" name="Holes" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="46" name="Milling" color="3" fill="1" visible="no" active="yes"/>
+<layer number="46" name="Milling" color="3" fill="1" visible="yes" active="yes"/>
 <layer number="47" name="Measures" color="7" fill="1" visible="no" active="yes"/>
-<layer number="48" name="Document" color="7" fill="1" visible="no" active="yes"/>
+<layer number="48" name="Document" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="49" name="Reference" color="7" fill="1" visible="no" active="yes"/>
 <layer number="50" name="dxf" color="7" fill="1" visible="no" active="no"/>
-<layer number="51" name="tDocu" color="7" fill="1" visible="no" active="yes"/>
+<layer number="51" name="tDocu" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="52" name="bDocu" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="53" name="tGND_GNDA" color="7" fill="9" visible="no" active="no"/>
 <layer number="54" name="bGND_GNDA" color="1" fill="9" visible="no" active="no"/>
@@ -160,6 +160,22 @@
 <wire x1="35.5" y1="16.4" x2="35.5" y2="7.4" width="0.6096" layer="46"/>
 <wire x1="53" y1="16.4" x2="53" y2="7.4" width="0.6096" layer="46"/>
 <wire x1="35.5" y1="32.9" x2="35.5" y2="0.1" width="0.2" layer="21"/>
+<text x="19.6" y="16.4" size="0.8" layer="16" font="vector" rot="MR270">Universal
+
+4*Onecolor</text>
+<text x="89.4" y="31.5" size="0.8" layer="16" font="vector" rot="MR0">v1.0</text>
+<text x="16.6" y="0.5" size="1.1" layer="48" font="vector" ratio="12" rot="MR0">W  B  12V  G  R</text>
+<text x="34.1" y="0.5" size="1.1" layer="48" font="vector" ratio="12" rot="MR0">W  B  12V  G  R</text>
+<text x="51.6" y="0.5" size="1.1" layer="48" font="vector" ratio="12" rot="MR0">W  B  12V  G  R</text>
+<text x="69.1" y="0.5" size="1.1" layer="48" font="vector" ratio="12" rot="MR0">W  B  12V  G  R</text>
+<text x="77.8" y="0.5" size="1.1" layer="48" font="vector" ratio="12" rot="MR0">GND 12V</text>
+<text x="37.1" y="32" size="1.1" layer="48" font="vector" ratio="12" rot="MR180">12V GND</text>
+<text x="19.6" y="32" size="1.1" layer="48" font="vector" ratio="12" rot="MR180">12V GND</text>
+<text x="2.1" y="32" size="1.1" layer="48" font="vector" ratio="12" rot="MR180">12V GND</text>
+<text x="65.5" y="2" size="1.1" layer="48" font="vector" ratio="12" rot="MR0">OUTPUT 1</text>
+<text x="48" y="2" size="1.1" layer="48" font="vector" ratio="12" rot="MR0">OUTPUT 2</text>
+<text x="30.5" y="2" size="1.1" layer="48" font="vector" ratio="12" rot="MR0">OUTPUT 3</text>
+<text x="13" y="2" size="1.1" layer="48" font="vector" ratio="12" rot="MR0">OUTPUT 4</text>
 </plain>
 <libraries>
 <library name="con-yaala">
@@ -3701,4 +3717,10 @@ design rules under a new name.</description>
 </signals>
 </board>
 </drawing>
+<compatibility>
+<note version="6.3" minversion="6.2.2" severity="warning">
+Since Version 6.2.2 text objects can contain more than one line,
+which will not be processed correctly with this version.
+</note>
+</compatibility>
 </eagle>
