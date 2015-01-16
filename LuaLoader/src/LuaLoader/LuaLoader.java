@@ -12,13 +12,20 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
+import java.nio.Buffer;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -34,18 +41,28 @@ public class LuaLoader extends JFrame implements ActionListener, SerialPortEvent
 
 	String[] serialPortsArray;
 	
-	
+	//setup
 	JButton portRefreshBtn;
 	JComboBox serialPortCombox;
-	JTextArea luaRxTa;
-	JScrollPane luaRxSta;
-	JTextField luaCmdTf;
-	
 	JToggleButton connectTbtn;
 	JCheckBox rtsChkbox;
 	JCheckBox dtrChkbox;
 	
 	SerialCom serial = new SerialCom();
+
+	
+	//ram	
+	JTextArea luaRxTa;
+	JScrollPane luaRxSta;
+	JTextField luaCmdTf;
+	JButton selectRunFileBtn;
+	final JFileChooser fc = new JFileChooser();
+	JTextField runFileTf;
+	JButton runFileBtn;
+	BufferedReader runFileBufferedReader = null;
+	JCheckBox priorResetChkbox;
+	
+	int waitPrompts;
 	
 	
 	/**
@@ -164,25 +181,30 @@ public class LuaLoader extends JFrame implements ActionListener, SerialPortEvent
 		JPanel filePanel = new JPanel(new GridBagLayout());
 
 		//RAM
-		JButton selectRunFileBtn = new JButton("Select File");
+		selectRunFileBtn = new JButton("Select a File");
+		selectRunFileBtn.addActionListener(this);
+		fc.addChoosableFileFilter(new OpenFileFilter("lua","lua Files") );
 		c.gridx=0;
 		c.gridy=0;
 		ramPanel.add(selectRunFileBtn, c);
 		
-		JTextField runFileTf = new JTextField(30);
+		runFileTf = new JTextField(30);
+		runFileTf.setText("/Users/sid/Desktop/test.lua");												//DEBUG
 		c.gridx=1;
 		c.gridy=0;
 		c.gridwidth=2;
 		ramPanel.add(runFileTf, c);
 
-		JButton runFileBtn = new JButton("Run File");
+		runFileBtn = new JButton("Run File");
+		runFileBtn.addActionListener(this);
+		runFileBtn.setEnabled(false);
 		c.gridx=3;
 		c.gridy=0;
 		c.gridwidth=1;
 		c.insets = new Insets(10, 10, 10, 3);
 		ramPanel.add(runFileBtn, c);
 		
-		JCheckBox priorResetChkbox = new JCheckBox("start clean (reset)");
+		priorResetChkbox = new JCheckBox("start clean (reset)");
 		c.gridx=4;
 		c.gridy=0;
 		c.insets = new Insets(10, 3, 10, 10);
@@ -256,14 +278,16 @@ public class LuaLoader extends JFrame implements ActionListener, SerialPortEvent
 		    }
 		}
 		else if(e.getSource() == connectTbtn)			//connect button
-		{
+		{																					//TODO telnet
 			if(connectTbtn.isSelected())		//connect
 			{
 				try 
 				{
 					serial.connect((String)serialPortCombox.getSelectedItem(), rtsChkbox.isSelected(), dtrChkbox.isSelected());
+					runFileBtn.setEnabled(true);
 				} catch (Exception e1) 
 				{
+					runFileBtn.setEnabled(false);
 					connectTbtn.setSelected(false);
 					e1.printStackTrace();
 				}
@@ -272,9 +296,15 @@ public class LuaLoader extends JFrame implements ActionListener, SerialPortEvent
 			{
 				try {
 					serial.disconnect();
-				} catch (IOException e1) {
+				}
+				catch (IOException e1) 
+				{
 					connectTbtn.setSelected(false);
 					e1.printStackTrace();
+				}
+				finally
+				{
+					runFileBtn.setEnabled(false);
 				}
 			}
 			
@@ -297,15 +327,66 @@ public class LuaLoader extends JFrame implements ActionListener, SerialPortEvent
 		}
 		else if(e.getSource() == luaCmdTf)
 		{
-			try {
-				serial.out.write(luaCmdTf.getText().getBytes());
-				serial.out.write("\r\n".getBytes());
-				luaCmdTf.setText("");
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+			if(connectTbtn.isSelected())
+			{
+				try {													//todo telnet, connection wrapper??
+					serial.out.write(luaCmdTf.getText().getBytes());
+					serial.out.write("\r\n".getBytes());
+					luaCmdTf.setText("");
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
+		}
+		else if(e.getSource() == selectRunFileBtn)
+		{
+			int returnVal = fc.showOpenDialog(this);
 			
+	        if (returnVal == JFileChooser.APPROVE_OPTION) 
+	        {
+	           runFileTf.setText(fc.getSelectedFile().getAbsolutePath());
+	        }
+		}
+		else if(e.getSource() == runFileBtn)
+		{
+			if(connectTbtn.isSelected())
+			{
+				try {
+					runFileBufferedReader = new BufferedReader(new FileReader(runFileTf.getText()));
+				} catch (FileNotFoundException e1) {
+					e1.printStackTrace();
+					JOptionPane.showMessageDialog(this, e1.getMessage());
+					return;
+				}
+				
+				if(priorResetChkbox.isSelected())
+				{
+					try {
+						serial.out.write("node.restart()\r\n".getBytes());
+						waitPrompts = 2;
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+				else
+				{
+					try {
+						String fstr = runFileBufferedReader.readLine();
+						if(fstr != null)
+						{
+							serial.out.write(fstr.getBytes());
+							serial.out.write("\r\n".getBytes());
+							waitPrompts = 1;
+						}
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+				
+			}
 		}
 		else
 		{
@@ -321,11 +402,36 @@ public class LuaLoader extends JFrame implements ActionListener, SerialPortEvent
 	{
         try
         {
-            System.out.print("Start ");
+ //           System.out.print("Start ");
             byte[] data = new byte[serial.in.available()*2];
             int read = serial.in.read(data);
-            String sentence = new String(data, "UTF-8");
+            String sentence = new String(data, 0, read,"UTF-8");
             
+            if(sentence.contains(">"))										//needs significant improvements, check for return error, "\r\n> " or "\r\n>> ", etc
+            {
+            	if(waitPrompts > 0 && --waitPrompts==0)
+            	{
+            		if(runFileBufferedReader != null)
+            		{
+            			String fstr = runFileBufferedReader.readLine();
+            			if(fstr != null)
+            			{
+//            				System.out.println("send");
+            				serial.out.write(fstr.getBytes());
+            				serial.out.write("\r\n".getBytes());
+               				waitPrompts = 1;
+            			}
+            			else
+            			{
+            				runFileBufferedReader = null;
+            			}
+            		}
+            		else
+            		{
+            			System.out.println("Prompt found. Nothing to do.");
+            		}
+            	}
+            }
             luaRxTa.append(sentence);
 
         }
