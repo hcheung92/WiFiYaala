@@ -16,6 +16,8 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
 import java.io.Reader;
 import java.nio.Buffer;
 
@@ -61,6 +63,9 @@ public class LuaLoader extends JFrame implements ActionListener, SerialPortEvent
 	JButton runFileBtn;
 	BufferedReader runFileBufferedReader = null;
 	JCheckBox priorResetChkbox;
+	FileUploader fUploader;
+	PipedOutputStream toFileUploaderPipe;
+	Thread fUploadThread;
 	
 	int waitPrompts;
 	
@@ -352,40 +357,28 @@ public class LuaLoader extends JFrame implements ActionListener, SerialPortEvent
 		{
 			if(connectTbtn.isSelected())
 			{
+				//ram case
+				if(fUploadThread != null && fUploader != null)
+				{
+					fUploader.terminate();
+					try {
+						toFileUploaderPipe.write("\r\n".getBytes());
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						//e1.printStackTrace();
+					}
+				}
+
+				
+				toFileUploaderPipe = new PipedOutputStream();
 				try {
-					runFileBufferedReader = new BufferedReader(new FileReader(runFileTf.getText()));
-				} catch (FileNotFoundException e1) {
-					e1.printStackTrace();
-					JOptionPane.showMessageDialog(this, e1.getMessage());
-					return;
+					fUploader = new FileUploader(serial.out, new PipedInputStream(toFileUploaderPipe), luaRxTa, runFileTf.getText(), priorResetChkbox.isSelected());
+					fUploadThread = new Thread(fUploader);
+					fUploadThread.start();
+				} catch (IOException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
 				}
-				
-				if(priorResetChkbox.isSelected())
-				{
-					try {
-						serial.out.write("node.restart()\r\n".getBytes());
-						waitPrompts = 2;
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-				}
-				else
-				{
-					try {
-						String fstr = runFileBufferedReader.readLine();
-						if(fstr != null)
-						{
-							serial.out.write(fstr.getBytes());
-							serial.out.write("\r\n".getBytes());
-							waitPrompts = 1;
-						}
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-				}
-				
 			}
 		}
 		else
@@ -396,7 +389,8 @@ public class LuaLoader extends JFrame implements ActionListener, SerialPortEvent
 		
 	}
 
-	
+
+	char lastAdded = 0;
 	@Override
 	public synchronized void serialEvent(SerialPortEvent arg0) 
 	{
@@ -406,33 +400,26 @@ public class LuaLoader extends JFrame implements ActionListener, SerialPortEvent
             byte[] data = new byte[serial.in.available()*2];
             int read = serial.in.read(data);
             String sentence = new String(data, 0, read,"UTF-8");
-            
-            if(sentence.contains(">"))										//needs significant improvements, check for return error, "\r\n> " or "\r\n>> ", etc
+
+            if(toFileUploaderPipe != null && fUploader != null && fUploadThread != null && fUploadThread.isAlive())
             {
-            	if(waitPrompts > 0 && --waitPrompts==0)
-            	{
-            		if(runFileBufferedReader != null)
-            		{
-            			String fstr = runFileBufferedReader.readLine();
-            			if(fstr != null)
-            			{
-//            				System.out.println("send");
-            				serial.out.write(fstr.getBytes());
-            				serial.out.write("\r\n".getBytes());
-               				waitPrompts = 1;
-            			}
-            			else
-            			{
-            				runFileBufferedReader = null;
-            			}
-            		}
-            		else
-            		{
-            			System.out.println("Prompt found. Nothing to do.");
-            		}
-            	}
+ //           	System.out.println("to fileuploader: '" + sentence+"' length:" + sentence.length());
+            	toFileUploaderPipe.write(data,0 ,read);
+            	toFileUploaderPipe.flush();
             }
-            luaRxTa.append(sentence);
+            
+
+            //avoid blank lines
+            for(char ch : sentence.toCharArray())
+            {
+            	
+            	if(lastAdded == '\n' && (ch == '\r' || ch == '\n'))
+            		continue;
+            	luaRxTa.append(ch + "");
+            	lastAdded = ch;
+            		
+            }
+            //luaRxTa.append(sentence);
 
         }
         catch ( IOException e )
