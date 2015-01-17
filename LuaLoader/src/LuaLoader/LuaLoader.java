@@ -34,7 +34,9 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
+import javax.swing.JTree;
 import javax.swing.text.DefaultCaret;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 public class LuaLoader extends JFrame implements ActionListener, SerialPortEventListener{
 
@@ -61,14 +63,20 @@ public class LuaLoader extends JFrame implements ActionListener, SerialPortEvent
 	final JFileChooser fc = new JFileChooser();
 	JTextField runFileTf;
 	JButton runFileBtn;
-	BufferedReader runFileBufferedReader = null;
 	JCheckBox priorResetChkbox;
 	FileUploader fUploader;
 	PipedOutputStream toFileUploaderPipe;
 	Thread fUploadThread;
 	
-	int waitPrompts;
-	
+	//file
+	JButton uploadFileBtn;
+	JButton refreshFileBtn;
+	JLabel flashFileName;
+	JTree fileTree;
+	JTextArea flashFileTa;
+	JLabel fileSizeLabel;
+	JButton updateFileBtn;
+	JButton saveFileBtn;
 	
 	/**
 	 * 
@@ -222,8 +230,8 @@ public class LuaLoader extends JFrame implements ActionListener, SerialPortEvent
 	    caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 	    luaRxTa.setLineWrap(true);
 	    luaRxTa.setWrapStyleWord(true);
-		luaRxSta = new JScrollPane(luaRxTa); 
 		luaRxTa.setEditable(false);
+		luaRxSta = new JScrollPane(luaRxTa); 
 		c.gridx=0;
 		c.gridy=1;
 		c.gridwidth=5;
@@ -241,17 +249,74 @@ public class LuaLoader extends JFrame implements ActionListener, SerialPortEvent
 
 		
 		//FILE
+		uploadFileBtn = new JButton("Upload File");
+		uploadFileBtn.addActionListener(this);
 		c.gridx=0;
 		c.gridy=0;
 		c.gridwidth=1;
-		filePanel.add(new JLabel("File Browser... TODO"), c);
+		filePanel.add(uploadFileBtn, c);
+
+		refreshFileBtn = new JButton("Refresh");
+		refreshFileBtn.addActionListener(this);
+		c.gridx=1;
+		c.gridy=0;
+		filePanel.add(refreshFileBtn, c);
+
+		c.gridx=2;
+		c.gridy=0;
+		filePanel.add(new JLabel("Flash file:"), c);
 		
-		JButton uploadFileBtn = new JButton("Upload File");
+		c.gridx=3;
+		c.gridy=0;
+		c.gridwidth=2;
+		flashFileName = new JLabel("none");
+		filePanel.add(flashFileName, c);
+				
 		c.gridx=0;
 		c.gridy=1;
-		filePanel.add(uploadFileBtn, c);
+		c.gridwidth=2;
+	    DefaultMutableTreeNode top = new DefaultMutableTreeNode("Flash");
+		fileTree = new JTree(top);
+		//TODO listener
+		JScrollPane fileSTree = new JScrollPane(fileTree);
+		filePanel.add(fileSTree, c);
 		
+		flashFileTa = new JTextArea(20, 50);
+		flashFileTa.setLineWrap(true);
+		flashFileTa.setWrapStyleWord(true);
+		JScrollPane flashFileSTa = new JScrollPane(flashFileTa); 
+		flashFileTa.setEditable(true);
+		c.gridx=2;
+		c.gridy=1;
+		c.gridwidth=3;
+		c.insets = new Insets(10, 10, 0, 10);
+		filePanel.add(flashFileSTa, c);
 		
+		c.gridx=0;
+		c.gridy=3;
+		c.gridwidth=1;
+		filePanel.add(new JLabel("Size:"), c);
+
+		fileSizeLabel = new JLabel("");
+		c.gridx=1;
+		c.gridy=3;
+		filePanel.add(fileSizeLabel, c);
+		
+		saveFileBtn = new JButton("Save to disk");
+		saveFileBtn.addActionListener(this);
+		c.gridx=3;
+		c.gridy=3;
+		c.gridwidth=1;
+		filePanel.add(saveFileBtn, c);
+		
+		updateFileBtn = new JButton("Update file");
+		updateFileBtn.addActionListener(this);
+		c.gridx=4;
+		c.gridy=3;
+		c.gridwidth=1;
+		filePanel.add(updateFileBtn, c);
+		
+		///
 		c.gridx=0;
 		c.gridy=1;
 		c.gridwidth=3;
