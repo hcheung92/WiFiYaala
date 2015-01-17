@@ -54,6 +54,9 @@ public class LuaLoader extends JFrame implements ActionListener, SerialPortEvent
 	
 	SerialCom serial = new SerialCom();
 
+	Uploader uploader;
+	PipedOutputStream toUploaderPipe;
+	Thread uploadThread;
 	
 	//ram	
 	JTextArea luaRxTa;
@@ -64,9 +67,7 @@ public class LuaLoader extends JFrame implements ActionListener, SerialPortEvent
 	JTextField runFileTf;
 	JButton runFileBtn;
 	JCheckBox priorResetChkbox;
-	FileUploader fUploader;
-	PipedOutputStream toFileUploaderPipe;
-	Thread fUploadThread;
+
 	
 	//file
 	JButton uploadFileBtn;
@@ -77,6 +78,7 @@ public class LuaLoader extends JFrame implements ActionListener, SerialPortEvent
 	JLabel fileSizeLabel;
 	JButton updateFileBtn;
 	JButton saveFileBtn;
+	JButton delFileBtn;
 	
 	/**
 	 * 
@@ -250,6 +252,7 @@ public class LuaLoader extends JFrame implements ActionListener, SerialPortEvent
 		
 		//FILE
 		uploadFileBtn = new JButton("Upload File");
+		uploadFileBtn.setEnabled(false);
 		uploadFileBtn.addActionListener(this);
 		c.gridx=0;
 		c.gridy=0;
@@ -309,6 +312,13 @@ public class LuaLoader extends JFrame implements ActionListener, SerialPortEvent
 		c.gridwidth=1;
 		filePanel.add(saveFileBtn, c);
 		
+		delFileBtn = new JButton("Delete");
+		delFileBtn.addActionListener(this);
+		c.gridx=2;
+		c.gridy=3;
+		c.gridwidth=1;
+		filePanel.add(delFileBtn, c);
+		
 		updateFileBtn = new JButton("Update file");
 		updateFileBtn.addActionListener(this);
 		c.gridx=4;
@@ -354,10 +364,10 @@ public class LuaLoader extends JFrame implements ActionListener, SerialPortEvent
 				try 
 				{
 					serial.connect((String)serialPortCombox.getSelectedItem(), rtsChkbox.isSelected(), dtrChkbox.isSelected());
-					runFileBtn.setEnabled(true);
+					connected();
 				} catch (Exception e1) 
 				{
-					runFileBtn.setEnabled(false);
+					disconnected();
 					connectTbtn.setSelected(false);
 					e1.printStackTrace();
 				}
@@ -374,7 +384,7 @@ public class LuaLoader extends JFrame implements ActionListener, SerialPortEvent
 				}
 				finally
 				{
-					runFileBtn.setEnabled(false);
+					disconnected();
 				}
 			}
 			
@@ -423,28 +433,56 @@ public class LuaLoader extends JFrame implements ActionListener, SerialPortEvent
 			if(connectTbtn.isSelected())
 			{
 				//ram case
-				if(fUploadThread != null && fUploader != null)
+				if(uploadThread != null && uploader != null)
 				{
-					fUploader.terminate();
+					uploader.terminate();
 					try {
-						toFileUploaderPipe.write("\r\n".getBytes());
+						toUploaderPipe.write("\r\n".getBytes());
 					} catch (IOException e1) {
-						// TODO Auto-generated catch block
 						//e1.printStackTrace();
 					}
 				}
 
 				
-				toFileUploaderPipe = new PipedOutputStream();
+				toUploaderPipe = new PipedOutputStream();
 				try {
-					fUploader = new FileUploader(serial.out, new PipedInputStream(toFileUploaderPipe), luaRxTa, runFileTf.getText(), priorResetChkbox.isSelected());
-					fUploadThread = new Thread(fUploader);
-					fUploadThread.start();
+					uploader = new RunFileUploader(serial.out, new PipedInputStream(toUploaderPipe), luaRxTa, runFileTf.getText(), priorResetChkbox.isSelected());
+					uploadThread = new Thread(uploader);
+					uploadThread.start();
 				} catch (IOException e2) {
-					// TODO Auto-generated catch block
 					e2.printStackTrace();
 				}
 			}
+		}
+		else if(e.getSource() == uploadFileBtn)
+		{
+			int returnVal = fc.showOpenDialog(this);
+			
+	        if (returnVal == JFileChooser.APPROVE_OPTION) 
+	        {
+	        	
+	        	String flashName = JOptionPane.showInputDialog(this, "Change name in flash to: (leave blank or press cancel if not)");
+	        	
+				if(uploadThread != null && uploader != null)
+				{
+					if(uploadThread.isAlive())
+					{
+						JOptionPane.showMessageDialog(this, "Another thread seems to be running");
+						return;
+					}
+				}
+
+				
+				toUploaderPipe = new PipedOutputStream();
+				try {
+					uploader = new FlashFileUploader(serial.out, new PipedInputStream(toUploaderPipe), luaRxTa, fc.getSelectedFile().getAbsolutePath(), flashName, this);
+					uploadThread = new Thread(uploader);
+					uploadThread.start();
+				} catch (IOException e2) {
+					e2.printStackTrace();
+				}
+	        	
+	        }
 		}
 		else
 		{
@@ -466,11 +504,11 @@ public class LuaLoader extends JFrame implements ActionListener, SerialPortEvent
             int read = serial.in.read(data);
             String sentence = new String(data, 0, read,"UTF-8");
 
-            if(toFileUploaderPipe != null && fUploader != null && fUploadThread != null && fUploadThread.isAlive())
+            if(toUploaderPipe != null && uploader != null && uploadThread != null && uploadThread.isAlive())
             {
  //           	System.out.println("to fileuploader: '" + sentence+"' length:" + sentence.length());
-            	toFileUploaderPipe.write(data,0 ,read);
-            	toFileUploaderPipe.flush();
+            	toUploaderPipe.write(data,0 ,read);
+            	toUploaderPipe.flush();
             }
             
 
@@ -492,5 +530,17 @@ public class LuaLoader extends JFrame implements ActionListener, SerialPortEvent
             e.printStackTrace();
             System.exit(-1);
         } 	
+	}
+	
+	void connected()
+	{
+		runFileBtn.setEnabled(true);
+		uploadFileBtn.setEnabled(true);
+	}
+	
+	void disconnected()
+	{
+		runFileBtn.setEnabled(false);
+		uploadFileBtn.setEnabled(false);
 	}
 }
