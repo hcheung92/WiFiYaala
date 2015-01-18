@@ -133,9 +133,13 @@ class ESPROM:
         # RTS = CH_PD (i.e reset)
         # DTR = GPIO0
         self._port.setRTS(True)
-        self._port.setDTR(True)
+        self._port.setDTR(False)
+
+        time.sleep(0.2)
         self._port.setRTS(False)
-        time.sleep(0.1)
+        self._port.setDTR(True)
+	time.sleep(0.2)
+        self._port.setRTS(False)
         self._port.setDTR(False)
 
         self._port.timeout = 0.5
