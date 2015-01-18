@@ -88,6 +88,8 @@ void led_deinit(void)
 	leds = 0;
 	if(led != NULL)
 		os_free(led);
+    
+    //todo deinit hardware
 
 }
 
