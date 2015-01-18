@@ -13,14 +13,14 @@
 
 void apa102_init(int amountLeds)
 {
-	spi_master_init(HSPI);
+	led_spi_master_init(HSPI);
 
 	apa102_start();
 	uint32_t i;
 	for (i = 0; i < amountLeds; i++)
 	{
-		spi_master_16bit_write(HSPI, 0xE0, 0);
-		spi_master_16bit_write(HSPI, 0, 0);
+		led_spi_master_16bit_write(HSPI, 0xE0, 0);
+		led_spi_master_16bit_write(HSPI, 0, 0);
 	}
 
 	apa102_stop(amountLeds);
@@ -28,15 +28,15 @@ void apa102_init(int amountLeds)
 
 void apa102_start(void)
 {
-	spi_master_16bit_write(HSPI, 0x00, 0x00);
-	spi_master_16bit_write(HSPI, 0x00, 0x00);
+	led_spi_master_16bit_write(HSPI, 0x00, 0x00);
+	led_spi_master_16bit_write(HSPI, 0x00, 0x00);
 }
 
 void apa102_stop(int amountLeds)
 {
 	int i = 0;
 	for(i=0; i<(amountLeds>>5)+1;i++)
-		spi_master_16bit_write(HSPI, 0xFF, 0xFF);
+		led_spi_master_16bit_write(HSPI, 0xFF, 0xFF);
 
 }
 
@@ -84,8 +84,8 @@ void apa102_set32(uint32_t red, uint32_t grn, uint32_t blu)
 	apa102.grn = g16;
 
 	apa102.global |= 0xE0;
-	spi_master_16bit_write(HSPI, apa102.raw[0], apa102.raw[1]);
-	spi_master_16bit_write(HSPI, apa102.raw[2], apa102.raw[3]);
+	led_spi_master_16bit_write(HSPI, apa102.raw[0], apa102.raw[1]);
+	led_spi_master_16bit_write(HSPI, apa102.raw[2], apa102.raw[3]);
 
 }
 

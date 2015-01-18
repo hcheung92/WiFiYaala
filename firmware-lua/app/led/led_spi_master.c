@@ -9,7 +9,7 @@
 #include "osapi.h"
 #include "led_spi_master.h"
 
-void ICACHE_FLASH_ATTR spi_master_init(uint8 spi_no)
+void ICACHE_FLASH_ATTR led_spi_master_init(uint8 spi_no)
 {
 	uint32 regvalue;
 
@@ -44,7 +44,7 @@ void ICACHE_FLASH_ATTR spi_master_init(uint8 spi_no)
 	WRITE_PERI_REG(SPI_FLASH_CLOCK(spi_no), (0<<SPI_CLKDIV_PRE_S) | (10<<SPI_CLKCNT_N_S) | (0<<SPI_CLKCNT_H_S) | (5<<SPI_CLKCNT_L_S)); //clear bit 31,set SPI clock div
 }
 
-void ICACHE_FLASH_ATTR spi_master_16bit_write(uint8 spi_no, uint8_t lowFirstByte, uint8 highLastByte)
+void ICACHE_FLASH_ATTR led_spi_master_16bit_write(uint8 spi_no, uint8_t lowFirstByte, uint8 highLastByte)
 {
 	uint32 regvalue;
 	if (spi_no > 1)

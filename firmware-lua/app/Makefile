@@ -154,34 +154,6 @@ INCLUDES += -I ./
 PDIR := ../$(PDIR)
 sinclude $(PDIR)Makefile
 
-#########################################################################
-#
-#  generate bin file
-#
-
-ifeq ($(OS),Windows_NT)
-	PORT = com1
-else
-	PORT = /dev/ttyUSB0
-endif
-
-$(BINODIR)/%.bin: $(IMAGEODIR)/%.out
-	@mkdir -p $(BINODIR)
-	../tools/esptool.py elf2image $< -o $(FIRMWAREDIR)
-	@echo "Size irom0.text: `wc -c < $(FIRMWAREDIR)/0x00000.bin` byte"
-	@echo "Size flash: `wc -c < $(FIRMWAREDIR)/0x10000.bin` byte"
-
-##old stuff:
-# 	$(OBJCOPY) -O binary $< $@
-#	$(OBJCOPY) --only-section .irom0.text -O binary $< $(@:.bin=.irom0text.bin)
-#	esptool -eo $< -bo $(@:.bin=.flash.bin) -bs .text -bs .data -bs .rodata -bc -ec
-#	@echo "Size irom0.text: `wc -c < $(@:.bin=.irom0text.bin)` byte"
-#	@echo "Size flash: `wc -c < $(@:.bin=.flash.bin)` byte"
-
-
-
-flash:
-	../tools/esptool.py -p $(PORT) write_flash 0x00000 ../bin/0x00000.bin 0x10000 ../bin/0x10000.bin
 
 .PHONY: FORCE
 FORCE:
