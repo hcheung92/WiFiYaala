@@ -56,26 +56,27 @@ static int ICACHE_FLASH_ATTR lled_dim( lua_State* L )
 }
 
 // Lua: setTypeApa(from, to) , return 0
-static int ICACHE_FLASH_ATTR lled_setApa( lua_State* L )
+static int ICACHE_FLASH_ATTR lled_setType( lua_State* L )
 {
-	  unsigned int from = (unsigned int)luaL_checkinteger( L, 1 );
-	  unsigned int to = (uint8_t) luaL_checkinteger( L, 2 );
+	uint8_t type = (uint8_t)luaL_checkinteger( L, 1 );
+	unsigned int from = (unsigned int)luaL_checkinteger( L, 2 );
+	unsigned int to = (unsigned int) luaL_checkinteger( L, 3 );
 
-	  if(!led_setTypeApa102(from, to))
-		  return luaL_error( L, "setTypeApa from,to" );
-	  else
-		  return 0;
+	if(!led_setType(type, from, to))
+		return luaL_error( L, "setTypeApa type,from,to" );
+	else
+		return 0;
 }
 // Lua: setTypeApa(from, to) , return 0
-static int ICACHE_FLASH_ATTR lled_setPca( lua_State* L )
+static int ICACHE_FLASH_ATTR lled_setWhiteBehav( lua_State* L )
 {
-	  unsigned int ledidx = (unsigned int)luaL_checkinteger( L, 1 );
-	  unsigned int channel = (unsigned int) luaL_checkinteger( L, 2 );
+	uint8_t ch0 = (uint8_t)luaL_checkinteger( L, 1 );
+	uint8_t ch1 = (uint8_t)luaL_checkinteger( L, 2 );
+	uint8_t ch2 = (uint8_t)luaL_checkinteger( L, 3 );
+	uint8_t ch3 = (uint8_t)luaL_checkinteger( L, 4 );
 
-	  if(!led_setTypePca9685(ledidx, channel))
-		  return luaL_error( L, "setTypePca ledidx,channel" );
-	  else
-		  return 0;
+	led_setWhiteBehaviour(ch0, ch1, ch2, ch3);
+	return 0;
 }
 
 // Module function map
@@ -87,8 +88,17 @@ const LUA_REG_TYPE led_map[] =
 	  { LSTRKEY( "deinit" ), LFUNCVAL( lled_deinit ) },
 	  { LSTRKEY( "set" ), LFUNCVAL( lled_set ) },
 	  { LSTRKEY( "dim" ), LFUNCVAL( lled_dim ) },
-	  { LSTRKEY( "setTypeApa" ), LFUNCVAL( lled_setApa ) },
-	  { LSTRKEY( "setTypePca" ), LFUNCVAL( lled_setPca ) },
+	  { LSTRKEY( "setType" ), LFUNCVAL( lled_setType ) },
+	  { LSTRKEY( "setWhiteBehav" ), LFUNCVAL( lled_setWhiteBehav ) },
+	  { LSTRKEY( "PCA9685" ), LNUMVAL( LED_PCA9685 ) },
+	  { LSTRKEY( "APA102" ), LNUMVAL( LED_APA102 ) },
+	  { LSTRKEY( "WS2801" ), LNUMVAL( LED_WS2801 ) },
+	  { LSTRKEY( "WS281X" ), LNUMVAL( LED_WS281X ) },
+	  { LSTRKEY( "WHITE_NA" ), LNUMVAL( WHITE_NA ) },
+	  { LSTRKEY( "WHITE_ADD" ), LNUMVAL( WHITE_ADD ) },
+	  { LSTRKEY( "WHITE_ADJUST" ), LNUMVAL( WHITE_ADJUST ) },
+	  { LSTRKEY( "WHITE_EXTRA" ), LNUMVAL( WHITE_EXTRA ) },
+
 
 //	  { LSTRKEY( "get" ), LFUNCVAL( led_get ) },
 #if LUA_OPTIMIZE_MEMORY > 0
