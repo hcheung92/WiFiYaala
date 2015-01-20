@@ -100,13 +100,6 @@ typedef struct __attribute__((packed))
 	} misc;
 } led_t;
 
-typedef struct __attribute__((packed))
-{
-	rgb16_t color;
-	rgb16_t offset;
-	rgb8_t channel;
-} ledCtl_t;
-
 #define min(a,b) ((a)<(b)?(a):(b))  /**< Find the minimum of 2 numbers. */
 
 

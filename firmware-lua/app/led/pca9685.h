@@ -39,7 +39,7 @@
 #define PCA9685_ALLLED_OFF_H	0xFD
 
 
-#define PCA_LEDS			4
+#define PCA_LEDS		4
 
 #define LED0_RED_CH		0
 #define LED0_GRN_CH		1
@@ -61,40 +61,17 @@
 #define LED3_BLU_CH		14
 #define LED3_WHITE		15
 
-
-#define OFFSET_ZERO		0
-#define OFFSET_FRST		1365
-#define OFFSET_SECD		2730
-#define OFFSET_HALF		682
-#define OFFSET_THREEHALF	2048
-#define OFFSET_FIVEHALF		3412
-
 #define PCA9685_PWM_MASK	0x0FFF
 
-#define LED0_RED_OFFSET		OFFSET_ZERO
-#define LED0_GRN_OFFSET		OFFSET_FRST
-#define LED0_BLU_OFFSET		OFFSET_SECD
-#define LED0_WHITE_OFFSET	OFFSET_THREEHALF
-
-#define LED1_RED_OFFSET		OFFSET_FRST
-#define LED1_GRN_OFFSET		OFFSET_SECD
-#define LED1_BLU_OFFSET		OFFSET_ZERO
-#define LED1_WHITE_OFFSET	OFFSET_FIVEHALF
-
-#define LED2_RED_OFFSET		OFFSET_SECD
-#define LED2_GRN_OFFSET		OFFSET_ZERO
-#define LED2_BLU_OFFSET		OFFSET_FRST
-#define LED2_WHITE_OFFSET	OFFSET_HALF
-
-#define LED3_RED_OFFSET		OFFSET_HALF
-#define LED3_GRN_OFFSET		OFFSET_THREEHALF
-#define LED3_BLU_OFFSET		OFFSET_FIVEHALF
-#define LED3_WHITE_OFFSET	OFFSET_FRST
+typedef struct __attribute__((packed))
+{
+	rgb16_t color;
+	rgb8_t channel;
+} ledCtl_t;
 
 typedef struct __attribute__((packed))
 {
 	uint16_t color;
-	uint16_t offset;
 	uint8_t channel;
 } ledWhiteCtl_t;
 
