@@ -7,26 +7,51 @@
 
 
 #include <avr/io.h>
+#include <avr/interrupt.h>
+#include <avr/wdt.h>
 
 #include "flexport.h"
 
-#define IN	B,2
-#define DATA 	B,1
-#define CLK	B,0
+#define IN		B,2
+#define DATA 		B,1
+#define CLK		B,0
+
+#define SELECT		B,4
+#define SELECTpcint	PCINT4
 
 
-//todo optinal: change latter r16 to r18 and tell gcc that we use those.
-//todo: enable pin change on switcher and reset device on interrupt
+
+ISR(PCINT0_vect)
+{
+	wdt_enable(WDTO_15MS);			//reset
+	while(1);
+}
 
 int main(void)
 {
 	INPUT(IN);
 	CLR(IN);
 
+	INPUT(SELECT);
+	CLR(SELECT);
+
+	wdt_reset();
+	/* Clear WDRF in MCUSR */
+	MCUSR = 0x00;
+	/* Write logical one to WDCE and WDE */
+	WDTCR |= (1<<WDCE) | (1<<WDE);
+	/* Turn off WDT */
+	WDTCR = 0x00;
+
 	OUTPUT(DATA);
 	OUTPUT(CLK);
 	CLR(DATA);
 	CLR(CLK);
+
+	GIMSK = 1<<PCIE;
+	PCMSK = 1<<SELECTpcint;
+	GIFR = 1<<PCIF;			//clear pin change interrupt
+	sei();
 
 	if(GET(IN))
 	{
