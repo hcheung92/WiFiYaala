@@ -1,7 +1,7 @@
 # **NodeMcu** #
-version 0.9.4
+version 0.9.5
 ###A lua based firmware for wifi-soc esp8266
-Build on [ESP8266 sdk 0.9.4](http://bbs.espressif.com/viewtopic.php?f=5&t=90)<br />
+Build on [ESP8266 sdk 0.9.5](http://bbs.espressif.com/viewtopic.php?f=7&t=104)<br />
 Lua core based on [eLua project](http://www.eluaproject.net/)<br />
 File system based on [spiffs](https://github.com/pellepl/spiffs)<br />
 Open source development kit for NodeMCU [nodemcu-devkit](https://github.com/nodemcu/nodemcu-devkit)<br />
@@ -12,23 +12,35 @@ home: [nodemcu.com](http://www.nodemcu.com)<br />
 bbs: [中文论坛Chinese bbs](http://bbs.nodemcu.com)<br />
 Tencent QQ group QQ群: 309957875<br />
 
-# Change log
-2014-12-30<br />
-modify uart.on api, when run_input set to 0, uart.on now can read raw data from uart.<br />
-serial input now accept non-ascii chars.<br />
-fix dev-kit gpio map.<br />
-add setip, setmac, sleeptype api to wifi module. <br />
-add tmr.time() api to get rtc time and calibration.
-
-[more change log](https://github.com/nodemcu/nodemcu-firmware/wiki/nodemcu_api_en#change_log)<br />
-[更多变更日志](https://github.com/nodemcu/nodemcu-firmware/wiki/nodemcu_api_cn#change_log)
 # Summary
 - Easy to access wireless router
-- Based on Lua 5.1.4
+- Based on Lua 5.1.4 (without *io, math, debug, os* module.)
 - Event-Drive programming preferred.
 - Build-in file, timer, pwm, i2c, 1-wire, net, gpio, wifi, adc, uart and system api.
 - GPIO pin re-mapped, use the index to access gpio, i2c, pwm.
-- GPIO Map Table:
+
+# To Do List (pull requests are very welcomed)
+- fix wifi smart connect
+- add spi module
+- add mqtt module
+- add coap module
+
+# Change log
+2015-01-18<br />
+merge mqtt module to [new branch mqtt](https://github.com/nodemcu/nodemcu-firmware/tree/mqtt) from [https://github.com/tuanpmt/esp_mqtt](https://github.com/tuanpmt/esp_mqtt).<br />
+merge spi module from iabdalkader:spi. <br />
+fix #110,set local port to random in client mode.<br />
+modify gpio.read to NOT set pin to input mode automatic.<br />
+add PATH env with C:\MinGW\bin;C:\MinGW\msys\1.0\bin;C:\Python27 in eclipse project. resolve #103.
+
+2015-01-08<br />
+fix net.socket:send() issue when multi sends are called. <br />
+*NOTE*: if data length is bigger than 1460, send next packet AFTER "sent" callback is called.<br />
+fix file.read() api, take 0xFF as a regular byte, not EOF.<br />
+pre_build/latest/nodemcu_512k_latest.bin is removed. use pre_build/latest/nodemcu_latest.bin instead.
+
+[more change log](https://github.com/nodemcu/nodemcu-firmware/wiki/nodemcu_api_en#change_log)<br />
+[更多变更日志](https://github.com/nodemcu/nodemcu-firmware/wiki/nodemcu_api_cn#change_log)
 
 ##GPIO NEW TABLE ( Build 20141219 and later)
 
@@ -98,13 +110,13 @@ add tmr.time() api to get rtc time and calibration.
 </table>
 
 #Build option
-####*GNU toolchain is not tested*
 ####file ./app/include/user_config.h
 ```c
-#define FLASH_512K
+// #define FLASH_512K
 // #define FLASH_1M
 // #define FLASH_2M
 // #define FLASH_4M
+#define FLASH_AUTOSIZE
 ...
 #define LUA_USE_MODULES
 #ifdef LUA_USE_MODULES
@@ -119,12 +131,12 @@ add tmr.time() api to get rtc time and calibration.
 #define LUA_USE_MODULES_ADC
 #define LUA_USE_MODULES_UART
 #define LUA_USE_MODULES_OW
-//#define LUA_USE_MODULES_BIT
+#define LUA_USE_MODULES_BIT
 #endif /* LUA_USE_MODULES */
 ```
 
 #Flash the firmware
-nodemcu_512k.bin: 0x00000<br />
+nodemcu_latest.bin: 0x00000<br />
 for most esp8266 modules, just pull GPIO0 down and restart.<br />
 You can use the [nodemcu-flasher](https://github.com/nodemcu/nodemcu-flasher) to burn the firmware.
 
@@ -134,20 +146,23 @@ eagle.app.v6.irom0text.bin: 0x10000<br />
 esp_init_data_default.bin: 0x7c000<br />
 blank.bin: 0x7e000<br />
 
+*Better run file.format() after flash*
 
 #Connect the hardware in serial
-braudrate:9600
+baudrate:9600
 
 #Start play
 
 ####Connect to your ap
 
 ```lua
-    print(wifi.sta.getip())
-    --0.0.0.0
+    ip = wifi.sta.getip()
+    print(ip)
+    --nil
     wifi.setmode(wifi.STATION)
     wifi.sta.config("SSID","password")
-    print(wifi.sta.getip())
+    ip = wifi.sta.getip()
+    print(ip)
     --192.168.18.110
 ```
 

@@ -1,28 +1,22 @@
 #ifndef __I2C_MASTER_H__
 #define __I2C_MASTER_H__
 
-#define I2C_MASTER_SCL_MUX PERIPHS_IO_MUX_GPIO4_U
+#define I2C_MASTER_SCL_MUX PERIPHS_IO_MUX_MTDI_U
 #define I2C_MASTER_SDA_MUX PERIPHS_IO_MUX_GPIO5_U //PERIPHS_IO_MUX_MTMS_U
-#define I2C_MASTER_SCL_GPIO 4
+#define I2C_MASTER_SCL_GPIO 12
 #define I2C_MASTER_SDA_GPIO 5 //14
-#define I2C_MASTER_SCL_FUNC FUNC_GPIO4
+#define I2C_MASTER_SCL_FUNC FUNC_GPIO12
 #define I2C_MASTER_SDA_FUNC FUNC_GPIO5 //14
 
 //in uS
-#define I2C_DELAY_HALF	1//3
-#define I2C_DELAY_FULL	2//5
-#define I2C_DELAY_LONG	3//8
+#define I2C_DELAY_HALF	0//1//3
+#define I2C_DELAY_FULL	0//2//5
+#define I2C_DELAY_LONG	0//3//8
 
 
 #define I2C_WRITE	0
 #define I2C_READ	1
 
-//#define I2C_MASTER_SDA_MUX PERIPHS_IO_MUX_GPIO2_U
-//#define I2C_MASTER_SCL_MUX PERIPHS_IO_MUX_GPIO0_U
-//#define I2C_MASTER_SDA_GPIO 2
-//#define I2C_MASTER_SCL_GPIO 0
-//#define I2C_MASTER_SDA_FUNC FUNC_GPIO2
-//#define I2C_MASTER_SCL_FUNC FUNC_GPIO0
 
 #if 0
 #define I2C_MASTER_GPIO_SET(pin)  \
@@ -50,6 +44,8 @@
 
 void i2c_master_gpio_init(void);
 void i2c_master_init(void);
+void i2c_master_gpio_deinit(void);
+
 
 #define i2c_master_wait    os_delay_us
 void i2c_master_stop(void);

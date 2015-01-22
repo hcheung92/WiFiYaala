@@ -1,12 +1,19 @@
 #ifndef __USER_CONFIG_H__
 #define __USER_CONFIG_H__
 
-#define NODE_VERSION	"Yaala 0.9.4"
-#define BUILD_DATE	"build 20141230"
-#define FLASH_512K
+#define NODE_VERSION_MAJOR		0U
+#define NODE_VERSION_MINOR		9U
+#define NODE_VERSION_REVISION	5U
+#define NODE_VERSION_INTERNAL   0U
+
+#define NODE_VERSION	"NodeMCU 0.9.5"
+#define BUILD_DATE	    "build 20150118"
+
+// #define FLASH_512K
 // #define FLASH_1M
 // #define FLASH_2M
 // #define FLASH_4M
+#define FLASH_AUTOSIZE
 // #define DEVELOP_VERSION
 #define FULL_VERSION_FOR_USER
 
@@ -28,6 +35,11 @@
 #define NODE_ERR
 #endif	/* NODE_ERROR */
 
+#define ICACHE_STORE_TYPEDEF_ATTR __attribute__((aligned(4),packed))
+#define ICACHE_STORE_ATTR __attribute__((aligned(4)))
+#define ICACHE_RAM_ATTR __attribute__((section(".iram0.text")))
+#define ICACHE_RODATA_ATTR __attribute__((section(".rodata2.text")))
+
 #define CLIENT_SSL_ENABLE
 #define GPIO_INTERRUPT_ENABLE
 
@@ -43,6 +55,7 @@
 #define LUA_USE_MODULES_NET
 //#define LUA_USE_MODULES_PWM
 #define LUA_USE_MODULES_I2C
+#define LUA_USE_MODULES_SPI
 #define LUA_USE_MODULES_TMR
 #define LUA_USE_MODULES_ADC
 #define LUA_USE_MODULES_HOSTNAME

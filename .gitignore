@@ -1,1 +1,3 @@
 /LuaLoader/nbproject/private/
+*.o
+*.d

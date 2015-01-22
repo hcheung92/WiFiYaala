@@ -14,9 +14,23 @@ enum
 {
 	LED_NONE,
 	LED_PCA9685,
-	LED_APA102
-
+	LED_APA102,
+	LED_WS281X,
+	LED_WS2801
 }LED_TYPE;
+
+enum
+{
+	WHITE_NA,					//white gets ignored
+	WHITE_ADJUST,					//some rgb color gets replaced by white
+	WHITE_ADD,					//some rgb color gets added by white channel
+	WHITE_EXTRA					//r channel of 4th-7th PCA led
+}PCA_BEHAV;
+
+#define LEDSTRPOS_RED	0
+#define LEDSTRPOS_GRN	1
+#define LEDSTRPOS_BLU	2
+
 
 typedef union __attribute__((packed))
 {
@@ -86,12 +100,7 @@ typedef struct __attribute__((packed))
 	} misc;
 } led_t;
 
-typedef struct __attribute__((packed))
-{
-	rgb16_t color;
-	rgb16_t offset;
-	rgb8_t channel;
-} ledCtl_t;
+#define min(a,b) ((a)<(b)?(a):(b))  /**< Find the minimum of 2 numbers. */
 
 
 //XXX: 0xffffffff/(80000000/16)=35A
@@ -121,8 +130,8 @@ int led_init(int newLeds);
 int led_set(uint32_t channel, rgb8_t ledValue, uint32_t ms);
 int led_setDim(uint32_t channel, uint8_t value);
 
-int led_setTypeApa102(unsigned int from, unsigned int to);
-int led_setTypePca9685(unsigned int ledidx, unsigned int channel);
+int led_setType(uint8_t type, unsigned int from, unsigned int to);
+void led_setWhiteBehaviour(uint8_t ch0, uint8_t ch1, uint8_t ch2, uint8_t ch3);
 
 
 #endif /* LED_H_ */

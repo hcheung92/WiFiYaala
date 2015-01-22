@@ -1,4 +1,4 @@
-avrtarget/ClockFrequency=24000000
+avrtarget/ClockFrequency=25000000
 avrtarget/ExtRAMSize=0
 avrtarget/ExtendedRAM=false
 avrtarget/MCUType=attiny85
@@ -10,7 +10,7 @@ avrtarget/avrdude/EEPROMFile=
 avrtarget/avrdude/EEPROMFromConfig=true
 avrtarget/avrdude/FlashFile=
 avrtarget/avrdude/FlashFromConfig=true
-avrtarget/avrdude/Fuses/ByteValues=238\:215\:255
+avrtarget/avrdude/Fuses/ByteValues=208\:215\:255
 avrtarget/avrdude/Fuses/FileName=
 avrtarget/avrdude/Fuses/MCUid=attiny85
 avrtarget/avrdude/Fuses/UseFile=false

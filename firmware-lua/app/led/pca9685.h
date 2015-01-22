@@ -39,51 +39,44 @@
 #define PCA9685_ALLLED_OFF_H	0xFD
 
 
-#define LEDS			5
+#define PCA_LEDS		4
 
-#define LED0_RED_CH		2
+#define LED0_RED_CH		0
 #define LED0_GRN_CH		1
-#define LED0_BLU_CH		0
-#define LED1_RED_CH		5
-#define LED1_GRN_CH		4
-#define LED1_BLU_CH		3
-#define LED2_RED_CH		8
-#define LED2_GRN_CH		7
-#define LED2_BLU_CH		6
-#define LED3_RED_CH		11
-#define LED3_GRN_CH		10
-#define LED3_BLU_CH		9
-#define LED4_RED_CH		14
-#define LED4_GRN_CH		13
-#define LED4_BLU_CH		12
+#define LED0_BLU_CH		2
+#define LED0_WHITE		3
 
-#define OFFSET_ZERO		0
-#define OFFSET_FRST		1365
-#define OFFSET_SECD		2730
-#define OFFSET_HALF		682
-#define OFFSET_THREEHALF	2048
-#define OFFSET_FIVEHALF		3412
+#define LED1_RED_CH		4
+#define LED1_GRN_CH		5
+#define LED1_BLU_CH		6
+#define LED1_WHITE		7
+
+#define LED2_RED_CH		8
+#define LED2_GRN_CH		9
+#define LED2_BLU_CH		10
+#define LED2_WHITE		11
+
+#define LED3_RED_CH		12
+#define LED3_GRN_CH		13
+#define LED3_BLU_CH		14
+#define LED3_WHITE		15
 
 #define PCA9685_PWM_MASK	0x0FFF
 
-#define LED0_RED_OFFSET		OFFSET_ZERO
-#define LED0_GRN_OFFSET		OFFSET_FRST
-#define LED0_BLU_OFFSET		OFFSET_SECD
-#define LED1_RED_OFFSET		OFFSET_FRST
-#define LED1_GRN_OFFSET		OFFSET_SECD
-#define LED1_BLU_OFFSET		OFFSET_ZERO
-#define LED2_RED_OFFSET		OFFSET_SECD
-#define LED2_GRN_OFFSET		OFFSET_ZERO
-#define LED2_BLU_OFFSET		OFFSET_FRST
-#define LED3_RED_OFFSET		OFFSET_HALF
-#define LED3_GRN_OFFSET		OFFSET_THREEHALF
-#define LED3_BLU_OFFSET		OFFSET_FIVEHALF
-#define LED4_RED_OFFSET		OFFSET_THREEHALF
-#define LED4_GRN_OFFSET		OFFSET_FIVEHALF
-#define LED4_BLU_OFFSET		OFFSET_HALF
+typedef struct __attribute__((packed))
+{
+	rgb16_t color;
+	rgb8_t channel;
+} ledCtl_t;
 
+typedef struct __attribute__((packed))
+{
+	uint16_t color;
+	uint8_t channel;
+} ledWhiteCtl_t;
 
 void pca9685_init(void);
+void pca9685_deinit(void);
 void pca9685_set32(uint32_t num, uint32_t red, uint32_t grn, uint32_t blu);
 
 #endif /* PWM12BIT_H_ */
