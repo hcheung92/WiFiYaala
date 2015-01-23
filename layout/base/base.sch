@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="7.2.0">
+<eagle version="6.5.0">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -11924,16 +11924,16 @@ Marquardt, RAFI, ITT, TYCO and others&lt;p&gt;
 <part name="GND6" library="supply1" deviceset="GND" device=""/>
 <part name="GND7" library="supply1" deviceset="GND" device=""/>
 <part name="GND8" library="supply1" deviceset="GND" device=""/>
-<part name="C3" library="rcl" deviceset="C-EU" device="C0603" value="22p"/>
-<part name="C4" library="rcl" deviceset="C-EU" device="C0603" value="22p"/>
-<part name="C2" library="rcl" deviceset="C-EU" device="C0603" value="100n"/>
-<part name="U$40" library="sid" deviceset="USB-B" device=""/>
+<part name="C6" library="rcl" deviceset="C-EU" device="C0603" value="22p"/>
+<part name="C7" library="rcl" deviceset="C-EU" device="C0603" value="22p"/>
+<part name="C8" library="rcl" deviceset="C-EU" device="C0603" value="100n"/>
+<part name="X1" library="sid" deviceset="USB-B" device=""/>
 <part name="D1" library="diode" deviceset="DIODE-" device="DO-214AC" value="SK24A"/>
 <part name="GND4" library="supply1" deviceset="GND" device=""/>
 <part name="SJ1" library="jumper" deviceset="SJ" device=""/>
 <part name="P+2" library="supply1" deviceset="+5V" device=""/>
-<part name="R1" library="rcl-2" deviceset="R-EU_" device="R0603" value="4k7"/>
-<part name="R2" library="rcl-2" deviceset="R-EU_" device="R0603" value="10k"/>
+<part name="R2" library="rcl-2" deviceset="R-EU_" device="R0603" value="4k7"/>
+<part name="R3" library="rcl-2" deviceset="R-EU_" device="R0603" value="10k"/>
 <part name="GND5" library="supply1" deviceset="GND" device=""/>
 <part name="IC1" library="sid" deviceset="LM1117IMP" device=""/>
 <part name="P+4" library="supply1" deviceset="+5V" device=""/>
@@ -11942,34 +11942,34 @@ Marquardt, RAFI, ITT, TYCO and others&lt;p&gt;
 <part name="GND12" library="supply1" deviceset="GND" device=""/>
 <part name="GND13" library="supply1" deviceset="GND" device=""/>
 <part name="FRAME1" library="frames" deviceset="A4L-LOC" device=""/>
-<part name="T1" library="transistor-neu-to92" deviceset="BC848" device=""/>
 <part name="T2" library="transistor-neu-to92" deviceset="BC848" device=""/>
-<part name="R3" library="rcl-2" deviceset="R-EU_" device="R0603" value="10k"/>
+<part name="T1" library="transistor-neu-to92" deviceset="BC848" device=""/>
+<part name="R1" library="rcl-2" deviceset="R-EU_" device="R0603" value="10k"/>
 <part name="R4" library="rcl-2" deviceset="R-EU_" device="R0603" value="10k"/>
 <part name="P+7" library="supply1" deviceset="+5V" device=""/>
 <part name="GND16" library="supply1" deviceset="GND" device=""/>
-<part name="C9" library="rcl" deviceset="C-EU" device="C0603" value="100n"/>
+<part name="C5" library="rcl" deviceset="C-EU" device="C0603" value="100n"/>
 <part name="GND18" library="supply1" deviceset="GND" device=""/>
 <part name="+3V2" library="supply1" deviceset="+3V3" device=""/>
 <part name="GND19" library="supply1" deviceset="GND" device=""/>
 <part name="GND20" library="supply1" deviceset="GND" device=""/>
 <part name="P1" library="switch-misc" deviceset="FSM4JSMA-SMD" device=""/>
-<part name="C5" library="rcl-2" deviceset="C-EU" device="C0805" value="22u"/>
+<part name="C2" library="rcl-2" deviceset="C-EU" device="C0805" value="22u"/>
 <part name="+3V3" library="supply1" deviceset="+3V3" device=""/>
 <part name="P+10" library="supply1" deviceset="+5V" device=""/>
 <part name="GND21" library="supply1" deviceset="GND" device=""/>
-<part name="JP5" library="pinhead-2" deviceset="PINHD-2X12" device="_2.54"/>
-<part name="JP6" library="pinhead-2" deviceset="PINHD-2X12" device="_2.54"/>
+<part name="JP1" library="pinhead-2" deviceset="PINHD-2X12" device="_2.54"/>
+<part name="JP2" library="pinhead-2" deviceset="PINHD-2X12" device="_2.54"/>
 <part name="SV1" library="sid" deviceset="1X4SMD-2.54" device=""/>
 <part name="SV2" library="sid" deviceset="1X4SMD-2.54" device=""/>
-<part name="C11" library="rcl-2" deviceset="C-EU" device="C0805" value="22u"/>
-<part name="C7" library="rcl-2" deviceset="C-EU" device="C0805" value="22u"/>
+<part name="C3" library="rcl-2" deviceset="C-EU" device="C0805" value="22u"/>
+<part name="C1" library="rcl-2" deviceset="C-EU" device="C0805" value="22u"/>
 <part name="P+6" library="supply1" deviceset="+5V" device=""/>
 <part name="GND15" library="supply1" deviceset="GND" device=""/>
-<part name="C6" library="rcl-2" deviceset="C-EU" device="C0805" value="22u"/>
+<part name="C4" library="rcl-2" deviceset="C-EU" device="C0805" value="22u"/>
 <part name="+3V4" library="supply1" deviceset="+3V3" device=""/>
 <part name="GND9" library="supply1" deviceset="GND" device=""/>
-<part name="U$1" library="sid" deviceset="USB-MALE-SMT" device=""/>
+<part name="X2" library="sid" deviceset="USB-MALE-SMT" device=""/>
 <part name="GND10" library="supply1" deviceset="GND" device=""/>
 </parts>
 <sheets>
@@ -12013,16 +12013,16 @@ Marquardt, RAFI, ITT, TYCO and others&lt;p&gt;
 <instance part="GND6" gate="1" x="43.18" y="15.24"/>
 <instance part="GND7" gate="1" x="48.26" y="15.24"/>
 <instance part="GND8" gate="1" x="22.86" y="15.24"/>
-<instance part="C3" gate="G$1" x="43.18" y="27.94"/>
-<instance part="C4" gate="G$1" x="48.26" y="27.94"/>
-<instance part="C2" gate="G$1" x="66.04" y="27.94"/>
-<instance part="U$40" gate="G$1" x="25.4" y="33.02" rot="MR0"/>
+<instance part="C6" gate="G$1" x="43.18" y="27.94"/>
+<instance part="C7" gate="G$1" x="48.26" y="27.94"/>
+<instance part="C8" gate="G$1" x="66.04" y="27.94"/>
+<instance part="X1" gate="G$1" x="25.4" y="33.02" rot="MR0"/>
 <instance part="D1" gate="G$1" x="40.64" y="76.2" rot="R90"/>
 <instance part="GND4" gate="1" x="38.1" y="15.24"/>
 <instance part="SJ1" gate="1" x="35.56" y="76.2" rot="R90"/>
 <instance part="P+2" gate="1" x="38.1" y="96.52"/>
-<instance part="R1" gate="G$1" x="50.8" y="66.04" rot="R180"/>
-<instance part="R2" gate="G$1" x="58.42" y="55.88" rot="R90"/>
+<instance part="R2" gate="G$1" x="50.8" y="66.04" rot="R180"/>
+<instance part="R3" gate="G$1" x="58.42" y="55.88" rot="R90"/>
 <instance part="GND5" gate="1" x="58.42" y="15.24"/>
 <instance part="IC1" gate="G$1" x="50.8" y="147.32"/>
 <instance part="P+4" gate="1" x="33.02" y="167.64"/>
@@ -12031,34 +12031,34 @@ Marquardt, RAFI, ITT, TYCO and others&lt;p&gt;
 <instance part="GND12" gate="1" x="33.02" y="116.84"/>
 <instance part="GND13" gate="1" x="71.12" y="116.84"/>
 <instance part="FRAME1" gate="G$1" x="0" y="0"/>
-<instance part="T1" gate="G$1" x="137.16" y="50.8" rot="R270"/>
-<instance part="T2" gate="G$1" x="137.16" y="66.04" rot="R270"/>
-<instance part="R3" gate="G$1" x="129.54" y="71.12"/>
+<instance part="T2" gate="G$1" x="137.16" y="50.8" rot="R270"/>
+<instance part="T1" gate="G$1" x="137.16" y="66.04" rot="R270"/>
+<instance part="R1" gate="G$1" x="129.54" y="71.12"/>
 <instance part="R4" gate="G$1" x="129.54" y="55.88"/>
 <instance part="P+7" gate="1" x="218.44" y="167.64"/>
 <instance part="GND16" gate="1" x="218.44" y="116.84"/>
-<instance part="C9" gate="G$1" x="238.76" y="38.1"/>
+<instance part="C5" gate="G$1" x="238.76" y="38.1"/>
 <instance part="GND18" gate="1" x="238.76" y="27.94"/>
 <instance part="+3V2" gate="G$1" x="185.42" y="93.98"/>
 <instance part="GND19" gate="1" x="180.34" y="27.94"/>
 <instance part="GND20" gate="1" x="134.62" y="116.84"/>
 <instance part="P1" gate="G$1" x="134.62" y="144.78" rot="R180"/>
-<instance part="C5" gate="G$1" x="33.02" y="134.62"/>
+<instance part="C2" gate="G$1" x="33.02" y="134.62"/>
 <instance part="+3V3" gate="G$1" x="66.04" y="96.52"/>
 <instance part="P+10" gate="1" x="190.5" y="93.98"/>
 <instance part="GND21" gate="1" x="231.14" y="27.94"/>
-<instance part="JP5" gate="A" x="198.12" y="58.42"/>
-<instance part="JP6" gate="A" x="220.98" y="58.42"/>
+<instance part="JP1" gate="A" x="198.12" y="58.42"/>
+<instance part="JP2" gate="A" x="220.98" y="58.42"/>
 <instance part="SV1" gate="G$1" x="228.6" y="142.24"/>
-<instance part="SV2" gate="G$1" x="228.6" y="139.7" rot="MR180"/>
-<instance part="C11" gate="G$1" x="71.12" y="134.62"/>
-<instance part="C7" gate="G$1" x="22.86" y="134.62"/>
+<instance part="SV2" gate="G$1" x="228.6" y="139.7" smashed="yes" rot="MR180"/>
+<instance part="C3" gate="G$1" x="71.12" y="134.62"/>
+<instance part="C1" gate="G$1" x="22.86" y="134.62"/>
 <instance part="P+6" gate="1" x="22.86" y="167.64"/>
 <instance part="GND15" gate="1" x="22.86" y="116.84"/>
-<instance part="C6" gate="G$1" x="78.74" y="134.62"/>
+<instance part="C4" gate="G$1" x="78.74" y="134.62"/>
 <instance part="+3V4" gate="G$1" x="78.74" y="167.64"/>
 <instance part="GND9" gate="1" x="78.74" y="116.84"/>
-<instance part="U$1" gate="G$1" x="17.78" y="33.02"/>
+<instance part="X2" gate="G$1" x="17.78" y="33.02"/>
 <instance part="GND10" gate="1" x="10.16" y="15.24"/>
 </instances>
 <busses>
@@ -12069,15 +12069,15 @@ Marquardt, RAFI, ITT, TYCO and others&lt;p&gt;
 <wire x1="48.26" y1="40.64" x2="76.2" y2="40.64" width="0.1524" layer="91"/>
 <wire x1="48.26" y1="40.64" x2="48.26" y2="30.48" width="0.1524" layer="91"/>
 <pinref part="IC2" gate="1" pin="USBDP"/>
-<pinref part="C4" gate="G$1" pin="1"/>
+<pinref part="C7" gate="G$1" pin="1"/>
 <wire x1="48.26" y1="40.64" x2="30.48" y2="40.64" width="0.1524" layer="91"/>
 <junction x="48.26" y="40.64"/>
-<pinref part="U$40" gate="G$1" pin="D+"/>
+<pinref part="X1" gate="G$1" pin="D+"/>
 <wire x1="17.78" y1="38.1" x2="20.32" y2="38.1" width="0.1524" layer="91"/>
 <wire x1="20.32" y1="38.1" x2="20.32" y2="40.64" width="0.1524" layer="91"/>
 <wire x1="20.32" y1="40.64" x2="30.48" y2="40.64" width="0.1524" layer="91"/>
 <junction x="30.48" y="40.64"/>
-<pinref part="U$1" gate="G$1" pin="D+"/>
+<pinref part="X2" gate="G$1" pin="D+"/>
 </segment>
 </net>
 <net name="N$4" class="0">
@@ -12085,15 +12085,15 @@ Marquardt, RAFI, ITT, TYCO and others&lt;p&gt;
 <wire x1="76.2" y1="38.1" x2="43.18" y2="38.1" width="0.1524" layer="91"/>
 <wire x1="43.18" y1="38.1" x2="43.18" y2="30.48" width="0.1524" layer="91"/>
 <pinref part="IC2" gate="1" pin="USBDM"/>
-<pinref part="C3" gate="G$1" pin="1"/>
+<pinref part="C6" gate="G$1" pin="1"/>
 <wire x1="43.18" y1="38.1" x2="30.48" y2="38.1" width="0.1524" layer="91"/>
 <junction x="43.18" y="38.1"/>
-<pinref part="U$40" gate="G$1" pin="D-"/>
+<pinref part="X1" gate="G$1" pin="D-"/>
 <wire x1="17.78" y1="35.56" x2="22.86" y2="35.56" width="0.1524" layer="91"/>
 <wire x1="22.86" y1="35.56" x2="22.86" y2="38.1" width="0.1524" layer="91"/>
 <wire x1="22.86" y1="38.1" x2="30.48" y2="38.1" width="0.1524" layer="91"/>
 <junction x="30.48" y="38.1"/>
-<pinref part="U$1" gate="G$1" pin="D-"/>
+<pinref part="X2" gate="G$1" pin="D-"/>
 </segment>
 </net>
 <net name="+5V" class="1">
@@ -12122,7 +12122,7 @@ Marquardt, RAFI, ITT, TYCO and others&lt;p&gt;
 <junction x="33.02" y="147.32"/>
 <wire x1="33.02" y1="137.16" x2="33.02" y2="147.32" width="0.1524" layer="91"/>
 <junction x="33.02" y="147.32"/>
-<pinref part="C5" gate="G$1" pin="1"/>
+<pinref part="C2" gate="G$1" pin="1"/>
 </segment>
 <segment>
 <wire x1="226.06" y1="144.78" x2="218.44" y2="144.78" width="0.1524" layer="91"/>
@@ -12133,8 +12133,8 @@ Marquardt, RAFI, ITT, TYCO and others&lt;p&gt;
 <junction x="226.06" y="144.78"/>
 </segment>
 <segment>
-<pinref part="JP5" gate="A" pin="23"/>
-<pinref part="JP5" gate="A" pin="24"/>
+<pinref part="JP1" gate="A" pin="23"/>
+<pinref part="JP1" gate="A" pin="24"/>
 <wire x1="195.58" y1="43.18" x2="203.2" y2="43.18" width="0.1524" layer="91"/>
 <pinref part="P+10" gate="1" pin="+5V"/>
 <wire x1="195.58" y1="43.18" x2="190.5" y2="43.18" width="0.1524" layer="91"/>
@@ -12142,7 +12142,7 @@ Marquardt, RAFI, ITT, TYCO and others&lt;p&gt;
 <junction x="195.58" y="43.18"/>
 </segment>
 <segment>
-<pinref part="C7" gate="G$1" pin="1"/>
+<pinref part="C1" gate="G$1" pin="1"/>
 <pinref part="P+6" gate="1" pin="+5V"/>
 <wire x1="22.86" y1="165.1" x2="22.86" y2="137.16" width="0.1524" layer="91"/>
 </segment>
@@ -12151,7 +12151,7 @@ Marquardt, RAFI, ITT, TYCO and others&lt;p&gt;
 <segment>
 <wire x1="66.04" y1="22.86" x2="66.04" y2="17.78" width="0.1524" layer="91"/>
 <pinref part="GND2" gate="1" pin="GND"/>
-<pinref part="C2" gate="G$1" pin="2"/>
+<pinref part="C8" gate="G$1" pin="2"/>
 </segment>
 <segment>
 <wire x1="104.14" y1="35.56" x2="109.22" y2="35.56" width="0.1524" layer="91"/>
@@ -12174,21 +12174,21 @@ Marquardt, RAFI, ITT, TYCO and others&lt;p&gt;
 <segment>
 <wire x1="43.18" y1="17.78" x2="43.18" y2="22.86" width="0.1524" layer="91"/>
 <pinref part="GND6" gate="1" pin="GND"/>
-<pinref part="C3" gate="G$1" pin="2"/>
+<pinref part="C6" gate="G$1" pin="2"/>
 </segment>
 <segment>
 <wire x1="48.26" y1="17.78" x2="48.26" y2="22.86" width="0.1524" layer="91"/>
 <pinref part="GND7" gate="1" pin="GND"/>
-<pinref part="C4" gate="G$1" pin="2"/>
+<pinref part="C7" gate="G$1" pin="2"/>
 </segment>
 <segment>
-<pinref part="U$40" gate="G$1" pin="P$2"/>
+<pinref part="X1" gate="G$1" pin="P$2"/>
 <pinref part="GND8" gate="1" pin="GND"/>
 <wire x1="22.86" y1="22.86" x2="22.86" y2="20.32" width="0.1524" layer="91"/>
 <wire x1="22.86" y1="20.32" x2="22.86" y2="17.78" width="0.1524" layer="91"/>
 <wire x1="22.86" y1="20.32" x2="25.4" y2="20.32" width="0.1524" layer="91"/>
 <junction x="22.86" y="20.32"/>
-<pinref part="U$40" gate="G$1" pin="P$1"/>
+<pinref part="X1" gate="G$1" pin="P$1"/>
 <wire x1="25.4" y1="20.32" x2="25.4" y2="22.86" width="0.1524" layer="91"/>
 </segment>
 <segment>
@@ -12198,7 +12198,7 @@ Marquardt, RAFI, ITT, TYCO and others&lt;p&gt;
 <wire x1="73.66" y1="33.02" x2="73.66" y2="17.78" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="U$40" gate="G$1" pin="GND"/>
+<pinref part="X1" gate="G$1" pin="GND"/>
 <pinref part="GND4" gate="1" pin="GND"/>
 <wire x1="30.48" y1="27.94" x2="38.1" y2="27.94" width="0.1524" layer="91"/>
 <wire x1="38.1" y1="27.94" x2="38.1" y2="17.78" width="0.1524" layer="91"/>
@@ -12206,10 +12206,10 @@ Marquardt, RAFI, ITT, TYCO and others&lt;p&gt;
 <junction x="30.48" y="27.94"/>
 <wire x1="20.32" y1="27.94" x2="20.32" y2="30.48" width="0.1524" layer="91"/>
 <wire x1="20.32" y1="30.48" x2="17.78" y2="30.48" width="0.1524" layer="91"/>
-<pinref part="U$1" gate="G$1" pin="GND"/>
+<pinref part="X2" gate="G$1" pin="GND"/>
 </segment>
 <segment>
-<pinref part="R2" gate="G$1" pin="1"/>
+<pinref part="R3" gate="G$1" pin="1"/>
 <pinref part="GND5" gate="1" pin="GND"/>
 <wire x1="58.42" y1="17.78" x2="58.42" y2="50.8" width="0.1524" layer="91"/>
 </segment>
@@ -12221,12 +12221,12 @@ Marquardt, RAFI, ITT, TYCO and others&lt;p&gt;
 <segment>
 <pinref part="GND12" gate="1" pin="GND"/>
 <wire x1="33.02" y1="119.38" x2="33.02" y2="129.54" width="0.1524" layer="91"/>
-<pinref part="C5" gate="G$1" pin="2"/>
+<pinref part="C2" gate="G$1" pin="2"/>
 </segment>
 <segment>
 <pinref part="GND13" gate="1" pin="GND"/>
 <wire x1="71.12" y1="119.38" x2="71.12" y2="129.54" width="0.1524" layer="91"/>
-<pinref part="C11" gate="G$1" pin="2"/>
+<pinref part="C3" gate="G$1" pin="2"/>
 </segment>
 <segment>
 <wire x1="226.06" y1="137.16" x2="218.44" y2="137.16" width="0.1524" layer="91"/>
@@ -12237,7 +12237,7 @@ Marquardt, RAFI, ITT, TYCO and others&lt;p&gt;
 <junction x="226.06" y="137.16"/>
 </segment>
 <segment>
-<pinref part="C9" gate="G$1" pin="2"/>
+<pinref part="C5" gate="G$1" pin="2"/>
 <pinref part="GND18" gate="1" pin="GND"/>
 <wire x1="238.76" y1="30.48" x2="238.76" y2="33.02" width="0.1524" layer="91"/>
 </segment>
@@ -12245,9 +12245,9 @@ Marquardt, RAFI, ITT, TYCO and others&lt;p&gt;
 <wire x1="180.34" y1="48.26" x2="195.58" y2="48.26" width="0.1524" layer="91"/>
 <pinref part="GND19" gate="1" pin="GND"/>
 <wire x1="180.34" y1="48.26" x2="180.34" y2="30.48" width="0.1524" layer="91"/>
-<pinref part="JP5" gate="A" pin="19"/>
+<pinref part="JP1" gate="A" pin="19"/>
 <junction x="195.58" y="48.26"/>
-<pinref part="JP5" gate="A" pin="20"/>
+<pinref part="JP1" gate="A" pin="20"/>
 <wire x1="195.58" y1="48.26" x2="203.2" y2="48.26" width="0.1524" layer="91"/>
 </segment>
 <segment>
@@ -12261,8 +12261,8 @@ Marquardt, RAFI, ITT, TYCO and others&lt;p&gt;
 <pinref part="P1" gate="G$1" pin="S@1"/>
 </segment>
 <segment>
-<pinref part="JP6" gate="A" pin="24"/>
-<pinref part="JP6" gate="A" pin="23"/>
+<pinref part="JP2" gate="A" pin="24"/>
+<pinref part="JP2" gate="A" pin="23"/>
 <wire x1="218.44" y1="43.18" x2="226.06" y2="43.18" width="0.1524" layer="91"/>
 <pinref part="GND21" gate="1" pin="GND"/>
 <wire x1="226.06" y1="43.18" x2="231.14" y2="43.18" width="0.1524" layer="91"/>
@@ -12270,20 +12270,20 @@ Marquardt, RAFI, ITT, TYCO and others&lt;p&gt;
 <junction x="226.06" y="43.18"/>
 </segment>
 <segment>
-<pinref part="C7" gate="G$1" pin="2"/>
+<pinref part="C1" gate="G$1" pin="2"/>
 <pinref part="GND15" gate="1" pin="GND"/>
 <wire x1="22.86" y1="119.38" x2="22.86" y2="129.54" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="C6" gate="G$1" pin="2"/>
+<pinref part="C4" gate="G$1" pin="2"/>
 <pinref part="GND9" gate="1" pin="GND"/>
 <wire x1="78.74" y1="119.38" x2="78.74" y2="129.54" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="U$1" gate="G$1" pin="S1"/>
+<pinref part="X2" gate="G$1" pin="S1"/>
 <pinref part="GND10" gate="1" pin="GND"/>
 <wire x1="10.16" y1="22.86" x2="10.16" y2="20.32" width="0.1524" layer="91"/>
-<pinref part="U$1" gate="G$1" pin="S2"/>
+<pinref part="X2" gate="G$1" pin="S2"/>
 <wire x1="10.16" y1="20.32" x2="10.16" y2="17.78" width="0.1524" layer="91"/>
 <wire x1="10.16" y1="20.32" x2="12.7" y2="20.32" width="0.1524" layer="91"/>
 <wire x1="12.7" y1="20.32" x2="12.7" y2="22.86" width="0.1524" layer="91"/>
@@ -12295,7 +12295,7 @@ Marquardt, RAFI, ITT, TYCO and others&lt;p&gt;
 <wire x1="76.2" y1="45.72" x2="66.04" y2="45.72" width="0.1524" layer="91"/>
 <wire x1="66.04" y1="45.72" x2="66.04" y2="30.48" width="0.1524" layer="91"/>
 <pinref part="IC2" gate="1" pin="3V3OUT"/>
-<pinref part="C2" gate="G$1" pin="1"/>
+<pinref part="C8" gate="G$1" pin="1"/>
 </segment>
 </net>
 <net name="N$2" class="0">
@@ -12306,11 +12306,11 @@ Marquardt, RAFI, ITT, TYCO and others&lt;p&gt;
 <wire x1="35.56" y1="68.58" x2="38.1" y2="68.58" width="0.1524" layer="91"/>
 <wire x1="38.1" y1="68.58" x2="40.64" y2="68.58" width="0.1524" layer="91"/>
 <wire x1="40.64" y1="68.58" x2="40.64" y2="73.66" width="0.1524" layer="91"/>
-<pinref part="U$40" gate="G$1" pin="VBUS"/>
+<pinref part="X1" gate="G$1" pin="VBUS"/>
 <wire x1="30.48" y1="30.48" x2="38.1" y2="30.48" width="0.1524" layer="91"/>
 <wire x1="38.1" y1="30.48" x2="38.1" y2="66.04" width="0.1524" layer="91"/>
 <junction x="38.1" y="68.58"/>
-<pinref part="R1" gate="G$1" pin="2"/>
+<pinref part="R2" gate="G$1" pin="2"/>
 <wire x1="38.1" y1="66.04" x2="38.1" y2="68.58" width="0.1524" layer="91"/>
 <wire x1="45.72" y1="66.04" x2="38.1" y2="66.04" width="0.1524" layer="91"/>
 <junction x="38.1" y="66.04"/>
@@ -12318,13 +12318,13 @@ Marquardt, RAFI, ITT, TYCO and others&lt;p&gt;
 <junction x="30.48" y="30.48"/>
 <wire x1="22.86" y1="30.48" x2="22.86" y2="33.02" width="0.1524" layer="91"/>
 <wire x1="22.86" y1="33.02" x2="17.78" y2="33.02" width="0.1524" layer="91"/>
-<pinref part="U$1" gate="G$1" pin="VBUS"/>
+<pinref part="X2" gate="G$1" pin="VBUS"/>
 </segment>
 </net>
 <net name="N$6" class="0">
 <segment>
-<pinref part="R2" gate="G$1" pin="2"/>
-<pinref part="R1" gate="G$1" pin="1"/>
+<pinref part="R3" gate="G$1" pin="2"/>
+<pinref part="R2" gate="G$1" pin="1"/>
 <wire x1="55.88" y1="66.04" x2="58.42" y2="66.04" width="0.1524" layer="91"/>
 <pinref part="IC2" gate="1" pin="RESET#"/>
 <wire x1="58.42" y1="66.04" x2="58.42" y2="60.96" width="0.1524" layer="91"/>
@@ -12344,15 +12344,15 @@ Marquardt, RAFI, ITT, TYCO and others&lt;p&gt;
 <junction x="71.12" y="147.32"/>
 <wire x1="71.12" y1="137.16" x2="71.12" y2="144.78" width="0.1524" layer="91"/>
 <junction x="71.12" y="144.78"/>
-<pinref part="C11" gate="G$1" pin="1"/>
+<pinref part="C3" gate="G$1" pin="1"/>
 </segment>
 <segment>
 <wire x1="185.42" y1="45.72" x2="195.58" y2="45.72" width="0.1524" layer="91"/>
 <pinref part="+3V2" gate="G$1" pin="+3V3"/>
 <wire x1="185.42" y1="45.72" x2="185.42" y2="91.44" width="0.1524" layer="91"/>
-<pinref part="JP5" gate="A" pin="21"/>
+<pinref part="JP1" gate="A" pin="21"/>
 <junction x="195.58" y="45.72"/>
-<pinref part="JP5" gate="A" pin="22"/>
+<pinref part="JP1" gate="A" pin="22"/>
 <wire x1="195.58" y1="45.72" x2="203.2" y2="45.72" width="0.1524" layer="91"/>
 </segment>
 <segment>
@@ -12362,7 +12362,7 @@ Marquardt, RAFI, ITT, TYCO and others&lt;p&gt;
 <pinref part="+3V3" gate="G$1" pin="+3V3"/>
 </segment>
 <segment>
-<pinref part="C6" gate="G$1" pin="1"/>
+<pinref part="C4" gate="G$1" pin="1"/>
 <pinref part="+3V4" gate="G$1" pin="+3V3"/>
 <wire x1="78.74" y1="165.1" x2="78.74" y2="137.16" width="0.1524" layer="91"/>
 </segment>
@@ -12370,13 +12370,13 @@ Marquardt, RAFI, ITT, TYCO and others&lt;p&gt;
 <net name="N$1" class="0">
 <segment>
 <pinref part="IC2" gate="1" pin="RTS#"/>
-<pinref part="R3" gate="G$1" pin="1"/>
+<pinref part="R1" gate="G$1" pin="1"/>
 <wire x1="124.46" y1="71.12" x2="116.84" y2="71.12" width="0.1524" layer="91"/>
 <wire x1="116.84" y1="71.12" x2="116.84" y2="68.58" width="0.1524" layer="91"/>
 <wire x1="116.84" y1="68.58" x2="104.14" y2="68.58" width="0.1524" layer="91"/>
 <wire x1="116.84" y1="48.26" x2="116.84" y2="68.58" width="0.1524" layer="91"/>
 <junction x="116.84" y="68.58"/>
-<pinref part="T1" gate="G$1" pin="E"/>
+<pinref part="T2" gate="G$1" pin="E"/>
 <wire x1="132.08" y1="48.26" x2="116.84" y2="48.26" width="0.1524" layer="91"/>
 </segment>
 </net>
@@ -12387,15 +12387,15 @@ Marquardt, RAFI, ITT, TYCO and others&lt;p&gt;
 <wire x1="124.46" y1="55.88" x2="121.92" y2="55.88" width="0.1524" layer="91"/>
 <wire x1="121.92" y1="55.88" x2="121.92" y2="63.5" width="0.1524" layer="91"/>
 <wire x1="121.92" y1="63.5" x2="104.14" y2="63.5" width="0.1524" layer="91"/>
-<pinref part="T2" gate="G$1" pin="E"/>
+<pinref part="T1" gate="G$1" pin="E"/>
 <wire x1="121.92" y1="63.5" x2="132.08" y2="63.5" width="0.1524" layer="91"/>
 <junction x="121.92" y="63.5"/>
 </segment>
 </net>
 <net name="N$7" class="0">
 <segment>
-<pinref part="R3" gate="G$1" pin="2"/>
-<pinref part="T2" gate="G$1" pin="B"/>
+<pinref part="R1" gate="G$1" pin="2"/>
+<pinref part="T1" gate="G$1" pin="B"/>
 <wire x1="137.16" y1="68.58" x2="137.16" y2="71.12" width="0.1524" layer="91"/>
 <wire x1="137.16" y1="71.12" x2="134.62" y2="71.12" width="0.1524" layer="91"/>
 </segment>
@@ -12403,7 +12403,7 @@ Marquardt, RAFI, ITT, TYCO and others&lt;p&gt;
 <net name="N$8" class="0">
 <segment>
 <pinref part="R4" gate="G$1" pin="2"/>
-<pinref part="T1" gate="G$1" pin="B"/>
+<pinref part="T2" gate="G$1" pin="B"/>
 <wire x1="137.16" y1="53.34" x2="137.16" y2="55.88" width="0.1524" layer="91"/>
 <wire x1="137.16" y1="55.88" x2="134.62" y2="55.88" width="0.1524" layer="91"/>
 </segment>
@@ -12412,17 +12412,17 @@ Marquardt, RAFI, ITT, TYCO and others&lt;p&gt;
 <segment>
 <wire x1="226.06" y1="68.58" x2="238.76" y2="68.58" width="0.1524" layer="91"/>
 <label x="241.3" y="68.58" size="1.778" layer="95" xref="yes"/>
-<pinref part="C9" gate="G$1" pin="1"/>
+<pinref part="C5" gate="G$1" pin="1"/>
 <wire x1="238.76" y1="68.58" x2="241.3" y2="68.58" width="0.1524" layer="91"/>
 <wire x1="238.76" y1="68.58" x2="238.76" y2="40.64" width="0.1524" layer="91"/>
 <junction x="238.76" y="68.58"/>
-<pinref part="JP6" gate="A" pin="4"/>
+<pinref part="JP2" gate="A" pin="4"/>
 <junction x="226.06" y="68.58"/>
-<pinref part="JP6" gate="A" pin="3"/>
+<pinref part="JP2" gate="A" pin="3"/>
 <wire x1="218.44" y1="68.58" x2="226.06" y2="68.58" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="T1" gate="G$1" pin="C"/>
+<pinref part="T2" gate="G$1" pin="C"/>
 <wire x1="142.24" y1="48.26" x2="147.32" y2="48.26" width="0.1524" layer="91"/>
 <label x="147.32" y="48.26" size="1.778" layer="95" xref="yes"/>
 </segment>
@@ -12431,9 +12431,9 @@ Marquardt, RAFI, ITT, TYCO and others&lt;p&gt;
 <segment>
 <wire x1="226.06" y1="48.26" x2="241.3" y2="48.26" width="0.1524" layer="91"/>
 <label x="241.3" y="48.26" size="1.778" layer="95" xref="yes"/>
-<pinref part="JP6" gate="A" pin="20"/>
+<pinref part="JP2" gate="A" pin="20"/>
 <junction x="226.06" y="48.26"/>
-<pinref part="JP6" gate="A" pin="19"/>
+<pinref part="JP2" gate="A" pin="19"/>
 <wire x1="218.44" y1="48.26" x2="226.06" y2="48.26" width="0.1524" layer="91"/>
 </segment>
 <segment>
@@ -12447,7 +12447,7 @@ Marquardt, RAFI, ITT, TYCO and others&lt;p&gt;
 <label x="127" y="152.4" size="1.778" layer="95" rot="R180" xref="yes"/>
 </segment>
 <segment>
-<pinref part="T2" gate="G$1" pin="C"/>
+<pinref part="T1" gate="G$1" pin="C"/>
 <wire x1="142.24" y1="63.5" x2="147.32" y2="63.5" width="0.1524" layer="91"/>
 <label x="147.32" y="63.5" size="1.778" layer="95" xref="yes"/>
 </segment>
@@ -12463,9 +12463,9 @@ Marquardt, RAFI, ITT, TYCO and others&lt;p&gt;
 <segment>
 <wire x1="180.34" y1="50.8" x2="195.58" y2="50.8" width="0.1524" layer="91"/>
 <label x="180.34" y="50.8" size="1.778" layer="95" rot="R180" xref="yes"/>
-<pinref part="JP5" gate="A" pin="17"/>
+<pinref part="JP1" gate="A" pin="17"/>
 <junction x="195.58" y="50.8"/>
-<pinref part="JP5" gate="A" pin="18"/>
+<pinref part="JP1" gate="A" pin="18"/>
 <wire x1="195.58" y1="50.8" x2="203.2" y2="50.8" width="0.1524" layer="91"/>
 </segment>
 </net>
@@ -12480,9 +12480,9 @@ Marquardt, RAFI, ITT, TYCO and others&lt;p&gt;
 <segment>
 <wire x1="180.34" y1="53.34" x2="195.58" y2="53.34" width="0.1524" layer="91"/>
 <label x="180.34" y="53.34" size="1.778" layer="95" rot="R180" xref="yes"/>
-<pinref part="JP5" gate="A" pin="15"/>
+<pinref part="JP1" gate="A" pin="15"/>
 <junction x="195.58" y="53.34"/>
-<pinref part="JP5" gate="A" pin="16"/>
+<pinref part="JP1" gate="A" pin="16"/>
 <wire x1="195.58" y1="53.34" x2="203.2" y2="53.34" width="0.1524" layer="91"/>
 </segment>
 </net>
@@ -12499,16 +12499,16 @@ Marquardt, RAFI, ITT, TYCO and others&lt;p&gt;
 <segment>
 <wire x1="226.06" y1="58.42" x2="241.3" y2="58.42" width="0.1524" layer="91"/>
 <label x="241.3" y="58.42" size="1.778" layer="95" xref="yes"/>
-<pinref part="JP6" gate="A" pin="12"/>
+<pinref part="JP2" gate="A" pin="12"/>
 <junction x="226.06" y="58.42"/>
-<pinref part="JP6" gate="A" pin="11"/>
+<pinref part="JP2" gate="A" pin="11"/>
 <wire x1="218.44" y1="58.42" x2="226.06" y2="58.42" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="SSL" class="0">
 <segment>
-<pinref part="JP6" gate="A" pin="22"/>
-<pinref part="JP6" gate="A" pin="21"/>
+<pinref part="JP2" gate="A" pin="22"/>
+<pinref part="JP2" gate="A" pin="21"/>
 <wire x1="218.44" y1="45.72" x2="226.06" y2="45.72" width="0.1524" layer="91"/>
 </segment>
 </net>
@@ -12525,100 +12525,100 @@ Marquardt, RAFI, ITT, TYCO and others&lt;p&gt;
 <segment>
 <wire x1="226.06" y1="55.88" x2="241.3" y2="55.88" width="0.1524" layer="91"/>
 <label x="241.3" y="55.88" size="1.778" layer="95" xref="yes"/>
-<pinref part="JP6" gate="A" pin="14"/>
+<pinref part="JP2" gate="A" pin="14"/>
 <junction x="226.06" y="55.88"/>
-<pinref part="JP6" gate="A" pin="13"/>
+<pinref part="JP2" gate="A" pin="13"/>
 <wire x1="218.44" y1="55.88" x2="226.06" y2="55.88" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="SSR" class="0">
 <segment>
-<pinref part="JP5" gate="A" pin="1"/>
-<pinref part="JP5" gate="A" pin="2"/>
+<pinref part="JP1" gate="A" pin="1"/>
+<pinref part="JP1" gate="A" pin="2"/>
 <wire x1="195.58" y1="71.12" x2="203.2" y2="71.12" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$11" class="0">
 <segment>
-<pinref part="JP5" gate="A" pin="3"/>
-<pinref part="JP5" gate="A" pin="4"/>
+<pinref part="JP1" gate="A" pin="3"/>
+<pinref part="JP1" gate="A" pin="4"/>
 <wire x1="195.58" y1="68.58" x2="203.2" y2="68.58" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$13" class="0">
 <segment>
-<pinref part="JP5" gate="A" pin="5"/>
-<pinref part="JP5" gate="A" pin="6"/>
+<pinref part="JP1" gate="A" pin="5"/>
+<pinref part="JP1" gate="A" pin="6"/>
 <wire x1="195.58" y1="66.04" x2="203.2" y2="66.04" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$14" class="0">
 <segment>
-<pinref part="JP5" gate="A" pin="7"/>
-<pinref part="JP5" gate="A" pin="8"/>
+<pinref part="JP1" gate="A" pin="7"/>
+<pinref part="JP1" gate="A" pin="8"/>
 <wire x1="195.58" y1="63.5" x2="203.2" y2="63.5" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$15" class="0">
 <segment>
-<pinref part="JP5" gate="A" pin="9"/>
-<pinref part="JP5" gate="A" pin="10"/>
+<pinref part="JP1" gate="A" pin="9"/>
+<pinref part="JP1" gate="A" pin="10"/>
 <wire x1="195.58" y1="60.96" x2="203.2" y2="60.96" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$16" class="0">
 <segment>
-<pinref part="JP5" gate="A" pin="11"/>
-<pinref part="JP5" gate="A" pin="12"/>
+<pinref part="JP1" gate="A" pin="11"/>
+<pinref part="JP1" gate="A" pin="12"/>
 <wire x1="195.58" y1="58.42" x2="203.2" y2="58.42" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$17" class="0">
 <segment>
-<pinref part="JP5" gate="A" pin="13"/>
-<pinref part="JP5" gate="A" pin="14"/>
+<pinref part="JP1" gate="A" pin="13"/>
+<pinref part="JP1" gate="A" pin="14"/>
 <wire x1="195.58" y1="55.88" x2="203.2" y2="55.88" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$18" class="0">
 <segment>
-<pinref part="JP6" gate="A" pin="2"/>
-<pinref part="JP6" gate="A" pin="1"/>
+<pinref part="JP2" gate="A" pin="2"/>
+<pinref part="JP2" gate="A" pin="1"/>
 <wire x1="218.44" y1="71.12" x2="226.06" y2="71.12" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$19" class="0">
 <segment>
-<pinref part="JP6" gate="A" pin="6"/>
-<pinref part="JP6" gate="A" pin="5"/>
+<pinref part="JP2" gate="A" pin="6"/>
+<pinref part="JP2" gate="A" pin="5"/>
 <wire x1="218.44" y1="66.04" x2="226.06" y2="66.04" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$20" class="0">
 <segment>
-<pinref part="JP6" gate="A" pin="8"/>
-<pinref part="JP6" gate="A" pin="7"/>
+<pinref part="JP2" gate="A" pin="8"/>
+<pinref part="JP2" gate="A" pin="7"/>
 <wire x1="218.44" y1="63.5" x2="226.06" y2="63.5" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$21" class="0">
 <segment>
-<pinref part="JP6" gate="A" pin="10"/>
-<pinref part="JP6" gate="A" pin="9"/>
+<pinref part="JP2" gate="A" pin="10"/>
+<pinref part="JP2" gate="A" pin="9"/>
 <wire x1="218.44" y1="60.96" x2="226.06" y2="60.96" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$22" class="0">
 <segment>
-<pinref part="JP6" gate="A" pin="16"/>
-<pinref part="JP6" gate="A" pin="15"/>
+<pinref part="JP2" gate="A" pin="16"/>
+<pinref part="JP2" gate="A" pin="15"/>
 <wire x1="218.44" y1="53.34" x2="226.06" y2="53.34" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$23" class="0">
 <segment>
-<pinref part="JP6" gate="A" pin="18"/>
-<pinref part="JP6" gate="A" pin="17"/>
+<pinref part="JP2" gate="A" pin="18"/>
+<pinref part="JP2" gate="A" pin="17"/>
 <wire x1="218.44" y1="50.8" x2="226.06" y2="50.8" width="0.1524" layer="91"/>
 </segment>
 </net>
