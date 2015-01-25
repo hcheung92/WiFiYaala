@@ -53,7 +53,7 @@ int main(void)
 	GIFR = 1<<PCIF;			//clear pin change interrupt
 	sei();
 
-	if(GET(IN))
+	if(GET(SELECT))
 	{
 	//ws281x inverter
 	asm volatile (	"ldi r16,3			; reg for PB0,PB1 clk,data high"			"\n\t"

@@ -88,7 +88,7 @@ Disassembly of section .text:
   70:	95 bb       	out	0x15, r25	; 21
   72:	8a bf       	out	0x3a, r24	; 58
   74:	78 94       	sei
-  76:	b2 9b       	sbis	0x16, 2	; 22
+  76:	b4 9b       	sbis	0x16, 4	; 22
   78:	1d c0       	rjmp	.+58     	; 0xb4 <main+0x66>
   7a:	03 e0       	ldi	r16, 0x03	; 3
   7c:	10 e0       	ldi	r17, 0x00	; 0
