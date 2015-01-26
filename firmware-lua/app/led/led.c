@@ -116,6 +116,8 @@ static void ICACHE_FLASH_ATTR procTask(os_event_t *events)
 
 	//ws28xx test
 
+	//only load during interrupt
+
 	int i;
 	for (i = 0; i < 40; i++)
 	{
@@ -218,6 +220,7 @@ int led_init(int newLeds)
 
 	uart_div_modify(1, UART_CLK_FREQ / (UartDev.baut_rate));
 
+	//todo improve setting... 7n1
 	WRITE_PERI_REG(UART_CONF0(1), UartDev.exist_parity | UartDev.parity | (UartDev.stop_bits << UART_STOP_BIT_NUM_S) | (SEVEN_BITS << UART_BIT_NUM_S));
 
 	//clear rx and tx fifo,not ready
@@ -225,11 +228,13 @@ int led_init(int newLeds)
 	CLEAR_PERI_REG_MASK(UART_CONF0(1), UART_RXFIFO_RST | UART_TXFIFO_RST);
 
 	//set rx fifo trigger
+	//needed???
 	WRITE_PERI_REG(UART_CONF1(1), (UartDev.rcv_buff.TrigLvl & UART_RXFIFO_FULL_THRHD) << UART_RXFIFO_FULL_THRHD_S);
 
 	//clear all interrupt
 	WRITE_PERI_REG(UART_INT_CLR(1), 0xffff);
 	//enable rx_interrupt
+	//needed??
 	SET_PERI_REG_MASK(UART_INT_ENA(1), UART_RXFIFO_FULL_INT_ENA);
 
 	//
