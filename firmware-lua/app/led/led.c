@@ -244,7 +244,7 @@ int led_init(int newLeds)
 
 int led_setType(uint8_t type, unsigned int from, unsigned int to)
 {
-	if (to >= leds || from >= to)
+	if (to >= leds || from > to)
 		return 0;
 
 	type &= 0x0F;
