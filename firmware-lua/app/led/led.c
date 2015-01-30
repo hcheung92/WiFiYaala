@@ -12,9 +12,7 @@
 #include "led/led.h"
 #include "pca9685.h"
 #include "apa102.h"
-
-//ws28xx test
-#include "driver/uart.h"
+#include "ws28xx.h"
 
 led_t *led = NULL;
 unsigned int leds = 0;
@@ -29,10 +27,11 @@ struct __attribute__((packed))
 
 os_event_t procTaskQueue[1];
 
-void inline led_refresh(void)
+void inline ICACHE_RAM_ATTR led_refresh(void)
 {
 	uint32_t apastate = 0, pcaCh = 0;
 	uint32_t loop;
+	uint8_t ws28xxDirty = 0;
 
 	for (loop = 0; loop < leds && apastate == 0; loop++)
 	{
@@ -52,7 +51,14 @@ void inline led_refresh(void)
 			led[loop].color.grn += led[loop].colorStep.grn;
 			led[loop].color.blu += led[loop].colorStep.blu;
 			led[loop].steps--;
+
+			if(led[loop].type == LED_WS2801 || led[loop].type == LED_WS281X)
+			{
+				ws28xxDirty = 1;
+			}
 		}
+
+//TODO computation unneeded if not dirty! rewrite!!!
 
 		uint32_t red = led[loop].color.red;
 		uint32_t grn = led[loop].color.grn;
@@ -105,38 +111,23 @@ void inline led_refresh(void)
 
 	}
 
+	if(ws28xxDirty)
+	{
+		ws28xx_transmitt(led, leds);
+	}
+
 	if (apastate)
 		apa102_stop(leds);
 }
 
-static void ICACHE_FLASH_ATTR procTask(os_event_t *events)
+LOCAL void ICACHE_RAM_ATTR procTask(os_event_t *events)
 {
 	if (leds)
 		led_refresh();
 
-	//ws28xx test
-
-	//only load during interrupt
-
-	int i;
-	for (i = 0; i < 40; i++)
-	{
-		// full green
-		uart_tx_one_char(1, 0x12);	//111
-		uart_tx_one_char(1, 0x12);	//111
-		uart_tx_one_char(1, 0x52);	//110
-		uart_tx_one_char(1, 0x5b);	//000
-		uart_tx_one_char(1, 0x5b);	//000
-		uart_tx_one_char(1, 0x5b);	//000
-		uart_tx_one_char(1, 0x5b);	//000
-		uart_tx_one_char(1, 0x5b);	//000
-	}
-
-	//
-
 }
 
-LOCAL void ICACHE_FLASH_ATTR tim1_intr_handler(void)
+LOCAL void ICACHE_RAM_ATTR tim1_intr_handler(void)
 {
 	RTC_CLR_REG_MASK(FRC1_INT_ADDRESS, FRC1_INT_CLR_MASK);
 	if (leds)
@@ -166,12 +157,12 @@ void led_deinit(void)
 	}
 	if (state.ws2801Init)
 	{
-		//TODO
+		ws28xx_deinit();
 		state.ws2801Init = 0;
 	}
 	if (state.ws281xInit)
 	{
-		//todo
+		ws28xx_deinit();
 		state.ws281xInit = 0;
 	}
 
@@ -203,42 +194,6 @@ int led_init(int newLeds)
 	RTC_REG_WRITE(FRC1_CTRL_ADDRESS, DIVDED_BY_16 | FRC1_ENABLE_TIMER | TM_EDGE_INT);
 	RTC_REG_WRITE(FRC1_LOAD_ADDRESS, US_TO_RTC_TIMER_TICKS(LED_INTERVALL_MS*1000));
 
-	//ws28XX test
-
-	PIN_FUNC_SELECT(PERIPHS_IO_MUX_MTDO_U, FUNC_GPIO15);
-
-	//ws281X
-	gpio_output_set(1 << 15, 0, 1 << 15, 0);
-	//ws280X
-	//gpio_output_set(0, 1<<15, 1<<15, 0);
-
-	//todo: give the device 25ms to sattle i.e. delay timer
-
-	extern UartDevice UartDev;
-	UartDev.baut_rate = 2400000;
-	PIN_FUNC_SELECT(PERIPHS_IO_MUX_GPIO2_U, FUNC_U1TXD_BK);
-
-	uart_div_modify(1, UART_CLK_FREQ / (UartDev.baut_rate));
-
-	//todo improve setting... 7n1
-	WRITE_PERI_REG(UART_CONF0(1), UartDev.exist_parity | UartDev.parity | (UartDev.stop_bits << UART_STOP_BIT_NUM_S) | (SEVEN_BITS << UART_BIT_NUM_S));
-
-	//clear rx and tx fifo,not ready
-	SET_PERI_REG_MASK(UART_CONF0(1), UART_RXFIFO_RST | UART_TXFIFO_RST);
-	CLEAR_PERI_REG_MASK(UART_CONF0(1), UART_RXFIFO_RST | UART_TXFIFO_RST);
-
-	//set rx fifo trigger
-	//needed???
-	WRITE_PERI_REG(UART_CONF1(1), (UartDev.rcv_buff.TrigLvl & UART_RXFIFO_FULL_THRHD) << UART_RXFIFO_FULL_THRHD_S);
-
-	//clear all interrupt
-	WRITE_PERI_REG(UART_INT_CLR(1), 0xffff);
-	//enable rx_interrupt
-	//needed??
-	SET_PERI_REG_MASK(UART_INT_ENA(1), UART_RXFIFO_FULL_INT_ENA);
-
-	//
-
 	return leds;
 }
 
@@ -267,12 +222,12 @@ int led_setType(uint8_t type, unsigned int from, unsigned int to)
 	}
 	else if (type == LED_WS2801 && state.ws2801Init == 0 && state.ws281xInit == 0)
 	{
-		//TODO INIT
+		ws28xx_init(type);
 		state.ws2801Init = 1;
 	}
 	else if (type == LED_WS281X && state.ws281xInit == 0 && state.ws2801Init == 0)
 	{
-		//TODO INIT
+		ws28xx_init(type);
 		state.ws281xInit = 1;
 	}
 

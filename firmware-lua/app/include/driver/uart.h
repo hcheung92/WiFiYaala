@@ -8,6 +8,9 @@
 #define RX_BUFF_SIZE    0x100
 #define TX_BUFF_SIZE    100
 
+#define UART0   0
+#define UART1   1
+
 typedef enum {
     FIVE_BITS = 0x0,
     SIX_BITS = 0x1,
@@ -98,5 +101,8 @@ void uart0_putc(const char c);
 void uart0_tx_buffer(uint8 *buf, uint16 len);
 void uart_setup(uint8 uart_no);
 STATUS uart_tx_one_char(uint8 uart, uint8 TxChar);
+
+void uart0_rx_intr_handler(void *para);
+
 #endif
 

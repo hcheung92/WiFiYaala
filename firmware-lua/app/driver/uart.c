@@ -14,14 +14,10 @@
 #include "driver/uart.h"
 #include "user_config.h"
 
-#define UART0   0
-#define UART1   1
-
 // UartDev is defined and initialized in rom code.
 extern UartDevice UartDev;
 
-LOCAL void ICACHE_RAM_ATTR
-uart0_rx_intr_handler(void *para);
+//LOCAL void ICACHE_RAM_ATTR uart0_rx_intr_handler(void *para);
 
 /******************************************************************************
  * FunctionName : uart_config
@@ -96,19 +92,19 @@ uart_tx_one_char(uint8 uart, uint8 TxChar)
  * Returns      : NONE
 *******************************************************************************/
 LOCAL void ICACHE_FLASH_ATTR
-uart1_write_char(char c)
+uart0_write_char(char c)
 {
   if (c == '\n')
   {
-    uart_tx_one_char(UART1, '\r');
-    uart_tx_one_char(UART1, '\n');
+    uart_tx_one_char(UART0, '\r');
+    uart_tx_one_char(UART0, '\n');
   }
   else if (c == '\r')
   {
   }
   else
   {
-    uart_tx_one_char(UART1, c);
+    uart_tx_one_char(UART0, c);
   }
 }
 
@@ -175,7 +171,7 @@ void ICACHE_FLASH_ATTR uart0_putc(const char c)
  * Parameters   : void *para - point to ETS_UART_INTR_ATTACH's arg
  * Returns      : NONE
 *******************************************************************************/
-LOCAL void
+void ICACHE_RAM_ATTR
 uart0_rx_intr_handler(void *para)
 {
     /* uart0 and uart1 intr combine togther, when interrupt occur, see reg 0x3ff20020, bit2, bit0 represents
@@ -238,7 +234,7 @@ uart_init(UartBautRate uart0_br, UartBautRate uart1_br)
 
     // install uart1 putc callback
 #ifndef NODE_DEBUG
-    os_install_putc1((void *)uart1_write_char);
+    os_install_putc1((void *)uart0_write_char);
 #endif
 }
 
