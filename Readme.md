@@ -9,9 +9,9 @@ Despite some early prototypes this is the third major attempt to create a fully 
 Project Status
 --------------
 As a base we are using the nodeMCU core to provide a fully functional eLUA console. We are adding stuff specific for our application like a LED core.
-Additionaly, we add some optional nice to have featres like the Domain Name support for the DHCP client.
+Additionally, we add some optional nice to have features like the Domain Name support for the DHCP client.
 
-It is currently in a VERY early state. Documentation does not yet exist. The only thing which is working right now is the driver support for APA102 and PCA9685 LEDs. Besides others, WS28XX Leds (glitch free, using hardware support) are getting implemented right now.
+It is currently in a VERY early state. Documentation does not yet exist. The only thing which is working right now is the driver support for APA102 and PCA9685 LEDs. Besides others, WS28XX LEDs (glitch free, using hardware support) are getting implemented right now.
 Stay tuned...
 
 Requirements
@@ -20,7 +20,7 @@ GCC toolchain, see https://github.com/esp8266/esp8266-wiki/wiki
 
 Building
 --------
-Goto firmware-lua and type '''make && make flash'''
+Goto firmware-lua and type "make && make flash"
 
 Credits
 ----------
