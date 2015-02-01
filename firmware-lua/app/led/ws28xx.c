@@ -77,7 +77,7 @@ LOCAL void inline ICACHE_RAM_ATTR fill_fifo(void)
 			if(ws28xx_led[current_led].type == LED_WS2801)
 			{
 //				if(!current_led)
-					uart_tx_one_char(UART0, red>>24);
+//					uart_tx_one_char(UART0, red>>24);
 
 				ws28xx_color(red>>24, grn>>24, blu>>24);
 			}
