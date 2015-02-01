@@ -27,21 +27,11 @@ struct __attribute__((packed))
 
 os_event_t procTaskQueue[1];
 
-void inline ICACHE_RAM_ATTR led_refresh(void)
+void inline led_refresh(void)
 {
-	uint32_t apastate = 0, pcaCh = 0;
+	uint32_t pcaCh = 0;
 	uint32_t loop;
-	uint8_t ws28xxDirty = 0;
-
-	for (loop = 0; loop < leds && apastate == 0; loop++)
-	{
-		apastate += led[loop].steps;
-	}
-
-	if (apastate == 0)
-		return;				//we are steady. no update required
-
-	apastate = 0;
+	uint8_t apaDirty = 0, ws28xxDirty = 0;
 
 	for (loop = 0; loop < leds; loop++)
 	{
@@ -56,78 +46,68 @@ void inline ICACHE_RAM_ATTR led_refresh(void)
 			{
 				ws28xxDirty = 1;
 			}
-		}
-
-//TODO computation unneeded if not dirty! rewrite!!!
-
-		uint32_t red = led[loop].color.red;
-		uint32_t grn = led[loop].color.grn;
-		uint32_t blu = led[loop].color.blu;
-		uint32_t white = 0;
-
-		if (led[loop].type == LED_PCA9685)
-		{
-			if (state.pcaWhiteBehav[pcaCh] != WHITE_NA && state.pcaWhiteBehav[pcaCh] != WHITE_EXTRA)
+			else if(led[loop].type == LED_APA102)
 			{
-				white = min(red, min(grn, blu));
+				apaDirty = 1;
+			}
+			else if(led[loop].type == LED_PCA9685)
+			{
+				uint32_t red = led[loop].color.red;
+				uint32_t grn = led[loop].color.grn;
+				uint32_t blu = led[loop].color.blu;
+				uint32_t white = 0;
 
-				if (state.pcaWhiteBehav[pcaCh] == WHITE_ADJUST)
+				if (state.pcaWhiteBehav[pcaCh] != WHITE_NA && state.pcaWhiteBehav[pcaCh] != WHITE_EXTRA)
 				{
-					white = min(0x2AAAA000, white);
-					red -= white;
-					grn -= white;
-					blu -= white;
-					white *= 3;
+					white = min(red, min(grn, blu));
+
+					if (state.pcaWhiteBehav[pcaCh] == WHITE_ADJUST)
+					{
+						white = min(0x2AAAA000, white);
+						red -= white;
+						grn -= white;
+						blu -= white;
+						white *= 3;
+					}
 				}
+
+				/* Gamma correction. Gamma = 2.0 */
+				red = ((uint32_t) (((uint16_t) (red >> 15)) * ((uint16_t) (red >> 15)))) >> led[loop].dim;
+				grn = ((uint32_t) (((uint16_t) (grn >> 15)) * ((uint16_t) (grn >> 15)))) >> led[loop].dim;
+				blu = ((uint32_t) (((uint16_t) (blu >> 15)) * ((uint16_t) (blu >> 15)))) >> led[loop].dim;
+
+				pca9685_set32(pcaCh, red, grn, blu);
+				if (pcaCh < PCA_LEDS && (state.pcaWhiteBehav[pcaCh] == WHITE_ADD || state.pcaWhiteBehav[pcaCh] == WHITE_ADJUST))
+					pca9685_setWhite32(pcaCh, ((uint32_t) (((uint16_t) (white >> 15)) * ((uint16_t) (white >> 15)))) >> led[loop].dim);
+				else if (pcaCh >= PCA_LEDS && pcaCh < (PCA_LEDS << 1) && state.pcaWhiteBehav[pcaCh - PCA_LEDS] == WHITE_EXTRA)
+					pca9685_setWhite32(pcaCh - PCA_LEDS, red);
 			}
 		}
-
-		/* Gamma correction. Gamma = 2.0 */
-		red = ((uint32_t) (((uint16_t) (red >> 15)) * ((uint16_t) (red >> 15)))) >> led[loop].dim;
-		grn = ((uint32_t) (((uint16_t) (grn >> 15)) * ((uint16_t) (grn >> 15)))) >> led[loop].dim;
-		blu = ((uint32_t) (((uint16_t) (blu >> 15)) * ((uint16_t) (blu >> 15)))) >> led[loop].dim;
-
-		switch (led[loop].type)
-		{
-		case LED_PCA9685:
-			pca9685_set32(pcaCh, red, grn, blu);
-			if (pcaCh < PCA_LEDS && (state.pcaWhiteBehav[pcaCh] == WHITE_ADD || state.pcaWhiteBehav[pcaCh] == WHITE_ADJUST))
-				pca9685_setWhite32(pcaCh, ((uint32_t) (((uint16_t) (white >> 15)) * ((uint16_t) (white >> 15)))) >> led[loop].dim);
-			else if (pcaCh >= PCA_LEDS && pcaCh < (PCA_LEDS << 1) && state.pcaWhiteBehav[pcaCh - PCA_LEDS] == WHITE_EXTRA)
-				pca9685_setWhite32(pcaCh - PCA_LEDS, red);
+		if(led[loop].type == LED_PCA9685)		//count even if idle
 			pcaCh++;
-			break;
-		case LED_APA102:
-			if (!apastate)
-			{
-				apa102_start();
-				apastate++;
-			}
-			apa102_set32(red, grn, blu);
-			break;
-			//default:
-			//os_printf("LED%u: unknown hardware\n", (unsigned int)loop);
-		}
-
 	}
 
 	if(ws28xxDirty)
-	{
 		ws28xx_transmitt(led, leds);
-	}
 
-	if (apastate)
+	if (apaDirty)
+	{
+		apa102_start();
+		for(loop=0; loop<leds; loop++)
+			if(led[loop].type == LED_APA102)
+				apa102_set32(led_To32Bit(led[loop], LEDSTRPOS_RED), led_To32Bit(led[loop], LEDSTRPOS_GRN), led_To32Bit(led[loop], LEDSTRPOS_BLU));
 		apa102_stop(leds);
+	}
 }
 
-LOCAL void ICACHE_RAM_ATTR procTask(os_event_t *events)
+LOCAL void procTask(os_event_t *events)
 {
 	if (leds)
 		led_refresh();
 
 }
 
-LOCAL void ICACHE_RAM_ATTR tim1_intr_handler(void)
+LOCAL void tim1_intr_handler(void)
 {
 	RTC_CLR_REG_MASK(FRC1_INT_ADDRESS, FRC1_INT_CLR_MASK);
 	if (leds)
@@ -139,7 +119,7 @@ LOCAL void ICACHE_RAM_ATTR tim1_intr_handler(void)
 
 //public
 
-void led_deinit(void)
+void ICACHE_FLASH_ATTR led_deinit(void)
 {
 	leds = 0;
 	if (led != NULL)
@@ -168,7 +148,7 @@ void led_deinit(void)
 
 }
 
-int led_init(int newLeds)
+int ICACHE_FLASH_ATTR led_init(int newLeds)
 {
 	if (leds || led != NULL)
 		led_deinit();
@@ -197,7 +177,7 @@ int led_init(int newLeds)
 	return leds;
 }
 
-int led_setType(uint8_t type, unsigned int from, unsigned int to)
+int ICACHE_FLASH_ATTR led_setType(uint8_t type, unsigned int from, unsigned int to)
 {
 	if (to >= leds || from > to)
 		return 0;
@@ -234,7 +214,7 @@ int led_setType(uint8_t type, unsigned int from, unsigned int to)
 	return to - from + 1;
 }
 
-void led_setWhiteBehaviour(uint8_t ch0, uint8_t ch1, uint8_t ch2, uint8_t ch3)
+void ICACHE_FLASH_ATTR led_setWhiteBehaviour(uint8_t ch0, uint8_t ch1, uint8_t ch2, uint8_t ch3)
 {
 	state.pcaWhiteBehav[0] = ch0;
 	state.pcaWhiteBehav[1] = ch1;
@@ -242,7 +222,7 @@ void led_setWhiteBehaviour(uint8_t ch0, uint8_t ch1, uint8_t ch2, uint8_t ch3)
 	state.pcaWhiteBehav[3] = ch3;
 }
 
-int led_set(uint32_t channel, rgb8_t ledValue, uint32_t ms)
+int ICACHE_FLASH_ATTR led_set(uint32_t channel, rgb8_t ledValue, uint32_t ms)
 {
 	if (channel >= leds)
 		return 0;
@@ -275,7 +255,7 @@ int led_set(uint32_t channel, rgb8_t ledValue, uint32_t ms)
 
 }
 
-int led_setDim(uint32_t channel, uint8_t value)
+int ICACHE_FLASH_ATTR led_setDim(uint32_t channel, uint8_t value)
 {
 	if (channel >= leds)
 		return 0;

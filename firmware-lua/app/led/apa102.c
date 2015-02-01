@@ -11,7 +11,7 @@
 #include "led_spi_master.h"
 #include "apa102.h"
 
-void apa102_init(int amountLeds)
+void ICACHE_FLASH_ATTR apa102_init(int amountLeds)
 {
 	led_spi_master_init(HSPI);
 
@@ -40,7 +40,7 @@ void apa102_stop(int amountLeds)
 
 }
 
-void apa102_set32(uint32_t red, uint32_t grn, uint32_t blu)
+void ICACHE_FLASH_ATTR apa102_set32(uint32_t red, uint32_t grn, uint32_t blu)
 {
 	apa102_t apa102;
 

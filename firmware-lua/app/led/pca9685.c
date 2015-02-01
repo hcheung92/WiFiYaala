@@ -171,7 +171,7 @@ void pca9685_deinit(void)
 	i2c_master_gpio_deinit();
 }
 
-void pca9685_init(void)
+void ICACHE_FLASH_ATTR pca9685_init(void)
 {
 	i2c_master_gpio_init();
 

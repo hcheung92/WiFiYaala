@@ -32,6 +32,8 @@ enum
 #define LEDSTRPOS_BLU	2
 
 
+#define led_To32Bit(l, ch) (((uint32_t) (((uint16_t) (l.color.raw[ch] >> 15)) * ((uint16_t) (l.color.raw[ch] >> 15)))) >> l.dim)
+
 typedef union __attribute__((packed))
 {
 	struct

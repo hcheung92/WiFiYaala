@@ -22,7 +22,7 @@ typedef union __attribute__((packed))
 
 void apa102_init(int amountLeds);
 void apa102_start(void);
-void apa102_setLed(uint32_t red, uint32_t grn, uint32_t blu);
+void apa102_set32(uint32_t red, uint32_t grn, uint32_t blu);
 void apa102_stop(int amountLeds);
 
 #endif /* APA102_H_ */

@@ -20,26 +20,42 @@ unsigned int current_led;
 // UartDev is defined and initialized in rom code.
 extern UartDevice UartDev;
 
-/*uart_tx_one_char(uint8 uart, uint8 TxChar)
+void ICACHE_RAM_ATTR ws28xx_color(uint8_t b0, uint8_t b1, uint8_t b2)
 {
-    while (true)
-    {
-      uint32 fifo_cnt = READ_PERI_REG(UART_STATUS(uart)) & (UART_TXFIFO_CNT<<UART_TXFIFO_CNT_S);
-      if ((fifo_cnt >> UART_TXFIFO_CNT_S & UART_TXFIFO_CNT) < 126) {
-        break;
-      }
-    }
-
-    WRITE_PERI_REG(UART_FIFO(uart) , TxChar);
-    return OK;
+	WRITE_PERI_REG(UART_FIFO(UART1), (b0&0x80?0:0x01) | (b0&0x40?0:0x08) | (b0&0x20?0:0x40) | 0x12);
+	WRITE_PERI_REG(UART_FIFO(UART1), (b0&0x10?0:0x01) | (b0&0x08?0:0x08) | (b0&0x04?0:0x40) | 0x12);
+	WRITE_PERI_REG(UART_FIFO(UART1), (b0&0x02?0:0x01) | (b0&0x01?0:0x08) | (b1&0x80?0:0x40) | 0x12);
+	WRITE_PERI_REG(UART_FIFO(UART1), (b1&0x40?0:0x01) | (b1&0x20?0:0x08) | (b1&0x10?0:0x40) | 0x12);
+	WRITE_PERI_REG(UART_FIFO(UART1), (b1&0x08?0:0x01) | (b1&0x04?0:0x08) | (b1&0x02?0:0x40) | 0x12);
+	WRITE_PERI_REG(UART_FIFO(UART1), (b1&0x01?0:0x01) | (b2&0x80?0:0x08) | (b2&0x40?0:0x40) | 0x12);
+	WRITE_PERI_REG(UART_FIFO(UART1), (b2&0x20?0:0x01) | (b2&0x10?0:0x08) | (b2&0x08?0:0x40) | 0x12);
+	WRITE_PERI_REG(UART_FIFO(UART1), (b2&0x04?0:0x01) | (b2&0x02?0:0x08) | (b2&0x01?0:0x40) | 0x12);
 }
-*/
 
 LOCAL void inline ICACHE_RAM_ATTR fill_fifo(void)
 {
-	if(WS28XX_FIFO_CNT >= 126 && !current_led)
+	if((WS28XX_FIFO_CNT >= 126 && !current_led) || ws28xx_led == NULL)
 	{
+		//uart_tx_one_char(UART1, '.');
+
 		//we were too slow
+		if(!current_led && ws28xx_led != NULL)
+		{
+			for(current_led=0; current_led<leds_total; current_led++)
+			{
+				if(ws28xx_led[current_led].type==LED_WS2801 || ws28xx_led[current_led].type==LED_WS281X)
+				{
+					if(ws28xx_led[current_led].steps == 0)
+					{
+						ws28xx_led[current_led].steps = 1;			//ensure dirty ws28xx buffer next time
+						ws28xx_led[current_led].colorStep.red = 0;
+						ws28xx_led[current_led].colorStep.grn = 0;
+						ws28xx_led[current_led].colorStep.blu = 0;
+					}
+					break;
+				}
+			}
+		}
 		ws28xx_led = NULL;
 
 		//disable tx_interrupt
@@ -50,30 +66,25 @@ LOCAL void inline ICACHE_RAM_ATTR fill_fifo(void)
 
 	while(WS28XX_FIFO_CNT < 119)	//126-7 (more)
 	{
-		if(ws28xx_led[current_led].type == LED_WS2801)
-		{									//FIXME
-			// full green
-			uart_tx_one_char(1, 0x12);	//111
-			uart_tx_one_char(1, 0x12);	//111
-			uart_tx_one_char(1, 0x52);	//110
-			uart_tx_one_char(1, 0x5b);	//000
-			uart_tx_one_char(1, 0x5b);	//000
-			uart_tx_one_char(1, 0x5b);	//000
-			uart_tx_one_char(1, 0x5b);	//000
-			uart_tx_one_char(1, 0x5b);	//000
-		}
-		else if(ws28xx_led[current_led].type == LED_WS281X)
+		if(ws28xx_led[current_led].type == LED_WS2801 || ws28xx_led[current_led].type == LED_WS281X)
 		{
-			// full green
-			uart_tx_one_char(1, 0x12);	//111
-			uart_tx_one_char(1, 0x12);	//111
-			uart_tx_one_char(1, 0x52);	//110
-			uart_tx_one_char(1, 0x5b);	//000
-			uart_tx_one_char(1, 0x5b);	//000
-			uart_tx_one_char(1, 0x5b);	//000
-			uart_tx_one_char(1, 0x5b);	//000
-			uart_tx_one_char(1, 0x5b);	//000
 
+			/* Gamma correction. Gamma = 2.0 */
+			uint32_t red = led_To32Bit(ws28xx_led[current_led], LEDSTRPOS_RED);
+			uint32_t grn = led_To32Bit(ws28xx_led[current_led], LEDSTRPOS_GRN);
+			uint32_t blu = led_To32Bit(ws28xx_led[current_led], LEDSTRPOS_BLU);
+
+			if(ws28xx_led[current_led].type == LED_WS2801)
+			{
+//				if(!current_led)
+					uart_tx_one_char(UART0, red>>24);
+
+				ws28xx_color(red>>24, grn>>24, blu>>24);
+			}
+			else if(ws28xx_led[current_led].type == LED_WS281X)
+			{
+				ws28xx_color(grn>>24, red>>24, blu>>24);
+			}
 		}
 
 		if(++current_led >= leds_total)
@@ -83,7 +94,7 @@ LOCAL void inline ICACHE_RAM_ATTR fill_fifo(void)
 
 			//disable tx_interrupt
 			CLEAR_PERI_REG_MASK(UART_INT_ENA(UART1), UART_TXFIFO_EMPTY_INT_ENA);
-			return;
+			break;
 		}
 	}
 
@@ -92,17 +103,19 @@ LOCAL void inline ICACHE_RAM_ATTR fill_fifo(void)
 
 LOCAL void ICACHE_RAM_ATTR intr_handler(void *para)
 {
-	    /* uart0 and uart1 intr combine together, when interrupt occur, see reg 0x3ff20020, bit2, bit0 represents
-	     * uart1 and uart0 respectively
-	     */
+	/* uart0 and uart1 intr combine together, when interrupt occur, see reg 0x3ff20020, bit2, bit0 represents
+	 * uart1 and uart0 respectively
+	 */
 
-	if(UART_TXFIFO_EMPTY_INT_ST == (READ_PERI_REG(UART_INT_ST(UART1)) & UART_TXFIFO_EMPTY_INT_ST))
+	if(READ_PERI_REG(UART_INT_ST(UART1)))	//any UART1 stuff
 	{
 
-//		fill_fifo();
+		if(UART_TXFIFO_EMPTY_INT_ST == (READ_PERI_REG(UART_INT_ST(UART1)) & UART_TXFIFO_EMPTY_INT_ST))
+			fill_fifo();
 
 		//clr int
 //		WRITE_PERI_REG(UART_INT_CLR(UART1), UART_TXFIFO_EMPTY_INT_CLR);
+		WRITE_PERI_REG(UART_INT_CLR(UART1), 0xffff);	//just to be sure :)
 	}
 
 	if(READ_PERI_REG(UART_INT_ST(UART0)))	//any UART0 stuff
@@ -111,7 +124,7 @@ LOCAL void ICACHE_RAM_ATTR intr_handler(void *para)
 	}
 }
 
-void ws28xx_init(uint8_t type)
+void ICACHE_FLASH_ATTR ws28xx_init(uint8_t type)
 {
 	PIN_FUNC_SELECT(WS28XX_MUX, WS28XX_FUNC);
 
@@ -138,25 +151,34 @@ void ws28xx_init(uint8_t type)
 	SET_PERI_REG_MASK(UART_CONF0(UART1), UART_RXFIFO_RST | UART_TXFIFO_RST);
 	CLEAR_PERI_REG_MASK(UART_CONF0(UART1), UART_RXFIFO_RST | UART_TXFIFO_RST);
 
-	//set tx fifo trigger
-//	WRITE_PERI_REG(UART_CONF1(UART1), 54 << UART_TXFIFO_EMPTY_THRHD_S); //gives us 200uS to reakt
-//fixme seems so activate fifo int??
-	//clear all interrupt
-	WRITE_PERI_REG(UART_INT_CLR(UART1), 0xffff);
-
 	//overload uart int handler
 	ETS_UART_INTR_ATTACH(intr_handler,  NULL);
+
+	//disable rx_interrupt. gets previously enables by uart.c
+	CLEAR_PERI_REG_MASK(UART_INT_ENA(UART1), UART_RXFIFO_FULL_INT_ENA);
+
+	//set tx fifo trigger
+	WRITE_PERI_REG(UART_CONF1(UART1), 54 << UART_TXFIFO_EMPTY_THRHD_S); //gives us 200uS to reakt
+
+	//disable tx_interrupt
+	CLEAR_PERI_REG_MASK(UART_INT_ENA(UART1), UART_TXFIFO_EMPTY_INT_ENA);
+
+	//clear all interrupt
+	WRITE_PERI_REG(UART_INT_CLR(UART1), 0xffff);
 
 	ETS_UART_INTR_ENABLE();
 }
 
-void ws28xx_deinit(void)
+void ICACHE_FLASH_ATTR ws28xx_deinit(void)
 {
 	gpio_output_set(0, 0, 0, 1<<WS28XX_GPIO);
 	CLEAR_PERI_REG_MASK(UART_INT_ENA(UART1), UART_TXFIFO_EMPTY_INT_ENA);
+
+	//disable tx_interrupt
+	CLEAR_PERI_REG_MASK(UART_INT_ENA(UART1), UART_TXFIFO_EMPTY_INT_ENA);
 }
 
-void ws28xx_transmitt(led_t *leds, unsigned int total)
+void ICACHE_RAM_ATTR ws28xx_transmitt(led_t *leds, unsigned int total)
 {
 	if(ws28xx_led != NULL)
 	{
@@ -169,6 +191,5 @@ void ws28xx_transmitt(led_t *leds, unsigned int total)
 	current_led = 0;
 
 	//enable tx_interrupt
-//	SET_PERI_REG_MASK(UART_INT_ENA(1), UART_TXFIFO_EMPTY_INT_ENA);
-
+	SET_PERI_REG_MASK(UART_INT_ENA(1), UART_TXFIFO_EMPTY_INT_ENA);
 }
