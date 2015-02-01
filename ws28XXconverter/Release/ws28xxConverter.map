@@ -115,7 +115,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000       0xf0
+.text           0x00000000      0x110
  *(.vectors)
  .vectors       0x00000000       0x1e /usr/local/CrossPack-AVR-20131216/lib/gcc/avr/4.8.1/../../../../avr/lib/avr25/crttn85.o
                 0x00000000                __vectors
@@ -190,26 +190,26 @@ END GROUP
                 0x00000030       0x1e ./main.o
                 0x00000030                __vector_2
  .text.startup.main
-                0x0000004e       0x9e ./main.o
+                0x0000004e       0xbe ./main.o
                 0x0000004e                main
  .text.libgcc.mul
-                0x000000ec        0x0 /usr/local/CrossPack-AVR-20131216/lib/gcc/avr/4.8.1/avr25/libgcc.a(_exit.o)
+                0x0000010c        0x0 /usr/local/CrossPack-AVR-20131216/lib/gcc/avr/4.8.1/avr25/libgcc.a(_exit.o)
  .text.libgcc.div
-                0x000000ec        0x0 /usr/local/CrossPack-AVR-20131216/lib/gcc/avr/4.8.1/avr25/libgcc.a(_exit.o)
- .text.libgcc   0x000000ec        0x0 /usr/local/CrossPack-AVR-20131216/lib/gcc/avr/4.8.1/avr25/libgcc.a(_exit.o)
+                0x0000010c        0x0 /usr/local/CrossPack-AVR-20131216/lib/gcc/avr/4.8.1/avr25/libgcc.a(_exit.o)
+ .text.libgcc   0x0000010c        0x0 /usr/local/CrossPack-AVR-20131216/lib/gcc/avr/4.8.1/avr25/libgcc.a(_exit.o)
  .text.libgcc.prologue
-                0x000000ec        0x0 /usr/local/CrossPack-AVR-20131216/lib/gcc/avr/4.8.1/avr25/libgcc.a(_exit.o)
+                0x0000010c        0x0 /usr/local/CrossPack-AVR-20131216/lib/gcc/avr/4.8.1/avr25/libgcc.a(_exit.o)
  .text.libgcc.builtins
-                0x000000ec        0x0 /usr/local/CrossPack-AVR-20131216/lib/gcc/avr/4.8.1/avr25/libgcc.a(_exit.o)
+                0x0000010c        0x0 /usr/local/CrossPack-AVR-20131216/lib/gcc/avr/4.8.1/avr25/libgcc.a(_exit.o)
  .text.libgcc.fmul
-                0x000000ec        0x0 /usr/local/CrossPack-AVR-20131216/lib/gcc/avr/4.8.1/avr25/libgcc.a(_exit.o)
+                0x0000010c        0x0 /usr/local/CrossPack-AVR-20131216/lib/gcc/avr/4.8.1/avr25/libgcc.a(_exit.o)
  .text.libgcc.fixed
-                0x000000ec        0x0 /usr/local/CrossPack-AVR-20131216/lib/gcc/avr/4.8.1/avr25/libgcc.a(_exit.o)
-                0x000000ec                . = ALIGN (0x2)
+                0x0000010c        0x0 /usr/local/CrossPack-AVR-20131216/lib/gcc/avr/4.8.1/avr25/libgcc.a(_exit.o)
+                0x0000010c                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x000000ec        0x0 /usr/local/CrossPack-AVR-20131216/lib/gcc/avr/4.8.1/avr25/libgcc.a(_exit.o)
-                0x000000ec                exit
-                0x000000ec                _exit
+ .fini9         0x0000010c        0x0 /usr/local/CrossPack-AVR-20131216/lib/gcc/avr/4.8.1/avr25/libgcc.a(_exit.o)
+                0x0000010c                exit
+                0x0000010c                _exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -228,11 +228,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x000000ec        0x4 /usr/local/CrossPack-AVR-20131216/lib/gcc/avr/4.8.1/avr25/libgcc.a(_exit.o)
+ .fini0         0x0000010c        0x4 /usr/local/CrossPack-AVR-20131216/lib/gcc/avr/4.8.1/avr25/libgcc.a(_exit.o)
  *(.fini0)
-                0x000000f0                _etext = .
+                0x00000110                _etext = .
 
-.data           0x00800060        0x0 load address 0x000000f0
+.data           0x00800060        0x0 load address 0x00000110
                 0x00800060                PROVIDE (__data_start, .)
  *(.data)
  .data          0x00800060        0x0 /usr/local/CrossPack-AVR-20131216/lib/gcc/avr/4.8.1/../../../../avr/lib/avr25/crttn85.o
@@ -255,8 +255,8 @@ END GROUP
  *(.bss*)
  *(COMMON)
                 0x00800060                PROVIDE (__bss_end, .)
-                0x000000f0                __data_load_start = LOADADDR (.data)
-                0x000000f0                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x00000110                __data_load_start = LOADADDR (.data)
+                0x00000110                __data_load_end = (__data_load_start + SIZEOF (.data))
 
 .noinit         0x00800060        0x0
                 0x00800060                PROVIDE (__noinit_start, .)

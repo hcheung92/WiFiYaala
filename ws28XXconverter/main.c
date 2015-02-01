@@ -97,7 +97,11 @@ int main(void)
 	else
 	{
 	//ws281X to ws2801
-	asm volatile (	"ldi r16,2			; reg for PB0 data hi"					"\n\t"
+	asm volatile (	"ldi r16,2			; reg for PB1 data hi"					"\n\t"
+			"ldi r17,3			; req for PB1 data, PB0 clk hi"				"\n\t"
+			"ldi r18,1			; req for PB1 data low, PB0 clk hi"			"\n\t"
+			"ldi r19,0			; req for PB1 data, PB0 clk low"			"\n\t"
+
 
 			"1:"											"\n\t"
 			"sbic 22,2			; skip next line if PB2 is clr (1noskip 2else)"		"\n\t"
@@ -114,24 +118,45 @@ int main(void)
 			"nop				; (1)"							"\n\t"
 			"nop				; (1)"							"\n\t"
 
-			"sbis 22,2			; skip next line if PD2 is set (1noskip 2else)"		"\n\t"
-			//"sbi 24,1			; set PB1 (data) (2 not1!)"				"\n\t"
-			"out 24,r16			; set PB1 - faster than sbi, reduces jitter (1)"	"\n\t"
+			"sbic 22,2			; skip next line if PD2 is clr (1noskip 2else)"		"\n\t"
+			"rjmp 2f			; jump to alternative branch (2)"			"\n\t"
 
-			"nop				; (1)"							"\n\t"
-			"nop				; (1)"							"\n\t"
-			"nop				; (1)"							"\n\t"
-			"nop				; (1)"							"\n\t"
-			"nop				; (1)"							"\n\t"
-			"nop				; (1)"							"\n\t"
-			"nop				; (1)"							"\n\t"
+				"out 24,r16			; set PB1 - faster than sbi, reduces jitter (1)"	"\n\t"
 
-			"sbic 22,2			; skip next line if PD2 still clr (1no skip 2else)"	"\n\t"
-			"sbi 24,0			; set PB0 (clk) (2 not1!)"				"\n\t"
+				"nop				; (1)"							"\n\t"
+				"nop				; (1)"							"\n\t"
+				"nop				; (1)"							"\n\t"
+				"nop				; (1)"							"\n\t"
+				"nop				; (1)"							"\n\t"
+				//"nop				; (1)"							"\n\t"
 
-			//optional: reducing upper nops by 1 (still works) give us a little more time to lower CLK here: "nop" + "out 22,r17" (requires: ldr r17,0 in advance)
+				"sbic 22,2			; skip next line if PD2 still clr (1no skip 2else)"	"\n\t"
+				"out 24,r17			; set PB0 (clk), set PB1(data) (1)"			"\n\t"
 
-			"rjmp 1b			; jump to start (2)"					"\n\t"
+				"nop				; (1)"							"\n\t"
+				"nop				; (1)"							"\n\t"
+
+				"out 24,r16			; clr PB0 (clk), set PB1(data) (1)"			"\n\t"
+
+				"rjmp 1b			; jump to start (2)"					"\n\t"
+
+			"2:"											"\n\t"
+				"nop				; (1)"							"\n\t"
+				"nop				; (1)"							"\n\t"
+				"nop				; (1)"							"\n\t"
+				"nop				; (1)"							"\n\t"
+				"nop				; (1)"							"\n\t"
+				//"nop				; (1)"							"\n\t"
+
+				"sbic 22,2			; skip next line if PD2 still clr (1no skip 2else)"	"\n\t"
+				"out 24,r18			; set PB0 (clk), clr PB1(data) (1)"			"\n\t"
+
+				"nop				; (1)"							"\n\t"
+				"nop				; (1)"							"\n\t"
+
+				"out 24,r19			; clr PB0 (clk), clr PB1(data) (1)"			"\n\t"
+
+				"rjmp 1b			; jump to start (2)"					"\n\t"
 			::);
 	}
 
