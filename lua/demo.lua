@@ -1,4 +1,4 @@
-function run (mode, cnt)
+programs.demo = function (mode, cnt)
      local time = 100
      local h = 0
      local s = 255
@@ -38,18 +38,19 @@ function run (mode, cnt)
           end
      elseif mode == 6 then
           h = ((tmr.now())%360)
-          time = ((tmr.now()*3)%1000)+1
-          fadetime = ((tmr.now()*2)%1000)
+          l = (cnt % 3) * 255
+          times = {2000, 1000, 500}
+          time = times[(cnt%3) + 1]
+          fadetime = time+200
      end
      local r,g,b = hsl2rgb(h, s, l)
      led.set(0,r,g,b,fadetime)
-
      if cnt > 50 then
           mode = (mode + 1) % 7
           cnt = 0
      else cnt = cnt + 1
      end
-     tmr.alarm(1, time, 0, function() run(mode, cnt) end)
+     tmr.alarm(1, time, 0, function() programs.demo(mode, cnt) end)
 end
-
-run(0,0)
+programs.demo_default = function () programs.demo(6,0) end
+table.insert(programs.names, "demo")
