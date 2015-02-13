@@ -61,7 +61,11 @@ int ICACHE_FLASH_ATTR fsHook(HttpdConnData *connData)
 }
 
 
-static const char *httpBrowserStart="<!DOCTYPE html><html><head><title>Yaala File Browser</title></head><body><h1>Yaala File Browser</h1><table cellpadding=\"10\" border=\"1\" rules=\"groups\"><thead><tr><td>Name</td><td>Del</td><td>Size</td></tr></thead><tfoot><tr><td>Format</td><td>Add</td><td>Free</td></tr></tfoot><tbody>";
+static const char *httpBrowserStart="<!DOCTYPE html><html><head><title>Yaala FS Browser</title></head><body><h1>Yaala FS Browser</h1>"\
+		"<form action=\"/fsbrowse\" method=\"post\" enctype=\"multipart/form-data\">"\
+		"<table cellpadding=\"10\" border=\"1\" rules=\"groups\">"\
+		"<thead><tr><td>Name</td><td>Action</td><td>Size</td></tr></thead><tfoot>"\
+		"<tr><td><input name=\"file\" size=\"20\" accept=\"*/*\" type=\"file\"></td><td><input type=\"submit\" name=\"add\" value=\"Upload\"></td><td>Format</td></tr></tfoot><tbody>";
 static const char *httpBrowserStop="</tbody></table></body></html>";
 
 int ICACHE_FLASH_ATTR fsBrowse(HttpdConnData *connData)
@@ -82,7 +86,7 @@ int ICACHE_FLASH_ATTR fsBrowse(HttpdConnData *connData)
 			if(!os_strncmp(connData->getArgs, "del", 3))
 			{
 				char *del = &connData->getArgs[4];
-				os_printf("del: %s\n", del);
+//				os_printf("del: %s\n", del);
 				SPIFFS_remove(&fs, del);
 			}
 		}
@@ -109,7 +113,8 @@ int ICACHE_FLASH_ATTR fsBrowse(HttpdConnData *connData)
 			char buf[256];
 			int l;
 //			os_printf("file: %s",pe->name);
-			l = os_sprintf(buf, "<tr><td><a href=\"/%s\">%s</a></td><td><a href=\"%s?del=%s\">X</a></td><td>%d</td></tr>", pe->name, pe->name, connData->url, pe->name, pe->size);
+			l = os_sprintf(buf, "<tr><td><a href=\"/%s\">%s</a></td><td><a href=\"%s?del=%s\">Del</a></td><td>%d</td></tr>", pe->name, pe->name, connData->url, pe->name, pe->size);
+//			l = os_sprintf(buf, "<tr><td><a href=\"/%s\">%s</a></td><td><input type=\"submit\" name=\"del\" value=\"%s\"></td><td>%d</td></tr>", pe->name, pe->name, pe->name, pe->size);
 			espconn_sent(connData->conn, buf, l);
 			return HTTPD_CGI_MORE;
 		}
