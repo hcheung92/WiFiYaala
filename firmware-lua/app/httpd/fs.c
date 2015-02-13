@@ -61,7 +61,7 @@ int ICACHE_FLASH_ATTR fsHook(HttpdConnData *connData)
 }
 
 
-static const char *httpBrowserStart="<!DOCTYPE html><html><head><title>Yaala File Browser</title></head><body><h1>Yaala File Browser</h1><table border=\"1\" rules=\"groups\"><thead><tr><td>Name</td><td>Del</td><td>Size</td></tr></thead><tfoot><tr><td>Add</td><td>Format</td><td>Free</td></tr></tfoot><tbody>";
+static const char *httpBrowserStart="<!DOCTYPE html><html><head><title>Yaala File Browser</title></head><body><h1>Yaala File Browser</h1><table cellpadding=\"10\" border=\"1\" rules=\"groups\"><thead><tr><td>Name</td><td>Del</td><td>Size</td></tr></thead><tfoot><tr><td>Format</td><td>Add</td><td>Free</td></tr></tfoot><tbody>";
 static const char *httpBrowserStop="</tbody></table></body></html>";
 
 int ICACHE_FLASH_ATTR fsBrowse(HttpdConnData *connData)
@@ -77,6 +77,15 @@ int ICACHE_FLASH_ATTR fsBrowse(HttpdConnData *connData)
 		//First call to this cgi.
 
 		//todo check args: add/format
+		if(connData->getArgs != NULL)
+		{
+			if(!os_strncmp(connData->getArgs, "del", 3))
+			{
+				char *del = &connData->getArgs[4];
+				os_printf("del: %s\n", del);
+				SPIFFS_remove(&fs, del);
+			}
+		}
 
 		httpdStartResponse(connData, 200);
 		httpdHeader(connData, "Content-Type", httpdGetMimetype(connData->url));
@@ -90,7 +99,7 @@ int ICACHE_FLASH_ATTR fsBrowse(HttpdConnData *connData)
 //		os_printf("dir head\n");
 		return HTTPD_CGI_MORE;
 	}
-	else if(connData->file == 0)
+	else
 	{
 		struct spiffs_dirent e;
 		struct spiffs_dirent *pe = &e;
