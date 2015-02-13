@@ -42,4 +42,8 @@ typedef struct {
 
 void ICACHE_FLASH_ATTR httpdInit(int port);
 
+
+
+int ICACHE_FLASH_ATTR redirIndexHtml(HttpdConnData *conn);
+
 #endif /* HTTPD_H_ */

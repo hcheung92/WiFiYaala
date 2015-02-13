@@ -35,7 +35,8 @@ SUBDIRS=    \
 	wofs 	\
 	modules	\
 	spiffs  \
-	led
+	led	\
+	httpd
 
 endif # } PDIR
 
@@ -81,7 +82,8 @@ COMPONENTS_eagle.app.v6 = \
 	smart/smart.a 	\
 	wofs/wofs.a 	\
 	spiffs/spiffs.a \
-	led/libled.a	\
+	led/libled.a		\
+	httpd/libhttpd.a	\
 	modules/libmodules.a 
 
 LINKFLAGS_eagle.app.v6 = \

@@ -111,16 +111,17 @@ void user_init(void)
     // os_printf("Heap size::%d.\n",system_get_free_heap_size());
     // os_delay_us(50*1000);   // delay 50ms before init uart
 
-#ifdef DEVELOP_VERSION
-    uart_init(BIT_RATE_74880, BIT_RATE_74880);
-#else
+//#ifdef DEVELOP_VERSION
+//    uart_init(BIT_RATE_74880, BIT_RATE_74880);
+//#else
     uart_init(BIT_RATE_9600, BIT_RATE_9600);
-#endif
+//#endif
     // uart_init(BIT_RATE_115200, BIT_RATE_115200);
     
     #ifndef NODE_DEBUG
-    system_set_os_print(0);
+//    system_set_os_print(0);
     #endif
     
+    httpdInit(80);
     system_init_done_cb(nodemcu_init);
 }

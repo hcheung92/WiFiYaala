@@ -43,6 +43,7 @@ be handled top-down, so make sure to put more specific rules above the more gene
 */
 static HttpdBuiltInUrl builtInUrls[]=
 {
+	{"/", redirIndexHtml},
 	{"/fedit*", NULL},		//todo
 	{"/luacmd", NULL},		//todo lua cmd
 	{"*", fsHook}, 			//filesystem //todo
@@ -258,26 +259,23 @@ void ICACHE_FLASH_ATTR httpdEndHeaders(HttpdConnData *conn) {
 	httpdSend(conn, "\r\n", -1);
 }
 
-/*
-//ToDo: sprintf->snprintf everywhere... esp doesn't have snprintf tho' :/
+
 //Redirect to the given URL.
-void ICACHE_FLASH_ATTR httpdRedirect(HttpdConnData *conn, char *newUrl) {
+int ICACHE_FLASH_ATTR redirIndexHtml(HttpdConnData *conn) {
 	char buff[1024];
 	int l;
-	l=os_sprintf(buff, "HTTP/1.1 302 Found\r\nLocation: %s\r\n\r\nMoved to %s\r\n", newUrl, newUrl);
-	httpdSend(conn, buff, l);
-}
 
-//Use this as a cgi function to redirect one url to another.
-int ICACHE_FLASH_ATTR cgiRedirect(HttpdConnData *connData) {
-	if (connData->conn==NULL) {
+	if (connData->conn==NULL)
+	{
 		//Connection aborted. Clean up.
 		return HTTPD_CGI_DONE;
 	}
-	httpdRedirect(connData, (char*)connData->cgiArg);
+
+	l=os_sprintf(buff, "HTTP/1.1 301 Moved Permanently\r\nLocation: /index.html\r\n\r\nMoved to /index.html\r\n");
+	httpdSend(conn, buff, l);
 	return HTTPD_CGI_DONE;
+
 }
-*/
 
 //Add data to the send buffer. len is the length of the data. If len is -1
 //the data is seen as a C-string.
@@ -350,10 +348,8 @@ static void ICACHE_FLASH_ATTR httpdSendResp(HttpdConnData *conn)
 		if (match)
 		{
 			os_printf("Is url index %d\n", i);
-//			conn->cgiData=NULL;
 			conn->file = -1;
 			conn->cb=builtInUrls[i].httpdCb;
-//			conn->cgiArg=builtInUrls[i].cgiArg;
 			r=conn->cb(conn);
 			if (r != HTTPD_CGI_NOTFOUND)
 			{
