@@ -44,9 +44,9 @@ be handled top-down, so make sure to put more specific rules above the more gene
 static HttpdBuiltInUrl builtInUrls[]=
 {
 	{"/", redirIndexHtml},
-	{"/fedit*", NULL},		//todo
+	{"/fsbrowse", fsBrowse},
 	{"/luacmd", NULL},		//todo lua cmd
-	{"*", fsHook}, 			//filesystem //todo
+	{"*", fsHook}, 			//filesystem
 	{NULL, NULL}
 };
 
@@ -188,16 +188,19 @@ int httpdUrlDecode(char *val, int valLen, char *ret, int retLen)
 //zero-terminated result is written in buff, with at most buffLen bytes used. The
 //function returns the length of the result, or -1 if the value wasn't found. The
 //returned string will be urldecoded already.
-int ICACHE_FLASH_ATTR httpdFindArg(char *line, char *arg, char *buff, int buffLen) {
+int ICACHE_FLASH_ATTR httpdFindArg(char *line, char *arg, char *buff, int buffLen)
+{
 	char *p, *e;
 	if (line==NULL) return 0;
 	p=line;
 	while(p!=NULL && *p!='\n' && *p!='\r' && *p!=0) {
 		os_printf("findArg: %s\n", p);
-		if (os_strncmp(p, arg, os_strlen(arg))==0 && p[strlen(arg)]=='=') {
+		if (os_strncmp(p, arg, os_strlen(arg))==0 && p[strlen(arg)]=='=')
+		{
 			p+=os_strlen(arg)+1; //move p to start of value
 			e=(char*)os_strstr(p, "&");
-			if (e==NULL) e=p+os_strlen(p);
+			if (e==NULL)
+				e=p+os_strlen(p);
 			os_printf("findArg: val %s len %d\n", p, (e-p));
 			return httpdUrlDecode(p, (e-p), buff, buffLen);
 		}
@@ -332,7 +335,7 @@ static const char *httpNotFoundHeader="HTTP/1.0 404 Not Found\r\nServer: httpd/"
 
 //This is called when the headers have been received and the connection is ready to send
 //the result headers and data.
-static void ICACHE_FLASH_ATTR httpdSendResp(HttpdConnData *conn)
+static void httpdSendResp(HttpdConnData *conn)
 {
 	int i=0;
 	int r;

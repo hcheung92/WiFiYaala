@@ -11,6 +11,7 @@
 typedef struct EspFsFile EspFsFile;
 
 int ICACHE_FLASH_ATTR fsHook(HttpdConnData *connData);
+int ICACHE_FLASH_ATTR fsBrowse(HttpdConnData *connData);
 
 
 #endif /* FS_H_ */

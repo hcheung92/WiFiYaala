@@ -10,29 +10,20 @@
 #include "httpd/httpd.h"
 #include "flash_fs.h"
 
-struct EspFsFile {
-//	EspFsHeader *header;
-//	char decompressor;
-//	int32_t posDecomp;
-//	char *posStart;
-//	char *posComp;
-//	void *decompData;
-};
-
+spiffs_DIR d;
+extern spiffs fs;
 
 //This is a catch-all cgi function. It takes the url passed to it, looks up the corresponding
 //path in the filesystem and if it exists, passes the file through. This simulates what a normal
 //webserver would do with static files.
 int ICACHE_FLASH_ATTR fsHook(HttpdConnData *connData)
 {
-//	EspFsFile *file=connData->cgiData;
 	int len;
 	char buff[1024];
 
 	if (connData->conn==NULL)
 	{
 		//Connection aborted. Clean up.
-//		espFsClose(file);
 		return HTTPD_CGI_DONE;
 	}
 
@@ -67,4 +58,59 @@ int ICACHE_FLASH_ATTR fsHook(HttpdConnData *connData)
 		//Ok, till next time.
 		return HTTPD_CGI_MORE;
 	}
+}
+
+
+static const char *httpBrowserStart="<!DOCTYPE html><html><head><title>Yaala File Browser</title></head><body><h1>Yaala File Browser</h1><table border=\"1\" rules=\"groups\"><thead><tr><td>Name</td><td>Del</td><td>Size</td></tr></thead><tfoot><tr><td>Add</td><td>Format</td><td>Free</td></tr></tfoot><tbody>";
+static const char *httpBrowserStop="</tbody></table></body></html>";
+
+int ICACHE_FLASH_ATTR fsBrowse(HttpdConnData *connData)
+{
+	if (connData->conn==NULL)
+	{
+		//Connection aborted. Clean up.
+		return HTTPD_CGI_DONE;
+	}
+
+	if (connData->file == -1)
+	{
+		//First call to this cgi.
+
+		//todo check args: add/format
+
+		httpdStartResponse(connData, 200);
+		httpdHeader(connData, "Content-Type", httpdGetMimetype(connData->url));
+		httpdHeader(connData, "Cache-Control", "max-age=3600, must-revalidate");
+		httpdEndHeaders(connData);
+
+		httpdSend(connData, httpBrowserStart, -1);
+		connData->file = 0;
+
+		SPIFFS_opendir(&fs, "/", &d);
+//		os_printf("dir head\n");
+		return HTTPD_CGI_MORE;
+	}
+	else if(connData->file == 0)
+	{
+		struct spiffs_dirent e;
+		struct spiffs_dirent *pe = &e;
+//		os_printf("cb\n");
+		if((pe = SPIFFS_readdir(&d, pe)))
+		{
+			char buf[256];
+			int l;
+//			os_printf("file: %s",pe->name);
+			l = os_sprintf(buf, "<tr><td><a href=\"/%s\">%s</a></td><td><a href=\"%s?del=%s\">X</a></td><td>%d</td></tr>", pe->name, pe->name, connData->url, pe->name, pe->size);
+			espconn_sent(connData->conn, buf, l);
+			return HTTPD_CGI_MORE;
+		}
+		else
+		{
+//			os_printf("dir done\n");
+			SPIFFS_closedir(&d);
+			httpdSend(connData, httpBrowserStop, -1);
+			return HTTPD_CGI_DONE;
+		}
+	}
+
 }
