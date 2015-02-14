@@ -12,12 +12,15 @@
 
 #define HTTPD_CGI_MORE 0
 #define HTTPD_CGI_DONE 1
-#define HTTPD_CGI_NOTFOUND 2		//todo remove
+#define HTTPD_CGI_NOTFOUND 2
+
+#define HTTPD_POST_MORE 0
+#define HTTPD_POST_DONE 1
 
 typedef struct HttpdPriv HttpdPriv;
 typedef struct HttpdConnData HttpdConnData;
 
-typedef int (* httpdSendCallback)(HttpdConnData *connData);
+typedef int (* httpdCallback)(HttpdConnData *connData);
 
 //A struct describing a http connection. This gets passed to cgi functions.
 struct HttpdConnData {
@@ -28,16 +31,21 @@ struct HttpdConnData {
 	//void *cgiData;
 	int file;
 	HttpdPriv *priv;
-	httpdSendCallback cb;			//former cgi
+	httpdCallback sendCb;
+	httpdCallback postCb;
 	int postLen;
-	char *postBuff;
+	char *postBoundary;
+	int postLinePos;
+	char *postLine;
+	char *postArg;
 };
 
 //A struct describing an url. This is the main struct that's used to send different URL requests to
 //different routines.
 typedef struct {
 	const char *url;
-	httpdSendCallback httpdCb;
+	httpdCallback httpdCb;
+	httpdCallback postCb;
 } HttpdBuiltInUrl;
 
 void ICACHE_FLASH_ATTR httpdInit(int port);

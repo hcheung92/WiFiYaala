@@ -65,7 +65,8 @@ static const char *httpBrowserStart="<!DOCTYPE html><html><head><title>Yaala FS 
 		"<form action=\"/fsbrowse\" method=\"post\" enctype=\"multipart/form-data\">"\
 		"<table cellpadding=\"10\" border=\"1\" rules=\"groups\">"\
 		"<thead><tr><td>Name</td><td>Action</td><td>Size</td></tr></thead><tfoot>"\
-		"<tr><td><input name=\"file\" size=\"20\" accept=\"*/*\" type=\"file\"></td><td><input type=\"submit\" name=\"add\" value=\"Upload\"></td><td>Format</td></tr></tfoot><tbody>";
+		"<tr><td><input name=\"file\" size=\"20\" accept=\"*/*\" type=\"file\"></td><td><input type=\"submit\" name=\"add\" value=\"Upload\"></td><td><a href=\"fsbrowse?format\">Format</a></td></tr></tfoot><tbody>";
+static const char *httpBrowserFormatErr="<tr><td>FS compromised. Re-flash image.</td></tr>";
 static const char *httpBrowserStop="</tbody></table></body></html>";
 
 int ICACHE_FLASH_ATTR fsBrowse(HttpdConnData *connData)
@@ -80,7 +81,14 @@ int ICACHE_FLASH_ATTR fsBrowse(HttpdConnData *connData)
 	{
 		//First call to this cgi.
 
-		//todo check args: add/format
+		httpdStartResponse(connData, 200);
+		httpdHeader(connData, "Content-Type", httpdGetMimetype(connData->url));
+		httpdHeader(connData, "Cache-Control", "max-age=3600, must-revalidate");
+		httpdEndHeaders(connData);
+
+		httpdSend(connData, httpBrowserStart, -1);
+		connData->file = 0;
+
 		if(connData->getArgs != NULL)
 		{
 			if(!os_strncmp(connData->getArgs, "del", 3))
@@ -89,15 +97,15 @@ int ICACHE_FLASH_ATTR fsBrowse(HttpdConnData *connData)
 //				os_printf("del: %s\n", del);
 				SPIFFS_remove(&fs, del);
 			}
+			else if(!os_strncmp(connData->getArgs, "format", 6))
+			{
+				os_printf("format\n");
+				if( !fs_format() )
+				{
+					httpdSend(connData, httpBrowserFormatErr, -1);
+				}
+			}
 		}
-
-		httpdStartResponse(connData, 200);
-		httpdHeader(connData, "Content-Type", httpdGetMimetype(connData->url));
-		httpdHeader(connData, "Cache-Control", "max-age=3600, must-revalidate");
-		httpdEndHeaders(connData);
-
-		httpdSend(connData, httpBrowserStart, -1);
-		connData->file = 0;
 
 		SPIFFS_opendir(&fs, "/", &d);
 //		os_printf("dir head\n");
@@ -114,7 +122,6 @@ int ICACHE_FLASH_ATTR fsBrowse(HttpdConnData *connData)
 			int l;
 //			os_printf("file: %s",pe->name);
 			l = os_sprintf(buf, "<tr><td><a href=\"/%s\">%s</a></td><td><a href=\"%s?del=%s\">Del</a></td><td>%d</td></tr>", pe->name, pe->name, connData->url, pe->name, pe->size);
-//			l = os_sprintf(buf, "<tr><td><a href=\"/%s\">%s</a></td><td><input type=\"submit\" name=\"del\" value=\"%s\"></td><td>%d</td></tr>", pe->name, pe->name, pe->name, pe->size);
 			espconn_sent(connData->conn, buf, l);
 			return HTTPD_CGI_MORE;
 		}
@@ -127,4 +134,91 @@ int ICACHE_FLASH_ATTR fsBrowse(HttpdConnData *connData)
 		}
 	}
 
+}
+
+int ICACHE_FLASH_ATTR fsPost(HttpdConnData *connData)
+{
+	char *e;
+
+	connData->postLine[connData->postLinePos] = '\0';
+
+	//os_printf("eval\n");
+	//eval post line
+	if(connData->postLine[0]=='-' && connData->postLine[1]=='-' && os_strncmp(&connData->postLine[2], connData->postBoundary, os_strlen(connData->postBoundary))==0)
+	{
+		os_printf("bd\n");
+		if(connData->postArg !=NULL)
+		{
+			os_free(connData->postArg);
+			connData->postArg = NULL;
+		}
+		//else...
+
+		//close file write if opened
+		if(connData->file != -1)
+		{
+			os_printf("close\n");
+			fs_close(connData->file);
+		}
+		connData->file = -1;
+
+		if(connData->postLine[2+os_strlen(connData->postBoundary)]=='-' && connData->postLine[2+os_strlen(connData->postBoundary)+1]=='-')
+		{
+			//Multipart end
+			os_printf("me\n");
+			//Send the response.
+			connData->file = -1;
+			return HTTPD_POST_DONE;
+		}
+	}
+	else if(os_strncmp(connData->postLine, "Content-Disposition", 19)==0)
+	{
+		os_printf("CD\n");
+		e=(char*)os_strstr(connData->postLine, "filename=");
+		if(e != NULL)
+		{
+			//os_printf("f fn?\n");
+			e += 10;
+			((char*)os_strstr(e, "\""))[0] = '\0';
+			if(os_strlen(e) && connData->postArg == NULL)
+			{
+				connData->postArg = (char*)os_malloc(os_strlen(e)+1);
+				os_memcpy(connData->postArg, e, os_strlen(e) +1);
+				os_printf("filename: '%s'\n", connData->postArg);
+			}
+		}
+	}
+	else if(connData->postLinePos==2 && connData->postLine[0]=='\r' && connData->postLine[1]=='\n')
+	{
+		os_printf("nl\n");
+		if(connData->postArg != NULL && connData->file == -1)
+		{
+			//open file for write
+			os_printf("open\n");
+			connData->file = fs_open(connData->postArg, FS_RDWR|FS_CREAT|FS_TRUNC);
+			if (connData->file < 0)				//wtf
+			{
+				return HTTPD_POST_DONE;
+			}
+		}
+	}
+	else if(connData->file != -1)
+	{
+		os_printf("store\n");
+		if(fs_write(connData->file, connData->postLine, connData->postLinePos) != connData->postLinePos)
+		{
+			os_printf("write too short");
+			fs_close(connData->file);
+			connData->file = -1;
+			return HTTPD_POST_DONE;
+		}
+	}
+	else
+	{
+		//connData->postLine[connData->postLinePos] = '\0';
+		os_printf("ul: %s", connData->postLine);
+	}
+
+	connData->postLinePos = 0;
+	return HTTPD_POST_MORE;
 }
