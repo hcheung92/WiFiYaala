@@ -83,7 +83,7 @@ int ICACHE_FLASH_ATTR fsBrowse(HttpdConnData *connData)
 
 		httpdStartResponse(connData, 200);
 		httpdHeader(connData, "Content-Type", httpdGetMimetype(connData->url));
-		httpdHeader(connData, "Cache-Control", "max-age=3600, must-revalidate");
+		httpdHeader(connData, "Cache-Control", "private, max-age=0, no-cache, no-store, must-revalidate");
 		httpdEndHeaders(connData);
 
 		httpdSend(connData, httpBrowserStart, -1);
