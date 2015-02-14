@@ -24,6 +24,7 @@
 #include "espconn.h"
 #include "httpd/httpd.h"
 #include "fs.h"
+#include "luaexec.h"
 
 
 //Max length of request head
@@ -45,7 +46,7 @@ static HttpdBuiltInUrl builtInUrls[]=
 {
 	{"/", redirIndexHtml, NULL},
 	{"/fsbrowse", fsBrowse, fsPost},
-	{"/luacmd", NULL, NULL},	//todo lua cmd
+	{"/luacmd", NULL, luaPost},	//todo lua cmd
 	{"*", fsHook, NULL},		//filesystem
 	{NULL, NULL}
 };
@@ -361,6 +362,10 @@ static void httpdSendResp(HttpdConnData *conn)
 			os_printf("Is url index %d\n", i);
 			conn->file = -1;
 			conn->sendCb=builtInUrls[i].httpdCb;
+			if(conn->sendCb == NULL)
+			{
+				return;
+			}
 			r=conn->sendCb(conn);
 			if (r != HTTPD_CGI_NOTFOUND)
 			{
@@ -464,7 +469,7 @@ static void ICACHE_FLASH_ATTR httpdParseHeader(char *h, HttpdConnData *conn)
 		char *e;
 
 		//Figure out start of boundary.
-		e=(char*)os_strstr(h, "=");
+		e=(char*)os_strstr(h, "=");				//"dary=" probably a bit more secure?!
 		if (e==NULL)
 			return; //wtf?
 		e++;
@@ -535,13 +540,14 @@ static void ICACHE_FLASH_ATTR httpdRecvCb(void *arg, char *data, unsigned short 
 
 			conn->priv->postPos++;
 
-			if(data[x] == '\n' || conn->postLinePos == 255 || conn->priv->postPos>=conn->postLen)
+			if(data[x] == '\n' || conn->postLinePos >= 255 || conn->priv->postPos>=conn->postLen)
 			{
 				if(httpdPost(conn) == HTTPD_POST_DONE)
 				{
 					httpdSendResp(conn);
 					break;
 				}
+				conn->postLinePos = 0;
 			}
 
 			if(conn->priv->postPos>=conn->postLen)

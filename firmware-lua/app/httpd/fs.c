@@ -62,7 +62,7 @@ int ICACHE_FLASH_ATTR fsHook(HttpdConnData *connData)
 
 
 static const char *httpBrowserStart="<!DOCTYPE html><html><head><title>Yaala FS Browser</title></head><body><h1>Yaala FS Browser</h1>"\
-		"<form action=\"/fsbrowse\" method=\"post\" enctype=\"multipart/form-data\">"\
+		"<form method=\"post\" enctype=\"multipart/form-data\">"\
 		"<table cellpadding=\"10\" border=\"1\" rules=\"groups\">"\
 		"<thead><tr><td>Name</td><td>Action</td><td>Size</td></tr></thead><tfoot>"\
 		"<tr><td><input name=\"file\" size=\"20\" accept=\"*/*\" type=\"file\"></td><td><input type=\"submit\" name=\"add\" value=\"Upload\"></td><td><a href=\"fsbrowse?format\">Format</a></td></tr></tfoot><tbody>";
@@ -219,6 +219,6 @@ int ICACHE_FLASH_ATTR fsPost(HttpdConnData *connData)
 		os_printf("ul: %s", connData->postLine);
 	}
 
-	connData->postLinePos = 0;
+	//connData->postLinePos = 0;
 	return HTTPD_POST_MORE;
 }
