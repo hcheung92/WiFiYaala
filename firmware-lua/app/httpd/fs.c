@@ -188,18 +188,14 @@ int ICACHE_FLASH_ATTR fsPost(HttpdConnData *connData)
 			}
 		}
 	}
-	else if(connData->postLinePos==2 && connData->postLine[0]=='\r' && connData->postLine[1]=='\n')
+	else if(connData->postLinePos==2 && connData->postLine[0]=='\r' && connData->postLine[1]=='\n' && connData->postArg != NULL && connData->file == -1)
 	{
-		os_printf("nl\n");
-		if(connData->postArg != NULL && connData->file == -1)
+		//open file for write
+		os_printf("open\n");
+		connData->file = fs_open(connData->postArg, FS_RDWR|FS_CREAT|FS_TRUNC);
+		if (connData->file < 0)				//wtf
 		{
-			//open file for write
-			os_printf("open\n");
-			connData->file = fs_open(connData->postArg, FS_RDWR|FS_CREAT|FS_TRUNC);
-			if (connData->file < 0)				//wtf
-			{
-				return HTTPD_POST_DONE;
-			}
+			return HTTPD_POST_DONE;
 		}
 	}
 	else if(connData->file != -1)
