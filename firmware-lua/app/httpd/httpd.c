@@ -46,7 +46,7 @@ static HttpdBuiltInUrl builtInUrls[]=
 {
 	{"/", redirIndexHtml, NULL},
 	{"/fsbrowse", fsBrowse, fsPost},
-	{"/luacmd", NULL, luaPost},	//todo lua cmd
+	{"/exec.lua", NULL, luaPost},	//todo lua cmd
 	{"*", fsHook, NULL},		//filesystem
 	{NULL, NULL}
 };
@@ -323,7 +323,7 @@ static void ICACHE_FLASH_ATTR httpdSentCb(void *arg)
 	conn->priv->sendBuff=sendBuff;
 	conn->priv->sendBuffLen=0;
 
-	if (conn->sendCb==NULL)
+	if (conn->sendCb==NULL && conn->postCb==NULL)
 	{ 									//Marked for destruction?
 		os_printf("Conn %p is done. Closing.\n", conn->conn);
 		espconn_disconnect(conn->conn);
@@ -544,6 +544,7 @@ static void ICACHE_FLASH_ATTR httpdRecvCb(void *arg, char *data, unsigned short 
 			{
 				if(httpdPost(conn) == HTTPD_POST_DONE)
 				{
+					conn->postCb = NULL;
 					httpdSendResp(conn);
 					break;
 				}
@@ -552,6 +553,7 @@ static void ICACHE_FLASH_ATTR httpdRecvCb(void *arg, char *data, unsigned short 
 
 			if(conn->priv->postPos>=conn->postLen)
 			{
+				conn->postCb = NULL;
 				//Send the response.
 				httpdSendResp(conn);
 				break;
