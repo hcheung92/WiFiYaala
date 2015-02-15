@@ -67,7 +67,7 @@ static const char *httpBrowserStart="<!DOCTYPE html><html><head><title>Yaala FS 
 		"<thead><tr><td>Name</td><td>Action</td><td>Size</td></tr></thead><tfoot>"\
 		"<tr><td><input name=\"file\" size=\"20\" accept=\"*/*\" type=\"file\"></td><td><input type=\"submit\" name=\"add\" value=\"Upload\"></td><td><a href=\"fsbrowse?format\">Format</a></td></tr></tfoot><tbody>";
 static const char *httpBrowserFormatErr="<tr><td>FS compromised. Re-flash image.</td></tr>";
-static const char *httpBrowserStop="</tbody></table></body></html>";
+static const char *httpBrowserStop="</tbody></table></form></body></html>";
 
 int ICACHE_FLASH_ATTR fsBrowse(HttpdConnData *connData)
 {
@@ -83,7 +83,7 @@ int ICACHE_FLASH_ATTR fsBrowse(HttpdConnData *connData)
 
 		httpdStartResponse(connData, 200);
 		httpdHeader(connData, "Content-Type", httpdGetMimetype(connData->url));
-		httpdHeader(connData, "Cache-Control", "private, max-age=0, no-cache, no-store, must-revalidate");
+		httpdHeader(connData, "Cache-Control", "max-age=0, no-cache, no-store, must-revalidate");
 		httpdEndHeaders(connData);
 
 		httpdSend(connData, httpBrowserStart, -1);
