@@ -258,11 +258,26 @@ static int node_input( lua_State* L )
 
 static int output_redir_ref = LUA_NOREF;
 static int serial_debug = 1;
+extern char *lua2httpdret;
+extern int lua2httpretPos;
 void output_redirect(const char *str){
   // if(c_strlen(str)>=TX_BUFF_SIZE){
   //   NODE_ERR("output too long.\n");
   //   return;
   // }
+
+	//lua2hhtp hack: lua only supports on redirect. in order not to break any stuff, we bypass everything
+	if(lua2httpdret != NULL)
+	{
+		int length = os_strlen(str);
+		if(length + lua2httpretPos > 1022)
+		{
+			length = 1022-lua2httpretPos;
+		}
+		os_memcpy(&lua2httpdret[lua2httpretPos], str,  length);	//should not be greater than 254!!!
+		lua2httpretPos += length;
+	}
+
 
   if(output_redir_ref == LUA_NOREF || !gL){
     uart0_sendStr(str);

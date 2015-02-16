@@ -30,9 +30,9 @@ int ICACHE_FLASH_ATTR fsHook(HttpdConnData *connData)
 	if (connData->file == -1)
 	{
 		//First call to this cgi. Open the file so we can read it.
-		os_printf("fopen %s\n", connData->url);
+//		os_printf("fopen %s\n", connData->url);
 		connData->file = fs_open(&connData->url[1], FS_RDONLY);
-		os_printf("open ret %d\n", connData->file);
+//		os_printf("open ret %d\n", connData->file);
 		if (connData->file < 0)
 		{
 			return HTTPD_CGI_NOTFOUND;
@@ -99,7 +99,7 @@ int ICACHE_FLASH_ATTR fsBrowse(HttpdConnData *connData)
 			}
 			else if(!os_strncmp(connData->getArgs, "format", 6))
 			{
-				os_printf("format\n");
+//				os_printf("format\n");
 				if( !fs_format() )
 				{
 					httpdSend(connData, httpBrowserFormatErr, -1);
@@ -146,7 +146,7 @@ int ICACHE_FLASH_ATTR fsPost(HttpdConnData *connData)
 	//eval post line
 	if(connData->postLine[0]=='-' && connData->postLine[1]=='-' && os_strncmp(&connData->postLine[2], connData->postBoundary, os_strlen(connData->postBoundary))==0)
 	{
-		os_printf("bd\n");
+//		os_printf("bd\n");
 		if(connData->postArg !=NULL)
 		{
 			os_free(connData->postArg);
@@ -157,7 +157,7 @@ int ICACHE_FLASH_ATTR fsPost(HttpdConnData *connData)
 		//close file write if opened
 		if(connData->file != -1)
 		{
-			os_printf("close\n");
+//			os_printf("close\n");
 			fs_close(connData->file);
 		}
 		connData->file = -1;
@@ -165,7 +165,7 @@ int ICACHE_FLASH_ATTR fsPost(HttpdConnData *connData)
 		if(connData->postLine[2+os_strlen(connData->postBoundary)]=='-' && connData->postLine[2+os_strlen(connData->postBoundary)+1]=='-')
 		{
 			//Multipart end
-			os_printf("me\n");
+//			os_printf("me\n");
 			//Send the response.
 			connData->file = -1;
 			return HTTPD_POST_DONE;
@@ -173,7 +173,7 @@ int ICACHE_FLASH_ATTR fsPost(HttpdConnData *connData)
 	}
 	else if(os_strncmp(connData->postLine, "Content-Disposition", 19)==0)
 	{
-		os_printf("CD\n");
+//		os_printf("CD\n");
 		e=(char*)os_strstr(connData->postLine, "filename=");
 		if(e != NULL)
 		{
@@ -184,14 +184,14 @@ int ICACHE_FLASH_ATTR fsPost(HttpdConnData *connData)
 			{
 				connData->postArg = (char*)os_malloc(os_strlen(e)+1);
 				os_memcpy(connData->postArg, e, os_strlen(e) +1);
-				os_printf("filename: '%s'\n", connData->postArg);
+//				os_printf("filename: '%s'\n", connData->postArg);
 			}
 		}
 	}
 	else if(connData->postLinePos==2 && connData->postLine[0]=='\r' && connData->postLine[1]=='\n' && connData->postArg != NULL && connData->file == -1)
 	{
 		//open file for write
-		os_printf("open\n");
+//		os_printf("open\n");
 		connData->file = fs_open(connData->postArg, FS_RDWR|FS_CREAT|FS_TRUNC);
 		if (connData->file < 0)				//wtf
 		{
@@ -200,10 +200,10 @@ int ICACHE_FLASH_ATTR fsPost(HttpdConnData *connData)
 	}
 	else if(connData->file != -1)
 	{
-		os_printf("store\n");
+//		os_printf("store\n");
 		if(fs_write(connData->file, connData->postLine, connData->postLinePos) != connData->postLinePos)
 		{
-			os_printf("write too short");
+//			os_printf("write too short");
 			fs_close(connData->file);
 			connData->file = -1;
 			return HTTPD_POST_DONE;
@@ -211,10 +211,8 @@ int ICACHE_FLASH_ATTR fsPost(HttpdConnData *connData)
 	}
 	else
 	{
-		//connData->postLine[connData->postLinePos] = '\0';
-		os_printf("ul: %s", connData->postLine);
+//		os_printf("ul: %s", connData->postLine);
 	}
 
-	//connData->postLinePos = 0;
 	return HTTPD_POST_MORE;
 }

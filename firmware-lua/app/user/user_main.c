@@ -119,7 +119,7 @@ void user_init(void)
     // uart_init(BIT_RATE_115200, BIT_RATE_115200);
     
     #ifndef NODE_DEBUG
-//    system_set_os_print(0);
+    system_set_os_print(0);
     #endif
     
     httpdInit(80);
