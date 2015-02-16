@@ -14,6 +14,22 @@ Additionally, we add some optional nice to have features like the Domain Name su
 It is currently in a VERY early state. Documentation does not yet exist. The only thing which is working right now is the driver support for APA102 and PCA9685 LEDs. Besides others, WS28XX LEDs (glitch free, using hardware support) are getting implemented right now.
 Stay tuned...
 
+Features
+--------
+
+1) Removed eLUA (nodemcu) modules
+- PWM: we need the timer for the LEDs
+- MQTT: currently no needed
+- WS2812: we are doing it proper: 127bytes hardware FIFO support. No hitches or glitches...
+
+2) Embedded web browser
+/fsbrowse let's you browse the file system
+/lua HTTP POST requests get interpreted. See lua/luaexec.html for more details on this.
+
+3) Additional LUA stuff
+- hostname.set() / hostname.get() let's you specify a hostname that will be transmitted to the DHCP server during a DHCP request. Execute the command BEFORE getting/renewing an IP, e.g. in the first line of init.lua
+- led.XXXX see lua-folder and/or sourcecode for usage (for now, I am too lazy to document it ggg)
+
 Requirements
 -------------
 GCC toolchain, see https://github.com/esp8266/esp8266-wiki/wiki
