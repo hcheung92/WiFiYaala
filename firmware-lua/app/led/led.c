@@ -113,7 +113,7 @@ LOCAL void tim1_intr_handler(void)
 	if (leds)
 	{
 		RTC_REG_WRITE(FRC1_LOAD_ADDRESS, US_TO_RTC_TIMER_TICKS(LED_INTERVALL_MS*1000));
-		system_os_post(USER_TASK_PRIO_1, 0, '0');
+		system_os_post(USER_TASK_PRIO_0, 0, '0');
 	}
 }
 
@@ -165,7 +165,7 @@ int ICACHE_FLASH_ATTR led_init(int newLeds)
 
 	os_memset(led, 0, sizeof(led_t) * leds);
 
-	system_os_task(procTask, USER_TASK_PRIO_1, procTaskQueue, 1);
+	system_os_task(procTask, USER_TASK_PRIO_0, procTaskQueue, 1);
 
 	ETS_FRC_TIMER1_INTR_ATTACH(tim1_intr_handler, NULL);
 	TM1_EDGE_INT_ENABLE();
