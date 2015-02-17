@@ -1,0 +1,13 @@
+<html><head><script>
+function run(code,div)
+{
+var xmlhttp = new XMLHttpRequest();
+xmlhttp.open("POST","/lua",true);
+xmlhttp.setRequestHeader("Content-Type","multipart/form-data; boundary=--BOUNDARY");
+xmlhttp.send("--BOUNDARY\nContent-Disposition: form-data; name=\"lua\"\n"+code+"\n--BOUNDARY\n");
+}
+</script></head><body>
+<input type="button" onClick="run('programs.change()')" value="change program" />
+<input type="button" onClick="run('led.set(0,100,0,0,1000)')" value="setcolor" />
+<input type="button" onClick="run('node.reset()')" value="reset node" />
+</body></html>
