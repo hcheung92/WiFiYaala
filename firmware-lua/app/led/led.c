@@ -100,7 +100,8 @@ void inline led_refresh(void)
 	}
 }
 
-LOCAL void procTask(os_event_t *events)
+//LOCAL void procTask(os_event_t *events)
+some_timerfunc(void *param)
 {
 	if (leds)
 		led_refresh();
@@ -109,12 +110,12 @@ LOCAL void procTask(os_event_t *events)
 
 LOCAL void tim1_intr_handler(void)
 {
-	RTC_CLR_REG_MASK(FRC1_INT_ADDRESS, FRC1_INT_CLR_MASK);
-	if (leds)
-	{
-		RTC_REG_WRITE(FRC1_LOAD_ADDRESS, US_TO_RTC_TIMER_TICKS(LED_INTERVALL_MS*1000));
-		system_os_post(USER_TASK_PRIO_0, 0, '0');
-	}
+//	RTC_CLR_REG_MASK(FRC1_INT_ADDRESS, FRC1_INT_CLR_MASK);
+//	if (leds)
+//	{
+//		RTC_REG_WRITE(FRC1_LOAD_ADDRESS, US_TO_RTC_TIMER_TICKS(LED_INTERVALL_MS*1000));
+//		system_os_post(USER_TASK_PRIO_0, 0, '0');
+//	}
 }
 
 //public
@@ -148,6 +149,8 @@ void ICACHE_FLASH_ATTR led_deinit(void)
 
 }
 
+static os_timer_t some_timer;
+
 int ICACHE_FLASH_ATTR led_init(int newLeds)
 {
 	if (leds || led != NULL)
@@ -165,14 +168,19 @@ int ICACHE_FLASH_ATTR led_init(int newLeds)
 
 	os_memset(led, 0, sizeof(led_t) * leds);
 
-	system_os_task(procTask, USER_TASK_PRIO_0, procTaskQueue, 1);
+//	system_os_task(procTask, USER_TASK_PRIO_1, procTaskQueue, 1);
 
-	ETS_FRC_TIMER1_INTR_ATTACH(tim1_intr_handler, NULL);
-	TM1_EDGE_INT_ENABLE();
-	ETS_FRC1_INTR_ENABLE();
+//	ETS_FRC_TIMER1_INTR_ATTACH(tim1_intr_handler, NULL);
+//	TM1_EDGE_INT_ENABLE();
+//	ETS_FRC1_INTR_ENABLE();
 
-	RTC_REG_WRITE(FRC1_CTRL_ADDRESS, DIVDED_BY_16 | FRC1_ENABLE_TIMER | TM_EDGE_INT);
-	RTC_REG_WRITE(FRC1_LOAD_ADDRESS, US_TO_RTC_TIMER_TICKS(LED_INTERVALL_MS*1000));
+//	RTC_REG_WRITE(FRC1_CTRL_ADDRESS, DIVDED_BY_16 | FRC1_ENABLE_TIMER | TM_EDGE_INT);
+//	RTC_REG_WRITE(FRC1_LOAD_ADDRESS, US_TO_RTC_TIMER_TICKS(LED_INTERVALL_MS*1000));
+
+//software test:
+	os_timer_disarm(&some_timer);
+	os_timer_setfn(&some_timer, (os_timer_func_t *) some_timerfunc, NULL);
+	os_timer_arm(&some_timer, 20, 1);
 
 	return leds;
 }
