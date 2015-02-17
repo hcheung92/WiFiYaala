@@ -165,7 +165,7 @@ int ICACHE_FLASH_ATTR led_init(int newLeds)
 
 	os_memset(led, 0, sizeof(led_t) * leds);
 
-	system_os_task(procTask, USER_TASK_PRIO_1, procTaskQueue, 1);
+	system_os_task(procTask, USER_TASK_PRIO_0, procTaskQueue, 1);
 
 	ETS_FRC_TIMER1_INTR_ATTACH(tim1_intr_handler, NULL);
 	TM1_EDGE_INT_ENABLE();
