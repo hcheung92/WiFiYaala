@@ -4,7 +4,7 @@ function run(code,div)
 var xmlhttp = new XMLHttpRequest();
 xmlhttp.open("POST","/lua",true);
 xmlhttp.setRequestHeader("Content-Type","multipart/form-data; boundary=--BOUNDARY");
-xmlhttp.send("--BOUNDARY\nContent-Disposition: form-data; name=\"lua\"\n"+code+"\n--BOUNDARY\n");
+xmlhttp.send("--BOUNDARY\r\nContent-Disposition: form-data; name=\"lua\"\r\n\r\n"+code+"\r\n--BOUNDARY--\r\n");
 }
 </script></head><body>
 <input type="button" onClick="run('programs.change()')" value="change program" />
