@@ -3,11 +3,13 @@ function run(code,div)
 {
 var xmlhttp = new XMLHttpRequest();
 xmlhttp.open("POST","/lua",true);
+var content = '----BOUNDARY\r\nContent-Disposition: form-data; charset: UTF-8; name="lua"\r\n\r\n'+code+"\r\n----BOUNDARY--\r\n";
 xmlhttp.setRequestHeader("Content-Type","multipart/form-data; boundary=--BOUNDARY");
-xmlhttp.send("--BOUNDARY\r\nContent-Disposition: form-data; name=\"lua\"\r\n\r\n"+code+"\r\n--BOUNDARY--\r\n");
+xmlhttp.setRequestHeader("Content-Length",content.length);
+xmlhttp.send(content);
 }
 </script></head><body>
 <input type="button" onClick="run('programs.change()')" value="change program" />
 <input type="button" onClick="run('led.set(0,100,0,0,1000)')" value="setcolor" />
-<input type="button" onClick="run('node.reset()')" value="reset node" />
+<input type="button" onClick="run('node.restart()')" value="restart node" />
 </body></html>
