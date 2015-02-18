@@ -21,6 +21,7 @@ function y_init ()
   programs=require("programs")
   gpio.mode(3, gpio.INT)
   gpio.trig(3, "both", y_button)
+  led.set(0,0,15,0,100)
 end
 if gpio.read(3) == 1 then  
   tmr.alarm(0, 5000, 0, y_init)
