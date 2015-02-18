@@ -81,8 +81,11 @@ typedef struct
 static const MimeMap mimeTypes[]=
 {
 	{"htm", "text/htm"},
+	{"htmlz", "text/html\r\nContent-Encoding: gzip"},
 	{"html", "text/html"},
+	{"cssz", "text/css\r\nContent-Encoding: gzip"},
 	{"css", "text/css"},
+	{"jsz", "text/javascript\r\nContent-Encoding: gzip"},
 	{"js", "text/javascript"},
 	{"txt", "text/plain"},
 	{"lua", "text/plain"},
@@ -469,10 +472,10 @@ static void ICACHE_FLASH_ATTR httpdParseHeader(char *h, HttpdConnData *conn)
 		char *e;
 
 		//Figure out start of boundary.
-		e=(char*)os_strstr(h, "=");				//"dary=" probably a bit more secure?!
+		e=(char*)os_strstr(h, "boundary=");
 		if (e==NULL)
 			return; //wtf?
-		e++;
+		e+=9;
 		conn->postBoundary=(char*)os_malloc(os_strlen(e)+1);
 		os_memcpy(conn->postBoundary, e, os_strlen(e));
 		conn->postBoundary[os_strlen(e)]='\0';
