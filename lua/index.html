@@ -1,12 +1,20 @@
-<html><head><script>
+<!DOCTYPE html>
+<html><head>
+<title>WiFiYaala Control</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script language="javascript" type="text/javascript" src="jquery.jsz"></script>
+<script language="javascript" type="text/javascript" src="spectrum.jsz"></script>
+<script>
 function run(code,div)
 {
-var xmlhttp = new XMLHttpRequest();
-xmlhttp.open("POST","/lua",true);
-var content = '----BOUNDARY\r\nContent-Disposition: form-data; charset: UTF-8; name="lua"\r\n\r\n'+code+"\r\n----BOUNDARY--\r\n";
-xmlhttp.setRequestHeader("Content-Type","multipart/form-data; boundary=--BOUNDARY");
-xmlhttp.setRequestHeader("Content-Length",content.length);
-xmlhttp.send(content);
+var content = '----BOUNDARY\r\nContent-Disposition: form-data; name="lua"\r\n\r\n'+code+"\r\n----BOUNDARY--\r\n";
+$.ajax({
+	url: '/lua',
+	type: 'POST',
+	data: content,
+	async: true,
+	cache: false,
+	contentType: "multipart/form-data; boundary=--BOUNDARY"});
 }
 </script></head><body>
 <input type="button" onClick="run('programs.change()')" value="change program" />
