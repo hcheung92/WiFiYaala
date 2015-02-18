@@ -23,8 +23,9 @@ function y_init ()
   gpio.trig(3, "both", y_button)
   led.set(0,0,15,0,100)
 end
-if gpio.read(3) == 1 then  
-  tmr.alarm(0, 5000, 0, y_init)
+if gpio.read(3) == 1 then
+  y_init()
+  --tmr.alarm(0, 5000, 0, y_init)
 else
   print("button prevents lua-startup!")
 end
