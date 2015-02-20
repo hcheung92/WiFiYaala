@@ -15,7 +15,7 @@
 #include "ws28xx.h"
 
 led_t *led = NULL;
-unsigned int leds = 0;
+uint16_t leds = 0;
 struct __attribute__((packed))
 {
 	uint8_t pcaWhiteBehav[PCA_LEDS];
@@ -26,6 +26,8 @@ struct __attribute__((packed))
 } state;
 
 os_event_t procTaskQueue[1];
+
+
 
 void inline led_refresh(void)
 {
@@ -151,7 +153,7 @@ void ICACHE_FLASH_ATTR led_deinit(void)
 
 static os_timer_t some_timer;
 
-int ICACHE_FLASH_ATTR led_init(int newLeds)
+uint16_t ICACHE_FLASH_ATTR led_init(uint16_t newLeds)
 {
 	if (leds || led != NULL)
 		led_deinit();
@@ -185,90 +187,153 @@ int ICACHE_FLASH_ATTR led_init(int newLeds)
 	return leds;
 }
 
-int ICACHE_FLASH_ATTR led_setType(uint8_t type, unsigned int from, unsigned int to)
+uint16_t ICACHE_FLASH_ATTR led_inited(void)
 {
-	if (to >= leds || from > to)
-		return 0;
+	return leds;
+}
 
-	type &= 0x0F;
+uint8_t ICACHE_FLASH_ATTR led_setType(ledrange_t range, uint8_t type)
+{
+	if (type == LED_PCA9685)
+	{
+		if (state.pca9685Init == 0)
+		{
+			pca9685_init();
+			state.pca9685Init = 1;
+		}
+	}
+	else if (type == LED_APA102)
+	{
+		if (state.apa102Init == 0)
+		{
+			apa102_init(leds);
+			state.apa102Init = 1;
+		}
+	}
+	else if (type == LED_WS2801)
+	{
+		if (state.ws281xInit == 1) return false;	// ws281x and WS2801 can't be initialized at same time
+		if (state.ws2801Init == 0) 
+		{
+			ws28xx_init(type);
+			state.ws2801Init = 1;
+		}
+	}
+	else if (type == LED_WS281X)
+	{
+		if (state.ws2801Init == 1) return false;	// ws281x and WS2801 can't be initialized at same time
+		if (state.ws281xInit == 0)
+		{
+			ws28xx_init(type);
+			state.ws281xInit = 1;
+		}
+	}
+	else return false;	// Invalid type
+	
 
-	unsigned int i;
-	for (i = from; i <= to; i++)
+	uint16_t i;
+	for (i = range.from; i <= range.to; i++)
 	{
 		led[i].type = type;
 	}
-
-	if (type == LED_PCA9685 && state.pca9685Init == 0)
-	{
-		pca9685_init();
-		state.pca9685Init = 1;
-	}
-	else if (type == LED_APA102 && state.apa102Init == 0)
-	{
-		apa102_init(leds);
-		state.apa102Init = 1;
-	}
-	else if (type == LED_WS2801 && state.ws2801Init == 0 && state.ws281xInit == 0)
-	{
-		ws28xx_init(type);
-		state.ws2801Init = 1;
-	}
-	else if (type == LED_WS281X && state.ws281xInit == 0 && state.ws2801Init == 0)
-	{
-		ws28xx_init(type);
-		state.ws281xInit = 1;
-	}
-
-	return to - from + 1;
+	
+	return true;
 }
 
-void ICACHE_FLASH_ATTR led_setWhiteBehaviour(uint8_t ch0, uint8_t ch1, uint8_t ch2, uint8_t ch3)
+uint8_t ICACHE_FLASH_ATTR led_setWhiteBehaviour(uint8_t ch0, uint8_t ch1, uint8_t ch2, uint8_t ch3)
 {
+	if ((ch0 > WHITE_EXTRA) || (ch1 > WHITE_EXTRA) || (ch2 > WHITE_EXTRA) || (ch3 > WHITE_EXTRA)) return false;
+
 	state.pcaWhiteBehav[0] = ch0;
 	state.pcaWhiteBehav[1] = ch1;
 	state.pcaWhiteBehav[2] = ch2;
 	state.pcaWhiteBehav[3] = ch3;
+	
+	return true;
 }
 
-int ICACHE_FLASH_ATTR led_set(uint32_t channel, rgb8_t ledValue, uint32_t ms)
+uint8_t ICACHE_FLASH_ATTR led_setDim(ledrange_t range, uint8_t dim)
 {
-	if (channel >= leds)
-		return 0;
+	uint16_t i;
+	
+	if( dim > 0x0F ) return false;	
 
+	for (i = range.from; i <= range.to; i++)
+	{
+		led[i].dim = dim & 0x0F;
+	}
+
+	return true;
+}
+
+uint8_t ICACHE_FLASH_ATTR led_set(ledrange_t range, rgb8_t ledValue, uint32_t ms)
+{
 	sint32_t targetRed = ledValue.red << 23 | 0x00400000;
 	sint32_t targetGrn = ledValue.grn << 23 | 0x00400000;
 	sint32_t targetBlu = ledValue.blu << 23 | 0x00400000;
-
-	led[channel].steps = ms / LED_INTERVALL_MS;
-	if (led[channel].steps < 2)				//set immediately
+	
+	uint16_t i;
+	for (i = range.from; i <= range.to; i++)
 	{
-		led[channel].color.red = targetRed;
-		led[channel].colorStep.red = 0;
-		led[channel].color.grn = targetGrn;
-		led[channel].colorStep.grn = 0;
-		led[channel].color.blu = targetBlu;
-		led[channel].colorStep.blu = 0;
-		led[channel].steps = 1;
+		if (led[i].type == LED_NONE) return false;
+
+		led[i].steps = ms / LED_INTERVALL_MS;
+		if (led[i].steps < 2)				//set immediately
+		{
+			led[i].color.red = targetRed;
+			led[i].colorStep.red = 0;
+			led[i].color.grn = targetGrn;
+			led[i].colorStep.grn = 0;
+			led[i].color.blu = targetBlu;
+			led[i].colorStep.blu = 0;
+			led[i].steps = 1;
+		}
+		else
+		{
+			led[i].colorStep.red = ((sint32_t) (targetRed - led[i].color.red)) / led[i].steps;
+			led[i].colorStep.grn = ((sint32_t) (targetGrn - led[i].color.grn)) / led[i].steps;
+			led[i].colorStep.blu = ((sint32_t) (targetBlu - led[i].color.blu)) / led[i].steps;
+
+			//os_printf("led%d: stepCol=%d target=%d col=%d\n", (int)i, (int)led[i].colorStep.red,(int)targetRed, (int)led[i].color.red);
+		}
 	}
-	else
-	{
-		led[channel].colorStep.red = ((sint32_t) (targetRed - led[channel].color.red)) / led[channel].steps;
-		led[channel].colorStep.grn = ((sint32_t) (targetGrn - led[channel].color.grn)) / led[channel].steps;
-		led[channel].colorStep.blu = ((sint32_t) (targetBlu - led[channel].color.blu)) / led[channel].steps;
 
-		//os_printf("led%d: stepCol=%d target=%d col=%d\n", (int)channel, (int)led[channel].colorStep.red,(int)targetRed, (int)led[channel].color.red);
-	}
-
-	return 1;
-
+	return true;
 }
 
-int ICACHE_FLASH_ATTR led_setDim(uint32_t channel, uint8_t value)
+void ICACHE_FLASH_ATTR led_get(ledrange_t range, rgb32_t* value)
 {
-	if (channel >= leds)
-		return 0;
+	uint32_t r = 0;
+        uint32_t g = 0;
+	uint32_t b = 0;
 
-	led[channel].dim = value & 0x0F;
-	return 1;
+	uint16_t i;
+	for (i = range.from; i <= range.to; i++)
+	{
+		r += led[i].color.red >> 23;
+		g += led[i].color.grn >> 23;
+		b += led[i].color.blu >> 23;
+	}
+		
+	uint16_t count = range.to - range.from +1;
+
+	value->red = r / count;
+	value->grn = g / count;
+	value->blu = b / count;
 }
+
+uint16_t ICACHE_FLASH_ATTR led_checkRange(ledrange_t *range)
+{
+	if (range->from > range->to)  // Make range always counting up
+	{
+		uint16_t tmp = range->from;
+		range->from = range->to;
+		range->to = tmp;
+	}
+
+	if (range->to >= leds) return 0;
+	else return (range->to - range->from +1);
+}
+
+
 
