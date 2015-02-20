@@ -1,9 +1,9 @@
 local program = {}
 program.mode=0
 program.run=function()
-  if program.mode==0 then led.set(0, 255,0,0,500)
-  elseif program.mode==1 then led.set(0,0,255,0,500)
-  elseif program.mode==2 then led.set(0,0,0,255,500)
+  if program.mode==0 then led.set(0,led.inited()-1,255,0,0,500)
+  elseif program.mode==1 then led.set(0,led.inited()-1,0,255,0,500)
+  elseif program.mode==2 then led.set(0,led.inited()-1,0,0,255,500)
   end
   program.mode = (program.mode+1)%3
   tmr.alarm(1, 1000, 0, program.run)

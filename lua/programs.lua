@@ -32,9 +32,8 @@ function programs.stop()
  print("off!")
  if programs.active ~= nil then
    programs.active.cancel()
-   led.set(0, 200,0,0,0)
  end
- led.set(0, 0,0,0,1000)
+ led.set(0,led.inited()-1,0,0,0,1000)
 end
 function programs.doload()
  if string.sub(programs.file, -3) == ".lc" then
