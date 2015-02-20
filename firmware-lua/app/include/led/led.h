@@ -102,6 +102,12 @@ typedef struct __attribute__((packed))
 	} misc;
 } led_t;
 
+typedef struct
+{
+	uint16_t from;
+	uint16_t to;
+} ledrange_t;
+
 #define min(a,b) ((a)<(b)?(a):(b))  /**< Find the minimum of 2 numbers. */
 
 
@@ -128,12 +134,16 @@ typedef enum {
 
 
 void led_deinit(void);
-int led_init(int newLeds);
-int led_set(uint32_t channel, rgb8_t ledValue, uint32_t ms);
-int led_setDim(uint32_t channel, uint8_t value);
+uint16_t led_init(uint16_t newLeds);
+uint16_t led_inited(void);
 
-int led_setType(uint8_t type, unsigned int from, unsigned int to);
-void led_setWhiteBehaviour(uint8_t ch0, uint8_t ch1, uint8_t ch2, uint8_t ch3);
+uint8_t led_set(ledrange_t range, rgb8_t ledValue, uint32_t ms);
+void led_get(ledrange_t range, rgb32_t* value);
 
+uint8_t led_setType(ledrange_t range, uint8_t type);
+uint8_t led_setWhiteBehaviour(uint8_t ch0, uint8_t ch1, uint8_t ch2, uint8_t ch3);
+uint8_t led_setDim(ledrange_t range, uint8_t value);
+
+uint16_t led_checkRange(ledrange_t* range);
 
 #endif /* LED_H_ */
