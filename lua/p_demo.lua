@@ -47,7 +47,7 @@ function program.run()
           fadetime = time+200
      end
      local r,g,b = hsl2rgb(h, s, l)
-     led.set(0,r,g,b,fadetime)
+     led.set(0,led.inited()-1,r,g,b,fadetime)
      if program.cnt > 50 then
           program.mode = (program.mode + 1) % 7
           program.cnt = 0

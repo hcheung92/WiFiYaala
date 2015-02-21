@@ -2,47 +2,13 @@
 <html><head>
 <title>WiFiYaala Control</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script language="javascript" type="text/javascript" src="jquery.jsz"></script>
-<script language="javascript" type="text/javascript" src="spectrum.jsz"></script>
-<link rel='stylesheet' type="text/css" href='spectrum.cssz' />
-<script language="javascript" type="text/javascript" >
-function run(code,div) {
-var content = '----BOUNDARY\r\nContent-Disposition: form-data; name="lua"\r\n\r\n'+code+"\r\n----BOUNDARY--\r\n";
-$.ajax({
-	url: '/lua',
-	type: 'POST',
-	data: content,
-	async: true,
-	cache: false,
-	contentType: "multipart/form-data; boundary=--BOUNDARY"});
-}
-function sendColor(color) {
-	var rgb=color.toRgb();
-	run('led.set(0,'+rgb.r+','+rgb.g+','+rgb.b+',200)');
-}
-$(function() {
-$("#color").spectrum({
-    color: "#ECC",
-    showInput: true,
-    containerClassName: "full-spectrum",
-    showInitial: true,
-    preferredFormat: "rgb",
-    move: function (color) {
-    },
-    show: function () {
-
-    },
-    beforeShow: function () {
-
-    },
-    hide: function (color) {
-        sendColor(color);
-    }
-});
-});
-</script></head><body>
-<input type="button" onClick="run('programs.change()')" value="change program" />
-<input type="text" id="color" />
-<input type="button" onClick="run('programs.stop()')" value="off" />
-<input type="button" onClick="run('node.restart()')" value="restart node" />
+<link rel="stylesheet" type="text/css" href="default.css" />
+<script language="javascript" type="text/javascript" src="minified.jsz"></script>
+<script language="javascript" type="text/javascript" src="yaala.js"></script>
+</head><body style="background-color: #333">
+<ul id="programs">
+<li id="toggle" onClick="run('programs.change()')">Change Program</li>
+<li onClick="run('programs.stop()')">Off</li>
+<li onClick="run('node.restart()')">Restart Node</li>
+</ul>
 </body></html>
