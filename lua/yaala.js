@@ -1,9 +1,10 @@
 var MINI = require('minified');
 var _=MINI._, $=MINI.$, $$=MINI.$$, EE=MINI.EE, HTML=MINI.HTML;
 var downX = -1, downY = -1, color = {r:0,g:0,b:0},bgAnim=null,newMode=-1,downColor={h:-1,s:-1,l:-1},newColor={h:-1,s:-1,l:-1};
+String.prototype.capitalize = function() { return this.charAt(0).toUpperCase() + this.slice(1); }
 function run(code,success,error) {
-var content = '----BOUNDARY\r\nContent-Disposition: form-data; name="lua"\r\n\r\n'+code+"\r\n----BOUNDARY--\r\n";
-$.request('POST','/lua',content,{headers:{'Content-Type':"multipart/form-data; boundary=--BOUNDARY"}}).then(success, error);
+	var content = '----BOUNDARY\r\nContent-Disposition: form-data; name="lua"\r\n\r\n'+code+"\r\n----BOUNDARY--\r\n";
+	$.request('POST','/lua',content,{headers:{'Content-Type':"multipart/form-data; boundary=--BOUNDARY"}}).then(success, error);
 }
 function sendColor(color) {
 	run('local r,g,b=hsl2rgb('+Math.floor(color.h)+','+Math.floor(color.s)+','+Math.floor(color.l)+');led.set(0,led.inited()-1,r,g,b,200)');
@@ -26,8 +27,8 @@ $(function() {
 run('=unpack(programs.list())', function(response){
 	if (typeof(response) == 'undefined') return;
 	var lines = response.split(/[\n> ]+/);
-	var prgs = lines[0].split("\t");
-	for (prg in prgs) { $('#toggle').addAfter(EE("li", {'id': prgs[prg]}, prgs[prg]).onClick(clickProgram)) };
+	var prgs = lines[0].split("\t").sort();
+	for (prg in prgs) { var id=prgs[prg]; $('#toggle').addAfter(EE("li", {'id': id}, id.substring(2, id.lastIndexOf('.')).capitalize()).onClick(clickProgram)) };
 });
 setInterval(function() {run('=led.get(0,led.inited()-1)\n=programs.file', function(response) {
 	if (typeof(response) == 'undefined') return;
@@ -45,8 +46,9 @@ $('html').on('mousedown',function(event){
 	downY=event.pageY;
 	if (newColor.h==-1) { RGBToHSL(color, downColor); }
 	else { downColor.h=newColor.h; downColor.s=newColor.s; downColor.l=newColor.l; }
-	if (downX < 100) newMode=1;
+	if (downX < document.getElementById('scrollline').getBoundingClientRect().left) newMode=1;
 	else newMode=2;
+	return false;
 }).on('mouseup',function(){
 	downX=-1;
 	downY=-1;
@@ -64,9 +66,9 @@ $('html').on('mousedown',function(event){
 		newColor.s=Math.min(255,Math.max(0,(downColor.s + (downY-event.pageY))));
 		newColor.l=downColor.l;
 	}
-	var tmp = "background-color: hsl(" + Math.floor(newColor.h) + "," + Math.floor(newColor.s/255*100) + "%," + Math.floor(newColor.l/510*100) + "%)";
-	$('html body').set('style', "background-color: hsl(" + Math.floor(newColor.h) + "," + Math.floor(newColor.s/255*100) + "%," + Math.floor(newColor.l/510*100) + "%)");
-	//bgAnim = $('html body').anim({$backgroundColor: "hsl(" + Math.floor(newColor.h) + "," + Math.floor(newColor.s/255) + "%," + Math.floor(newColor.l/510) + "%)"}, 50);
+	$('html body').set('$background-color', "hsl(" + Math.floor(newColor.h) + "," + Math.floor(newColor.s/255*100) + "%," + Math.floor(newColor.l/510*100) + "%)");
+	//bgAnim = $('html body').anim({$backgroundColor: "hsl(" + Math.floor(newColor.h) + "," + Math.floor(newColor.s/25*1005) + "%," + Math.floor(newColor.l/510*100) + "%)"}, 50);
+	return false;
 });
 $('#programs').on('mousedown',function() {return false;});
 });

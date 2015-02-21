@@ -14,3 +14,13 @@ ul li:hover,li.active {
 ul li.loading {
 	background-color:rgba(255,255,255,0.8);
 }
+div#scrollline {
+	border: 1px solid rgba(255,255,255,0.1);
+	width: 0px;
+	height: 100%;
+	position: fixed;
+	top: 0;
+	margin-left: 8px;
+	left: 82px;
+	z-index: -999;
+}

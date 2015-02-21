@@ -29,11 +29,9 @@ function programs.change()
  end
 end
 function programs.stop()
- print("off!")
  if programs.active ~= nil then
    programs.active.cancel()
  end
- led.set(0,led.inited()-1,0,0,0,1000)
 end
 function programs.dofile(file)
    programs.file=file
@@ -41,6 +39,8 @@ function programs.dofile(file)
    return file
 end
 function programs.doload()
+ programs.active=nil
+ collectgarbage()
  if string.sub(programs.file, -3) == ".lc" then
    programs.active=require(string.sub(programs.file, 1, -4))
  else

@@ -3,12 +3,14 @@
 <title>WiFiYaala Control</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" type="text/css" href="default.css" />
+<link rel="stylesheet" media="all and (orientation:landscape)" href="landscape.css">
 <script language="javascript" type="text/javascript" src="minified.jsz"></script>
-<script language="javascript" type="text/javascript" src="yaala.js"></script>
+<script language="javascript" type="text/javascript" src="yaala.jsz"></script>
 </head><body style="background-color: #333">
+<div id="scrollline"></div>
 <ul id="programs">
-<li id="toggle" onClick="run('programs.change()')">Change Program</li>
-<li onClick="run('programs.stop()')">Off</li>
-<li onClick="run('node.restart()')">Restart Node</li>
+<li id="toggle" onClick="run('programs.change();')">Change Program</li>
+<li onClick="run('programs.stop();led.set(0,-1,0,0,0,1000);'">Off</li>
+<li onClick="run('node.restart();')">Restart Node</li>
 </ul>
 </body></html>
