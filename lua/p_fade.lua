@@ -6,7 +6,7 @@ function program.run()
   h = ((tmr.now())%360)
   s = ((tmr.now())%255)
   local r,g,b = hsl2rgb(h, s, program.lightness)
-  led.set(0, -1,r,g,b,program.fadetime)
+  led.set(0,-1,r,g,b,program.fadetime)
   tmr.alarm(1, program.time, 0, program.run)
 end
 function program.cancel()
