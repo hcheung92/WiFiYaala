@@ -301,7 +301,7 @@ uint8_t ICACHE_FLASH_ATTR led_set(ledrange_t range, rgb8_t ledValue, uint32_t ms
 	return true;
 }
 
-void ICACHE_FLASH_ATTR led_get(ledrange_t range, rgb32_t* value)
+void ICACHE_FLASH_ATTR led_get(ledrange_t range, rgb8_t* value)
 {
 	uint32_t r = 0;
         uint32_t g = 0;
@@ -321,18 +321,30 @@ void ICACHE_FLASH_ATTR led_get(ledrange_t range, rgb32_t* value)
 	value->grn = g / count;
 	value->blu = b / count;
 }
+	
 
-uint16_t ICACHE_FLASH_ATTR led_checkRange(ledrange_t *range)
+
+uint16_t ICACHE_FLASH_ATTR led_checkRange(int32_t from, int32_t to, ledrange_t *range)
 {
+	if (leds == 0) return 0;
+
+	// Negative modulo gives negative results in C, so do a workarround	
+	int32_t tmp = from % leds;
+	if (tmp < 0) tmp += leds;
+	range->from = (uint16_t)tmp;
+	
+	tmp = to % leds;
+	if (tmp < 0) tmp += leds;
+	range->to = (uint16_t)tmp;
+
 	if (range->from > range->to)  // Make range always counting up
 	{
 		uint16_t tmp = range->from;
 		range->from = range->to;
 		range->to = tmp;
 	}
-
-	if (range->to >= leds) return 0;
-	else return (range->to - range->from +1);
+	
+	return (range->to - range->from +1);
 }
 
 

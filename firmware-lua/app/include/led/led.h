@@ -138,12 +138,12 @@ uint16_t led_init(uint16_t newLeds);
 uint16_t led_inited(void);
 
 uint8_t led_set(ledrange_t range, rgb8_t ledValue, uint32_t ms);
-void led_get(ledrange_t range, rgb32_t* value);
+void led_get(ledrange_t range, rgb8_t* value);
 
 uint8_t led_setType(ledrange_t range, uint8_t type);
 uint8_t led_setWhiteBehaviour(uint8_t ch0, uint8_t ch1, uint8_t ch2, uint8_t ch3);
 uint8_t led_setDim(ledrange_t range, uint8_t value);
 
-uint16_t led_checkRange(ledrange_t* range);
+uint16_t led_checkRange(int32_t from, int32_t to, ledrange_t *range);
 
 #endif /* LED_H_ */
