@@ -7,7 +7,7 @@ function run(code,success,error) {
 	$.request('POST','/lua',content,{headers:{'Content-Type':"multipart/form-data; boundary=--BOUNDARY"}}).then(success, error);
 }
 function sendColor(color) {
-	run('local r,g,b=hsl2rgb('+Math.floor(color.h)+','+Math.floor(color.s)+','+Math.floor(color.l)+');led.set(0,led.inited()-1,r,g,b,200)');
+	run('local r,g,b=hsl2rgb('+Math.floor(color.h)+','+Math.floor(color.s)+','+Math.floor(color.l)+');led.set(0,-1,r,g,b,200)');
 }
 function clickProgram(event) {
 	run('programs.dofile("'+event.target.id+'")',function(){ $('#'+event.target.id).set('className', 'loading'); });
@@ -30,7 +30,7 @@ run('=unpack(programs.list())', function(response){
 	var prgs = lines[0].split("\t").sort();
 	for (prg in prgs) { var id=prgs[prg]; $('#toggle').addAfter(EE("li", {'id': id}, id.substring(2, id.lastIndexOf('.')).capitalize()).onClick(clickProgram)) };
 });
-setInterval(function() {run('=led.get(0,led.inited()-1)\n=programs.file', function(response) {
+setInterval(function() {run('=led.get(0,-1)\n=programs.file', function(response) {
 	if (typeof(response) == 'undefined') return;
 	var lines = response.split(/[\n> ]+/);
 	var cols = lines[0].split("\t");

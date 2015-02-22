@@ -9,8 +9,8 @@
 </head><body style="background-color: #333">
 <div id="scrollline"></div>
 <ul id="programs">
-<li id="toggle" onClick="run('programs.change();')">Change Program</li>
-<li onClick="run('programs.stop();led.set(0,-1,0,0,0,1000);'">Off</li>
-<li onClick="run('node.restart();')">Restart Node</li>
+<li id="toggle" onClick="run('programs.change();');return false;">Change Program</li>
+<li onClick="run('programs.stop();led.set(0,-1,0,0,0,1000);');return false;">Off</li>
+<li onClick="run('node.restart();');return false;">Restart Node</li>
 </ul>
 </body></html>
