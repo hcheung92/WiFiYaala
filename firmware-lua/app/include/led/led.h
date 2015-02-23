@@ -106,6 +106,7 @@ typedef struct
 {
 	uint16_t from;
 	uint16_t to;
+	uint16_t count;
 } ledrange_t;
 
 #define min(a,b) ((a)<(b)?(a):(b))  /**< Find the minimum of 2 numbers. */
@@ -144,6 +145,6 @@ uint8_t led_setType(ledrange_t range, uint8_t type);
 uint8_t led_setWhiteBehaviour(uint8_t ch0, uint8_t ch1, uint8_t ch2, uint8_t ch3);
 uint8_t led_setDim(ledrange_t range, uint8_t value);
 
-uint16_t led_checkRange(int32_t from, int32_t to, ledrange_t *range);
+void led_checkRange(int32_t from, int32_t to, ledrange_t *range);
 
 #endif /* LED_H_ */

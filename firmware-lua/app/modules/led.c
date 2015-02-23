@@ -42,10 +42,11 @@ static int ICACHE_FLASH_ATTR lled_set( lua_State* L )
 	ledrange_t range;	
 	rgb8_t led;
 	
-	uint16_t count = led_checkRange(luaL_checkinteger( L, 1 ),
-					luaL_checkinteger( L, 2 ),
-					&range);	
-	if (!count) return luaL_error( L, "Not initialized" );
+	if (!led_inited()) return luaL_error( L, "Not initialized" ); 
+	
+	led_checkRange(luaL_checkinteger( L, 1 ),
+	               luaL_checkinteger( L, 2 ),
+	               &range);	 
 
 	led.red = (uint8_t) luaL_checkinteger( L, 3 );
 	led.grn = (uint8_t) luaL_checkinteger( L, 4 );
@@ -54,21 +55,21 @@ static int ICACHE_FLASH_ATTR lled_set( lua_State* L )
 
 	if (!led_set(range, led, time)) return luaL_error( L, "Type not set" );
 
-	lua_pushinteger(L, count);	
+	lua_pushinteger(L, range.count);	
 	return 1;
 }
 
 // Lua: led.get(from, to) , return r, g, b
 static int ICACHE_FLASH_ATTR lled_get( lua_State* L )
 {
-	uint16_t count;
 	ledrange_t range;	
 	rgb8_t value;	
 
-	count = led_checkRange(luaL_checkinteger( L, 1 ),
-	                       luaL_checkinteger( L, 2 ),
-	                       &range);	
-	if (!count) return luaL_error( L, "Not initialized" );
+	if (!led_inited()) return luaL_error( L, "Not initialized" ); 
+	
+	led_checkRange(luaL_checkinteger( L, 1 ),
+	               luaL_checkinteger( L, 2 ),
+	               &range);	 
 
 	led_get(range, &value);
 
@@ -81,19 +82,23 @@ static int ICACHE_FLASH_ATTR lled_get( lua_State* L )
 // Lua: led.dim(from, to, dim) , return 0
 static int ICACHE_FLASH_ATTR lled_dim( lua_State* L )
 {
-	uint16_t count;
 	ledrange_t range;
-	uint8_t dim;
+	uint32_t dim;
 
-	count = led_checkRange(luaL_checkinteger( L, 1 ),
-	                       luaL_checkinteger( L, 2 ),
-	                       &range);	
-	if (!count) return luaL_error( L, "Not initialized" );
+	
+	if (!led_inited()) return luaL_error( L, "Not initialized" ); 
+	
+	led_checkRange(luaL_checkinteger( L, 1 ),
+	               luaL_checkinteger( L, 2 ),
+	               &range);	 
 
-	dim = (uint8_t) luaL_checkinteger( L, 3 );
-  	if (!led_setDim(range, dim)) luaL_error( L, "Invalid dim value" );
+	dim = luaL_checkinteger( L, 3 );
+	if (dim > 0x0F) return luaL_error( L, "invalid dim value" );	
+
+
+  	if (!led_setDim(range, (uint8_t)dim)) luaL_error( L, "dim only for PCA9685" );
   	
-	lua_pushinteger(L, count);	
+	lua_pushinteger(L, range.count);	
 	return 1;
 }
 
@@ -102,18 +107,18 @@ static int ICACHE_FLASH_ATTR lled_setType( lua_State* L )
 {
 	ledrange_t range;
 	uint8_t type;
-	uint16_t count;
 	
-	count = led_checkRange(luaL_checkinteger( L, 1 ),
-	                       luaL_checkinteger( L, 2 ),
-	                       &range);	
-	if (!count) return luaL_error( L, "Not initialized" );
+	if (!led_inited()) return luaL_error( L, "Not initialized" ); 
+	
+	led_checkRange(luaL_checkinteger( L, 1 ),
+	               luaL_checkinteger( L, 2 ),
+	               &range);	 
 
 	type = (uint8_t)luaL_checkinteger( L, 3 );
 
 	if( !led_setType(range, type) ) return luaL_error( L, "Invalid type" );
 
-	lua_pushinteger(L, count);	
+	lua_pushinteger(L, range.count);	
 	return 1;
 }
 

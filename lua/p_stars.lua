@@ -29,4 +29,6 @@ function program.cancel()
   tmr.stop(1)
 end
 
+-- Need to turn off all leds, otherwise run will not start setting stars
+led.set(0, -1, 0, 0, 0, 2000)
 return program

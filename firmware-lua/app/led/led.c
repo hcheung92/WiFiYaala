@@ -155,12 +155,10 @@ static os_timer_t some_timer;
 
 uint16_t ICACHE_FLASH_ATTR led_init(uint16_t newLeds)
 {
-	if (leds || led != NULL)
-		led_deinit();
+	if (leds || led != NULL) led_deinit();
 
 	led = os_malloc(sizeof(led_t) * newLeds);
-	if (led == NULL)
-		return 0;
+	if (led == NULL) return 0;
 	leds = newLeds;
 
 	state.apa102Init = 0;
@@ -230,12 +228,16 @@ uint8_t ICACHE_FLASH_ATTR led_setType(ledrange_t range, uint8_t type)
 	}
 	else return false;	// Invalid type
 	
-
-	uint16_t i;
-	for (i = range.from; i <= range.to; i++)
+	// This loop is used multiple times here in led.c
+	// There may be a better implementation posssible with a for loop, but all thoughts result in one unhandled case.
+	int16_t i = range.from -1;	
+	do 
 	{
+		i++;
+		if (i==leds) i = 0;
+
 		led[i].type = type;
-	}
+	} while (i != range.to);
 	
 	return true;
 }
@@ -254,14 +256,15 @@ uint8_t ICACHE_FLASH_ATTR led_setWhiteBehaviour(uint8_t ch0, uint8_t ch1, uint8_
 
 uint8_t ICACHE_FLASH_ATTR led_setDim(ledrange_t range, uint8_t dim)
 {
-	uint16_t i;
-	
-	if( dim > 0x0F ) return false;	
-
-	for (i = range.from; i <= range.to; i++)
+	int16_t i = range.from -1;
+	do 
 	{
+		i++;
+		if (i==leds) i = 0;
+
+		if (led[i].type != LED_PCA9685) return false; 
 		led[i].dim = dim & 0x0F;
-	}
+	} while (i != range.to);
 
 	return true;
 }
@@ -272,9 +275,11 @@ uint8_t ICACHE_FLASH_ATTR led_set(ledrange_t range, rgb8_t ledValue, uint32_t ms
 	sint32_t targetGrn = ledValue.grn << 23 | 0x00400000;
 	sint32_t targetBlu = ledValue.blu << 23 | 0x00400000;
 	
-	uint16_t i;
-	for (i = range.from; i <= range.to; i++)
+	int16_t i = range.from -1;
+	do 
 	{
+		i++;
+		if (i==leds) i = 0;
 		if (led[i].type == LED_NONE) return false;
 
 		led[i].steps = ms / LED_INTERVALL_MS;
@@ -296,7 +301,7 @@ uint8_t ICACHE_FLASH_ATTR led_set(ledrange_t range, rgb8_t ledValue, uint32_t ms
 
 			//os_printf("led%d: stepCol=%d target=%d col=%d\n", (int)i, (int)led[i].colorStep.red,(int)targetRed, (int)led[i].color.red);
 		}
-	}
+	} while (i != range.to);
 
 	return true;
 }
@@ -307,29 +312,29 @@ void ICACHE_FLASH_ATTR led_get(ledrange_t range, rgb8_t* value)
         uint32_t g = 0;
 	uint32_t b = 0;
 
-	uint16_t i;
-	for (i = range.from; i <= range.to; i++)
+	int16_t i = range.from -1;
+	do 
 	{
+		i++;
+		if (i==leds) i = 0;
+
 		r += led[i].color.red >> 23;
 		g += led[i].color.grn >> 23;
 		b += led[i].color.blu >> 23;
-	}
-		
-	uint16_t count = range.to - range.from +1;
-
-	value->red = r / count;
-	value->grn = g / count;
-	value->blu = b / count;
+	} while (i != range.to);
+	
+	value->red = r / range.count;
+	value->grn = g / range.count;
+	value->blu = b / range.count;
 }
 	
 
-
-uint16_t ICACHE_FLASH_ATTR led_checkRange(int32_t from, int32_t to, ledrange_t *range)
+void ICACHE_FLASH_ATTR led_checkRange(int32_t from, int32_t to, ledrange_t *range)
 {
-	if (leds == 0) return 0;
+	int32_t tmp;
 
 	// Negative modulo gives negative results in C, so do a workarround	
-	int32_t tmp = from % leds;
+	tmp = from % leds;
 	if (tmp < 0) tmp += leds;
 	range->from = (uint16_t)tmp;
 	
@@ -337,14 +342,9 @@ uint16_t ICACHE_FLASH_ATTR led_checkRange(int32_t from, int32_t to, ledrange_t *
 	if (tmp < 0) tmp += leds;
 	range->to = (uint16_t)tmp;
 
-	if (range->from > range->to)  // Make range always counting up
-	{
-		uint16_t tmp = range->from;
-		range->from = range->to;
-		range->to = tmp;
-	}
-	
-	return (range->to - range->from +1);
+	tmp = range->to - range->from +1;
+	if (tmp < 0) tmp += leds;
+	range->count = (uint16_t)tmp;
 }
 
 

@@ -11,7 +11,7 @@ program.hue = 0
 
 function program.run() 
      if program.index == 0 then 
-          if program.color == 0 then 
+          if program.color == -1 then 
                program.hue = ((tmr.now())%360)
           else
                program.hue = program.color
@@ -28,20 +28,23 @@ function program.run()
     
           program.index = program.index +1         
           if program.index == led.inited() then 
-               if program.mode == 1 then -- again from start
-                    program.index = 0;
-               else -- reverse
+               if program.mode == 0 then -- revert dir
                     program.dir = 1 
                     program.index = program.index -1
                end
-           end
+          end
      else
           if program.index < (led.inited() -1) then 
                led.set(program.index+1, program.index+1, 0, 0, 0, program.delay*5) 
           end
           
           program.index = program.index -1
-          if program.index == 0 then program.dir = 0 end
+          if program.index == 0 then
+               if program.mode == 0 then -- revert dir
+                    program.dir = 0 
+                    program.index = program.index +1
+               end
+          end
      end      
 
      tmr.alarm(1, program.delay, 0, program.run)
