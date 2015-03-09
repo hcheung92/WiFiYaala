@@ -3,16 +3,16 @@ ul {
 	padding: 0;
 	list-style-type: none;
 }
-ul li{
+ul.choice li {
 	padding: 0.2cm;
 	border: 1px solid gray;
 	background-color:rgba(255,255,255,0.5);
 }
-ul li:hover,li.active {
-	background-color:white;
+ul.choice li:hover,li.active {
+	background-color:white !important;
 }
-ul li.loading {
-	background-color:rgba(255,255,255,0.8);
+ul.choice li.loading {
+	background-color:rgba(255,255,255,0.8) !important;
 }
 div#scrollline {
 	border: 1px solid rgba(255,255,255,0.1);
@@ -23,4 +23,7 @@ div#scrollline {
 	margin-left: 8px;
 	left: 82px;
 	z-index: -999;
+}
+p.value {
+	display: inline;
 }

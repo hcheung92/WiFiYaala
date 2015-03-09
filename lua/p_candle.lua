@@ -1,7 +1,11 @@
 local program={}
+program.settings={}
 program.color=40
+program.settings.color="0-360"
 program.saturation=150
+program.settings.saturation="0-255%"
 program.brightness=200
+program.settings.brightness="0-255%"
 program.mode=0
 function program.run()
   if program.mode == nil then program.mode=tmr.now()%9 end
