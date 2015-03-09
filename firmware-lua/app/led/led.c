@@ -16,6 +16,7 @@
 
 led_t *led = NULL;
 uint16_t leds = 0;
+
 struct __attribute__((packed))
 {
 	uint8_t pcaWhiteBehav[PCA_LEDS];
@@ -25,7 +26,12 @@ struct __attribute__((packed))
 	uint8_t ws2801Init :1;
 } state;
 
-os_event_t procTaskQueue[1];
+
+#ifdef LED_TIMER_HARDWARE
+	static os_event_t procTaskQueue[1];
+#else
+	static os_timer_t led_timer;
+#endif
 
 
 
@@ -102,25 +108,32 @@ void inline led_refresh(void)
 	}
 }
 
-//LOCAL void procTask(os_event_t *events)
-some_timerfunc(void *param)
-{
-	if (leds)
-		led_refresh();
 
-}
 
-LOCAL void tim1_intr_handler(void)
-{
-//	RTC_CLR_REG_MASK(FRC1_INT_ADDRESS, FRC1_INT_CLR_MASK);
-//	if (leds)
-//	{
-//		RTC_REG_WRITE(FRC1_LOAD_ADDRESS, US_TO_RTC_TIMER_TICKS(LED_INTERVALL_MS*1000));
-//		system_os_post(USER_TASK_PRIO_0, 0, '0');
-//	}
-}
 
-//public
+#ifdef LED_TIMER_HARDWARE
+	LOCAL void procTask(os_event_t *events)
+	{
+		if (leds) led_refresh();
+	}
+
+	LOCAL void tim1_intr_handler(void)
+	{
+		RTC_CLR_REG_MASK(FRC1_INT_ADDRESS, FRC1_INT_CLR_MASK);
+		if (leds)
+		{
+			RTC_REG_WRITE(FRC1_LOAD_ADDRESS, US_TO_RTC_TIMER_TICKS(LED_INTERVALL_MS*1000));
+			system_os_post(LED_TIMER_HARDWARE_PRIO, 0, '0');
+		}
+	}
+#else
+	void timerfunc(void *param)
+	{
+		if (leds) led_refresh();
+	}
+#endif
+
+
 
 void ICACHE_FLASH_ATTR led_deinit(void)
 {
@@ -151,8 +164,6 @@ void ICACHE_FLASH_ATTR led_deinit(void)
 
 }
 
-static os_timer_t some_timer;
-
 uint16_t ICACHE_FLASH_ATTR led_init(uint16_t newLeds)
 {
 	if (leds || led != NULL) led_deinit();
@@ -168,19 +179,21 @@ uint16_t ICACHE_FLASH_ATTR led_init(uint16_t newLeds)
 
 	os_memset(led, 0, sizeof(led_t) * leds);
 
-//	system_os_task(procTask, USER_TASK_PRIO_1, procTaskQueue, 1);
+	#ifdef LED_TIMER_HARDWARE
+		system_os_task(procTask, LED_TIMER_HARDWARE_PRIO, procTaskQueue, 1);
 
-//	ETS_FRC_TIMER1_INTR_ATTACH(tim1_intr_handler, NULL);
-//	TM1_EDGE_INT_ENABLE();
-//	ETS_FRC1_INTR_ENABLE();
+		ETS_FRC_TIMER1_INTR_ATTACH(tim1_intr_handler, NULL);
+		TM1_EDGE_INT_ENABLE();
+		ETS_FRC1_INTR_ENABLE();
 
-//	RTC_REG_WRITE(FRC1_CTRL_ADDRESS, DIVDED_BY_16 | FRC1_ENABLE_TIMER | TM_EDGE_INT);
-//	RTC_REG_WRITE(FRC1_LOAD_ADDRESS, US_TO_RTC_TIMER_TICKS(LED_INTERVALL_MS*1000));
+		RTC_REG_WRITE(FRC1_CTRL_ADDRESS, DIVDED_BY_16 | FRC1_ENABLE_TIMER | TM_EDGE_INT);
+		RTC_REG_WRITE(FRC1_LOAD_ADDRESS, US_TO_RTC_TIMER_TICKS(LED_INTERVALL_MS*1000));
 
-//software test:
-	os_timer_disarm(&some_timer);
-	os_timer_setfn(&some_timer, (os_timer_func_t *) some_timerfunc, NULL);
-	os_timer_arm(&some_timer, 20, 1);
+	#else
+		os_timer_disarm(&led_timer);
+		os_timer_setfn(&led_timer, (os_timer_func_t *) timerfunc, NULL);
+		os_timer_arm(&led_timer, LED_INTERVALL_MS, 1);
+	#endif
 
 	return leds;
 }

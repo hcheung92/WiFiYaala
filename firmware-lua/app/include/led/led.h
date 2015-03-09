@@ -8,7 +8,11 @@
 #ifndef LED_H_
 #define LED_H_
 
-#define LED_INTERVALL_MS	20			//min 2
+
+#define LED_INTERVALL_MS		20			//min 2
+//#define LED_TIMER_HARDWARE
+//#define LED_TIMER_HARDWARE_PRIO		USER_TASK_PRIO_0
+
 
 enum
 {
