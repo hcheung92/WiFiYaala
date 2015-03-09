@@ -36,125 +36,153 @@ static int math_abs (lua_State *L) {
 
 #ifndef LUA_NUMBER_INTEGRAL
 
-static int math_sin (lua_State *L) {
-  lua_pushnumber(L, sin(luaL_checknumber(L, 1)));
-  return 1;
-}
+	#ifdef sin
+		static int math_sin (lua_State *L) {
+	 		lua_pushnumber(L, sin(luaL_checknumber(L, 1)));
+	  	return 1;
+		}
+	#endif
 
-static int math_sinh (lua_State *L) {
-  lua_pushnumber(L, sinh(luaL_checknumber(L, 1)));
-  return 1;
-}
+	#ifdef sinh
+		static int math_sinh (lua_State *L) {
+  		lua_pushnumber(L, sinh(luaL_checknumber(L, 1)));
+  		return 1;
+		}
+	#endif
+	
+	#ifdef cos
+		static int math_cos (lua_State *L) {
+			lua_pushnumber(L, cos(luaL_checknumber(L, 1)));
+			return 1;
+		}
+	#endif
 
-static int math_cos (lua_State *L) {
-  lua_pushnumber(L, cos(luaL_checknumber(L, 1)));
-  return 1;
-}
+	#ifdef cosh
+		static int math_cosh (lua_State *L) {
+  		lua_pushnumber(L, cosh(luaL_checknumber(L, 1)));
+  		return 1;
+		}
+	#endif
 
-static int math_cosh (lua_State *L) {
-  lua_pushnumber(L, cosh(luaL_checknumber(L, 1)));
-  return 1;
-}
+	#ifdef tan
+		static int math_tan (lua_State *L) {
+			lua_pushnumber(L, tan(luaL_checknumber(L, 1)));
+			return 1;
+		}
+	#endif
 
-static int math_tan (lua_State *L) {
-  lua_pushnumber(L, tan(luaL_checknumber(L, 1)));
-  return 1;
-}
+	#ifdef tanh
+		static int math_tanh (lua_State *L) {
+  		lua_pushnumber(L, tanh(luaL_checknumber(L, 1)));
+  		return 1;
+		}
+	#endif
 
-static int math_tanh (lua_State *L) {
-  lua_pushnumber(L, tanh(luaL_checknumber(L, 1)));
-  return 1;
-}
+	#ifdef asin
+		static int math_asin (lua_State *L) {
+  		lua_pushnumber(L, asin(luaL_checknumber(L, 1)));
+  		return 1;
+		}
+	#endif
 
-static int math_asin (lua_State *L) {
-  lua_pushnumber(L, asin(luaL_checknumber(L, 1)));
-  return 1;
-}
+	#ifdef acos
+		static int math_acos (lua_State *L) {
+			lua_pushnumber(L, acos(luaL_checknumber(L, 1)));
+			return 1;
+		}
+	#endif
 
-static int math_acos (lua_State *L) {
-  lua_pushnumber(L, acos(luaL_checknumber(L, 1)));
-  return 1;
-}
+	#ifdef atan
+		static int math_atan (lua_State *L) {
+			lua_pushnumber(L, atan(luaL_checknumber(L, 1)));
+			return 1;
+		}
+	#endif
 
-static int math_atan (lua_State *L) {
-  lua_pushnumber(L, atan(luaL_checknumber(L, 1)));
-  return 1;
-}
+	#ifdef atan2
+		static int math_atan2 (lua_State *L) {
+			lua_pushnumber(L, atan2(luaL_checknumber(L, 1), luaL_checknumber(L, 2)));
+			return 1;
+		}
+	#endif
 
-static int math_atan2 (lua_State *L) {
-  lua_pushnumber(L, atan2(luaL_checknumber(L, 1), luaL_checknumber(L, 2)));
-  return 1;
-}
+	#ifdef ceil
+		static int math_ceil (lua_State *L) {
+			lua_pushnumber(L, ceil(luaL_checknumber(L, 1)));
+			return 1;
+		}
+	#endif
 
-static int math_ceil (lua_State *L) {
-  lua_pushnumber(L, ceil(luaL_checknumber(L, 1)));
-  return 1;
-}
+	#ifdef floor
+		static int math_floor (lua_State *L) {
+			lua_pushnumber(L, floor(luaL_checknumber(L, 1)));
+			return 1;
+		}
+	#endif
 
-static int math_floor (lua_State *L) {
-  lua_pushnumber(L, floor(luaL_checknumber(L, 1)));
-  return 1;
-}
+	#ifdef fmod
+		static int math_fmod (lua_State *L) {
+			lua_pushnumber(L, fmod(luaL_checknumber(L, 1), luaL_checknumber(L, 2)));
+			return 1;
+		}
+	#endif
 
-static int math_fmod (lua_State *L) {
-  lua_pushnumber(L, fmod(luaL_checknumber(L, 1), luaL_checknumber(L, 2)));
-  return 1;
-}
-
-static int math_modf (lua_State *L) {
-  double ip;
-  double fp = modf(luaL_checknumber(L, 1), &ip);
-  lua_pushnumber(L, ip);
-  lua_pushnumber(L, fp);
-  return 2;
-}
+	#ifdef modf
+		static int math_modf (lua_State *L) {
+			double ip;
+			double fp = modf(luaL_checknumber(L, 1), &ip);
+			lua_pushnumber(L, ip);
+			lua_pushnumber(L, fp);
+			return 2;
+		}
+	#endif
 
 #else  // #ifndef LUA_NUMBER_INTEGRAL
 
-// In integer math, floor() and ceil() give the same value;
-// having them in the integer library allows you to write code that
-// works in both integer and floating point versions of Lua.
-// This identity function is used for them.
+	// In integer math, floor() and ceil() give the same value;
+	// having them in the integer library allows you to write code that
+	// works in both integer and floating point versions of Lua.
+	// This identity function is used for them.
 
-static int math_identity (lua_State *L) {
-  lua_pushnumber(L, luaL_checknumber(L, 1));
-  return 1;
-}
+	static int math_identity (lua_State *L) {
+		lua_pushnumber(L, luaL_checknumber(L, 1));
+		return 1;
+	}
 
 #endif // #ifndef LUA_NUMBER_INTEGRAL
 
 #ifdef LUA_NUMBER_INTEGRAL
-// Integer square root for integer version
-static lua_Number isqrt(lua_Number x)
-{
-  lua_Number op, res, one;
+	// Integer square root for integer version
+	static lua_Number isqrt(lua_Number x)
+	{
+		lua_Number op, res, one;
 
-  op = x; res = 0;
+		op = x; res = 0;
 
-  /* "one" starts at the highest power of four <= than the argument. */
-  one = 1 << 30;  /* second-to-top bit set */
-  while (one > op) one >>= 2;
+		/* "one" starts at the highest power of four <= than the argument. */
+		one = 1 << 30;  /* second-to-top bit set */
+		while (one > op) one >>= 2;
 
-  while (one != 0) {
-    if (op >= res + one) {
-      op = op - (res + one);
-      res = res +  2 * one;
-    }
-    res >>= 1;
-    one >>= 2;
-  }
-  return(res);
-}
+		while (one != 0) {
+		  if (op >= res + one) {
+		    op = op - (res + one);
+		    res = res +  2 * one;
+		  }
+		  res >>= 1;
+		  one >>= 2;
+		}
+		return(res);
+	}
 #endif
 
 static int math_sqrt (lua_State *L) {
-#ifdef LUA_NUMBER_INTEGRAL
-  lua_Number x = luaL_checknumber(L, 1);
-  luaL_argcheck(L, 0<=x, 1, "negative");
-  lua_pushnumber(L, isqrt(x));
-#else
-  lua_pushnumber(L, sqrt(luaL_checknumber(L, 1)));
-#endif
+	#ifdef LUA_NUMBER_INTEGRAL
+		lua_Number x = luaL_checknumber(L, 1);
+		luaL_argcheck(L, 0<=x, 1, "negative");
+		lua_pushnumber(L, isqrt(x));
+	#else
+		lua_pushnumber(L, sqrt(luaL_checknumber(L, 1)));
+	#endif
   return 1;
 }
 
@@ -168,48 +196,58 @@ static int math_pow (lua_State *L) {
 }
 
 #ifdef LUA_NUMBER_INTEGRAL
-# undef pow
+	#undef pow
 #endif
 
 
 #ifndef LUA_NUMBER_INTEGRAL
 
-static int math_log (lua_State *L) {
-  lua_pushnumber(L, log(luaL_checknumber(L, 1)));
-  return 1;
-}
+	#ifdef log
+		static int math_log (lua_State *L) {
+			lua_pushnumber(L, log(luaL_checknumber(L, 1)));
+			return 1;
+		}
+	#endif
 
-static int math_log10 (lua_State *L) {
-  lua_pushnumber(L, log10(luaL_checknumber(L, 1)));
-  return 1;
-}
+	#ifdef log10
+		static int math_log10 (lua_State *L) {
+			lua_pushnumber(L, log10(luaL_checknumber(L, 1)));
+			return 1;
+		}
+	#endif
 
-static int math_exp (lua_State *L) {
-  lua_pushnumber(L, exp(luaL_checknumber(L, 1)));
-  return 1;
-}
+	#ifdef exp
+		static int math_exp (lua_State *L) {
+			lua_pushnumber(L, exp(luaL_checknumber(L, 1)));
+			return 1;
+		}
+	#endif
 
-static int math_deg (lua_State *L) {
-  lua_pushnumber(L, luaL_checknumber(L, 1)/RADIANS_PER_DEGREE);
-  return 1;
-}
+	static int math_deg (lua_State *L) {
+		lua_pushnumber(L, luaL_checknumber(L, 1)/RADIANS_PER_DEGREE);
+		return 1;
+	}
 
-static int math_rad (lua_State *L) {
-  lua_pushnumber(L, luaL_checknumber(L, 1)*RADIANS_PER_DEGREE);
-  return 1;
-}
+	static int math_rad (lua_State *L) {
+		lua_pushnumber(L, luaL_checknumber(L, 1)*RADIANS_PER_DEGREE);
+		return 1;
+	}
 
-static int math_frexp (lua_State *L) {
-  int e;
-  lua_pushnumber(L, frexp(luaL_checknumber(L, 1), &e));
-  lua_pushinteger(L, e);
-  return 2;
-}
+	#ifdef frexp
+		static int math_frexp (lua_State *L) {
+			int e;
+			lua_pushnumber(L, frexp(luaL_checknumber(L, 1), &e));
+			lua_pushinteger(L, e);
+			return 2;
+		}
+	#endif
 
-static int math_ldexp (lua_State *L) {
-  lua_pushnumber(L, ldexp(luaL_checknumber(L, 1), luaL_checkint(L, 2)));
-  return 1;
-}
+	#ifdef ldexp
+		static int math_ldexp (lua_State *L) {
+			lua_pushnumber(L, ldexp(luaL_checknumber(L, 1), luaL_checkint(L, 2)));
+			return 1;
+		}
+	#endif
 
 #endif // #ifdef LUA_NUMBER_INTEGRAL
 
@@ -309,56 +347,98 @@ static int math_randomseed (lua_State *L) {
 #define MIN_OPT_LEVEL 1
 #include "lrodefs.h"
 const LUA_REG_TYPE math_map[] = {
-#ifdef LUA_NUMBER_INTEGRAL
-  {LSTRKEY("abs"),   LFUNCVAL(math_abs)},
-  {LSTRKEY("ceil"),  LFUNCVAL(math_identity)},
-  {LSTRKEY("floor"), LFUNCVAL(math_identity)},
-  {LSTRKEY("max"),   LFUNCVAL(math_max)},
-  {LSTRKEY("min"),   LFUNCVAL(math_min)},
-  {LSTRKEY("pow"),   LFUNCVAL(math_pow)},
-  {LSTRKEY("random"),     LFUNCVAL(math_random)},
-  {LSTRKEY("randomseed"), LFUNCVAL(math_randomseed)},
-  {LSTRKEY("sqrt"),  LFUNCVAL(math_sqrt)},
-#if LUA_OPTIMIZE_MEMORY > 0
-  {LSTRKEY("huge"),  LNUMVAL(LONG_MAX)},
-#endif
-#else
-  {LSTRKEY("abs"),   LFUNCVAL(math_abs)},
-  {LSTRKEY("acos"),  LFUNCVAL(math_acos)},
-  {LSTRKEY("asin"),  LFUNCVAL(math_asin)},
-  {LSTRKEY("atan2"), LFUNCVAL(math_atan2)},
-  {LSTRKEY("atan"),  LFUNCVAL(math_atan)},
-  {LSTRKEY("ceil"),  LFUNCVAL(math_ceil)},
-  {LSTRKEY("cosh"),  LFUNCVAL(math_cosh)},
-  {LSTRKEY("cos"),   LFUNCVAL(math_cos)},
-  {LSTRKEY("deg"),   LFUNCVAL(math_deg)},
-  {LSTRKEY("exp"),   LFUNCVAL(math_exp)},
-  {LSTRKEY("floor"), LFUNCVAL(math_floor)},
-  {LSTRKEY("fmod"),  LFUNCVAL(math_fmod)},
-#if LUA_OPTIMIZE_MEMORY > 0 && defined(LUA_COMPAT_MOD)
-  {LSTRKEY("mod"),   LFUNCVAL(math_fmod)}, 
-#endif
-  {LSTRKEY("frexp"), LFUNCVAL(math_frexp)},
-  {LSTRKEY("ldexp"), LFUNCVAL(math_ldexp)},
-  {LSTRKEY("log10"), LFUNCVAL(math_log10)},
-  {LSTRKEY("log"),   LFUNCVAL(math_log)},
-  {LSTRKEY("max"),   LFUNCVAL(math_max)},
-  {LSTRKEY("min"),   LFUNCVAL(math_min)},
-  {LSTRKEY("modf"),   LFUNCVAL(math_modf)},
-  {LSTRKEY("pow"),   LFUNCVAL(math_pow)},
-  {LSTRKEY("rad"),   LFUNCVAL(math_rad)},
-  {LSTRKEY("random"),     LFUNCVAL(math_random)},
-  {LSTRKEY("randomseed"), LFUNCVAL(math_randomseed)},
-  {LSTRKEY("sinh"),   LFUNCVAL(math_sinh)},
-  {LSTRKEY("sin"),   LFUNCVAL(math_sin)},
-  {LSTRKEY("sqrt"),  LFUNCVAL(math_sqrt)},
-  {LSTRKEY("tanh"),   LFUNCVAL(math_tanh)},
-  {LSTRKEY("tan"),   LFUNCVAL(math_tan)},
-#if LUA_OPTIMIZE_MEMORY > 0
-  {LSTRKEY("pi"),    LNUMVAL(PI)},
-  {LSTRKEY("huge"),  LNUMVAL(HUGE_VAL)},
-#endif // #if LUA_OPTIMIZE_MEMORY > 0
-#endif // #ifdef LUA_NUMBER_INTEGRAL
+	#ifdef LUA_NUMBER_INTEGRAL
+		{LSTRKEY("abs"),   LFUNCVAL(math_abs)},
+		{LSTRKEY("ceil"),  LFUNCVAL(math_identity)},
+		{LSTRKEY("floor"), LFUNCVAL(math_identity)},
+		{LSTRKEY("max"),   LFUNCVAL(math_max)},
+		{LSTRKEY("min"),   LFUNCVAL(math_min)},
+		{LSTRKEY("pow"),   LFUNCVAL(math_pow)},
+		{LSTRKEY("random"),     LFUNCVAL(math_random)},
+		{LSTRKEY("randomseed"), LFUNCVAL(math_randomseed)},
+		{LSTRKEY("sqrt"),  LFUNCVAL(math_sqrt)},
+		#if LUA_OPTIMIZE_MEMORY > 0
+			{LSTRKEY("huge"),  LNUMVAL(LONG_MAX)},
+		#endif
+	#else
+		{LSTRKEY("abs"),   LFUNCVAL(math_abs)},
+		#ifdef acos
+			{LSTRKEY("acos"),  LFUNCVAL(math_acos)},	
+		#endif
+		#ifdef asin
+			{LSTRKEY("asin"),  LFUNCVAL(math_asin)},
+		#endif
+		#ifdef atan2
+			{LSTRKEY("atan2"), LFUNCVAL(math_atan2)},
+		#endif
+		#ifdef atan
+			{LSTRKEY("atan"),  LFUNCVAL(math_atan)},
+		#endif
+		#ifdef ceil
+			{LSTRKEY("ceil"),  LFUNCVAL(math_ceil)},
+		#endif
+		#ifdef cosh
+			{LSTRKEY("cosh"),  LFUNCVAL(math_cosh)},
+		#endif
+		#ifdef cos
+			{LSTRKEY("cos"),   LFUNCVAL(math_cos)},
+		#endif
+		#ifdef deg
+			{LSTRKEY("deg"),   LFUNCVAL(math_deg)},
+		#endif
+		#ifdef exp
+			{LSTRKEY("exp"),   LFUNCVAL(math_exp)},
+		#endif
+		#ifdef floor
+			{LSTRKEY("floor"), LFUNCVAL(math_floor)},
+		#endif
+		#ifdef fmod
+			{LSTRKEY("fmod"),  LFUNCVAL(math_fmod)},
+		#endif
+		#if defined(mod) && (LUA_OPTIMIZE_MEMORY > 0) && defined(LUA_COMPAT_MOD)
+			{LSTRKEY("mod"),   LFUNCVAL(math_fmod)}, 
+		#endif
+		#ifdef frexp
+		{LSTRKEY("frexp"), LFUNCVAL(math_frexp)},
+		#endif
+		#ifdef ldexp
+		{LSTRKEY("ldexp"), LFUNCVAL(math_ldexp)},
+		#endif
+		#ifdef log10
+			{LSTRKEY("log10"), LFUNCVAL(math_log10)},
+		#endif
+		#ifdef log
+			{LSTRKEY("log"),   LFUNCVAL(math_log)},
+		#endif
+		{LSTRKEY("max"),   LFUNCVAL(math_max)},
+		{LSTRKEY("min"),   LFUNCVAL(math_min)},
+		#ifdef modf
+			{LSTRKEY("modf"),   LFUNCVAL(math_modf)},
+		#endif
+		{LSTRKEY("pow"),   LFUNCVAL(math_pow)},
+		{LSTRKEY("rad"),   LFUNCVAL(math_rad)},
+		{LSTRKEY("random"),     LFUNCVAL(math_random)},
+		{LSTRKEY("randomseed"), LFUNCVAL(math_randomseed)},
+		#ifdef sinh
+			{LSTRKEY("sinh"),   LFUNCVAL(math_sinh)},
+		#endif
+		#ifdef sin
+			{LSTRKEY("sin"),   LFUNCVAL(math_sin)},
+		#endif
+		#ifdef sqrt
+			{LSTRKEY("sqrt"),  LFUNCVAL(math_sqrt)},
+		#endif
+		#ifdef tanh	
+			{LSTRKEY("tanh"),   LFUNCVAL(math_tanh)},
+		#endif
+		#ifdef tan
+			{LSTRKEY("tan"),   LFUNCVAL(math_tan)},
+		#endif
+		#if LUA_OPTIMIZE_MEMORY > 0
+			{LSTRKEY("pi"),    LNUMVAL(PI)},
+			{LSTRKEY("huge"),  LNUMVAL(HUGE_VAL)},
+		#endif // #if LUA_OPTIMIZE_MEMORY > 0
+	#endif // #ifdef LUA_NUMBER_INTEGRAL
   {LNILKEY, LNILVAL}
 };
 

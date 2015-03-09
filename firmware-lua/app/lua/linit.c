@@ -31,7 +31,7 @@ static const luaL_Reg lualibs[] = {
   // {LUA_IOLIBNAME, luaopen_io},
   {LUA_STRLIBNAME, luaopen_string},    
 #if LUA_OPTIMIZE_MEMORY == 0
-  // {LUA_MATHLIBNAME, luaopen_math},
+  {LUA_MATHLIBNAME, luaopen_math},
   {LUA_TABLIBNAME, luaopen_table},  
   // {LUA_DBLIBNAME, luaopen_debug},  
 #endif
@@ -48,7 +48,7 @@ extern const luaR_entry syslib[];
 extern const luaR_entry tab_funcs[];
 // extern const luaR_entry dblib[];
 extern const luaR_entry co_funcs[];
-// extern const luaR_entry math_map[];
+extern const luaR_entry math_map[];
 #if defined(LUA_MODULES_ROM) && LUA_OPTIMIZE_MEMORY == 2
 #undef _ROM
 #define _ROM( name, openf, table ) extern const luaR_entry table[];
@@ -61,7 +61,7 @@ const luaR_table lua_rotable[] =
   {LUA_TABLIBNAME, tab_funcs},
   // {LUA_DBLIBNAME, dblib},
   {LUA_COLIBNAME, co_funcs},
-  // {LUA_MATHLIBNAME, math_map},
+  {LUA_MATHLIBNAME, math_map},
 #if defined(LUA_MODULES_ROM) && LUA_OPTIMIZE_MEMORY == 2
 #undef _ROM
 #define _ROM( name, openf, table ) { name, table },
