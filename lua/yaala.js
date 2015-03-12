@@ -38,7 +38,14 @@ function clickProgram(event) {
 			var key = settings[line][0];
 			var props = regex.exec(settings[line][1]);
 			var setvalue = settings[line][2];
-			var item = EE('li', {'@id': 'prg_settings_'+key, '@title': key}, key + ": ").add(EE('p', {'@class': 'value'}, setvalue)).onClick(function(){return false;}).on('mousedown',function(event){
+			if (key==null || props==null || setvalue==null) continue;
+			var formatFunc = (typeof(props[3]) != 'undefined' && props[3] == "%")?function(value) {
+				return Math.round(value * 100) + "%";
+			}:function(value) {
+				var max=props[2];
+				return Math.round(value * max);
+			};
+			var item = EE('li', {'@id': 'prg_settings_'+key, '@title': key}, key + ": ").add(EE('p', {'@class': 'value'}, formatFunc(setvalue/props[2]))).onClick(function(){return false;}).on('mousedown',function(event){
 				downTarget=event.target;
 				return false;
 			}).on('mouseup',function(event){
@@ -48,9 +55,10 @@ function clickProgram(event) {
 				}
 				var rect = event.target.getBoundingClientRect();
 				var value = Math.min(1, Math.max(0, (event.pageX - rect.left) / (rect.width)));
-				if (props != null && typeof(props[3]) != 'undefined' && props[3] == "%") $('#'+event.target.id+" .value").fill(Math.round(value * 100) + "%");
-				else $('#'+event.target.id+" .value").fill(Math.round(value * props[2]));
-				run('programs.active.'+event.target.title+'='+Math.round(value * props[2]));
+				var myFormatFunc = formatFunc;
+				var max = props[2];
+				$('#'+event.target.id+" .value").fill(myFormatFunc(value));
+				run('programs.active.'+event.target.title+'='+Math.round(value * max));
 				return false;
 			});
 			list.add(item);
@@ -80,7 +88,7 @@ setInterval(function() {run('=led.get(0,-1)\n=programs.file', function(response)
 	newColor.h=-1;
 	 var col = ((1 << 24) + (color.r << 16) + (color.g << 8) + color.b).toString(16).slice(1);
 	 if (downX==-1&&downY==-1) bgAnim = $('html body').animate({$backgroundColor: "#" + col}, 5000);
-	$('*', '#programs', true).filter(function(item){return item.id!=null&&item.id.indexOf("p_") == 0}).set('className', '');
+	$('*', '.choice', true).filter(function(item){return item.id!=null&&item.id.indexOf("p_") == 0}).set('className', '');
 	if (lines[1]!="") $('#'+lines[1]).set('className', 'active')
 })}, 5000);
 $('html').on('mousedown',function(event){

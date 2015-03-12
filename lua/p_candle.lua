@@ -11,7 +11,7 @@ function program.run()
   if program.mode == nil then program.mode=tmr.now()%9 end
   if program.mode < 5 then -- flicker
     local col = tmr.now() % 20
-    local bright = tmr.now() % 50 + 20
+    local bright = tmr.now() % (program.brightness / 4) + (program.brightness / 8)
     local r,g,b = hsl2rgb((program.color + (col - 10)) % 360, program.saturation, program.brightness - bright)
     local time = 150 + program.mode * 20
     led.set(0, -1, r, g, b, time)
@@ -30,7 +30,7 @@ function program.run()
     tmr.alarm(1, 5000, 0, program.run)
   else -- flicker
     local col = tmr.now() % 20
-    local bright = tmr.now() % 50
+    local bright = tmr.now() % (program.brightness / 4)
     local r,g,b = hsl2rgb((program.color + (col - 10)) % 360, program.saturation, program.brightness - bright)
     led.set(0, -1, r, g, b, 300)
     program.mode=nil
