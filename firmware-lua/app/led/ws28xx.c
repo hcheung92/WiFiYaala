@@ -178,7 +178,7 @@ void ICACHE_FLASH_ATTR ws28xx_deinit(void)
 	CLEAR_PERI_REG_MASK(UART_INT_ENA(UART1), UART_TXFIFO_EMPTY_INT_ENA);
 }
 
-void ICACHE_RAM_ATTR ws28xx_transmitt(led_t *leds, unsigned int total)
+void ICACHE_FLASH_ATTR ws28xx_transmitt(led_t *leds, unsigned int total)
 {
 	if(ws28xx_led != NULL)
 	{
