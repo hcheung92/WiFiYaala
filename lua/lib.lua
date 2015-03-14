@@ -1,5 +1,6 @@
 -- values 0..360, 0..255, 0..510
 function hsl2rgb(hue, saturation, lightness)
+     hue = hue %360
      local tmp = lightness - 255
      local chroma = (255 - (tmp < 0 and -tmp or tmp)) * saturation / 255
      local h2 = (hue % 120) - 60
