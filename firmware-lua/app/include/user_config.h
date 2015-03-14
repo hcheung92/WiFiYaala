@@ -61,14 +61,14 @@
 #define LUA_USE_MODULES_NET
 //#define LUA_USE_MODULES_PWM
 #define LUA_USE_MODULES_I2C
-#define LUA_USE_MODULES_SPI
+//#define LUA_USE_MODULES_SPI
 #define LUA_USE_MODULES_TMR
-#define LUA_USE_MODULES_ADC
+//#define LUA_USE_MODULES_ADC
 #define LUA_USE_MODULES_HOSTNAME
 #define LUA_USE_MODULES_LED
 #define LUA_USE_MODULES_UART
-#define LUA_USE_MODULES_OW
-#define LUA_USE_MODULES_BIT
+//#define LUA_USE_MODULES_OW
+//#define LUA_USE_MODULES_BIT
 //#define LUA_USE_MODULES_MQTT
 // #define LUA_USE_MODULES_WS2812	// TODO: put this device specific module to device driver section.
 #endif /* LUA_USE_MODULES */
