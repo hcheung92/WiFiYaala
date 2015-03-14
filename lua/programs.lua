@@ -25,7 +25,7 @@ function programs.change()
  if #list == 0 then
   print("no programs found")
  else
-  programs.change()
+  return programs.change()
  end
 end
 function programs.stop()
@@ -34,18 +34,18 @@ function programs.stop()
  end
 end
 function programs.dofile(file)
+   programs.dounload()
    programs.file=file
    tmr.alarm(0, 200, 0, programs.doload)
    return file
 end
+function programs.dounload()
+   programs.active=nil
+   tmr.alarm(1, 200, 0, function() end)
+   collectgarbage()
+end
 function programs.doload()
- programs.active=nil
- collectgarbage()
- if string.sub(programs.file, -3) == ".lc" then
-   programs.active=require(string.sub(programs.file, 1, -4))
- else
-   programs.active=dofile(programs.file)
- end
+ programs.active=dofile(programs.file)
  programs.active.run()
  return programs.file
 end
