@@ -23,7 +23,7 @@ function program.run()
           for i = 0, quater, 1 do
                sat = 255/quater *i 
                -- blue on the side
-               r,g,b = hsl2rgb(240, (255-sat) , 255)
+               r,g,b = led.hsl2rgb(240, (255-sat) , 255)
                led.set(i, i, r, g, b, delay)
                led.set(-i, -i, r, g, b, delay)
                -- orange in the mid

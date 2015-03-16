@@ -26,7 +26,7 @@ function program.run()
           end
      end
      
-     local r,g,b = hsl2rgb(program.hue, 255, program.Brightness)
+     local r,g,b = led.hsl2rgb(program.hue, 255, program.Brightness)
      led.set(program.index, program.index, r, g, b, program.Delay)
 
      if program.dir == 0 then
@@ -47,7 +47,7 @@ function program.run()
           end
           
           program.index = program.index -1
-          if program.index == 0 then
+          if program.index < 0 then
                if program.Mode == 0 then -- revert dir
                     program.dir = 0 
                     program.index = program.index +1

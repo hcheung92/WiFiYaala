@@ -18,9 +18,9 @@ function program.run()
                local lightnes = math.random(127, 255)
                if program.Color == -1 then
                     local hue = math.random(0, 360)
-                    r,g,b = hsl2rgb(hue, 255, lightnes)
+                    r,g,b = led.hsl2rgb(hue, 255, lightnes)
                else    
-                    r,g,b = hsl2rgb(program.Color, 255, lightnes)
+                    r,g,b = led.hsl2rgb(program.Color, 255, lightnes)
                end
                -- Set one LED on
                led.set(i, i, r, g, b, 0)

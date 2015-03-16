@@ -26,7 +26,7 @@ function program.run()
           program.hue = (program.hue + program.Color) %360
      end
 
-     r,g,b = hsl2rgb(program.hue, 255, program.Brightness)
+     r,g,b = led.hsl2rgb(program.hue, 255, program.Brightness)
      led.set(0, 0, r, g, b, program.Delay)
  
      tmr.alarm(1, program.Delay, 0, program.run)
