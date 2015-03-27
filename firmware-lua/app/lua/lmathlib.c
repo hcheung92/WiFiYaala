@@ -347,98 +347,56 @@ static int math_randomseed (lua_State *L) {
 #define MIN_OPT_LEVEL 1
 #include "lrodefs.h"
 const LUA_REG_TYPE math_map[] = {
-	#ifdef LUA_NUMBER_INTEGRAL
-		{LSTRKEY("abs"),   LFUNCVAL(math_abs)},
-		{LSTRKEY("ceil"),  LFUNCVAL(math_identity)},
-		{LSTRKEY("floor"), LFUNCVAL(math_identity)},
-		{LSTRKEY("max"),   LFUNCVAL(math_max)},
-		{LSTRKEY("min"),   LFUNCVAL(math_min)},
-		{LSTRKEY("pow"),   LFUNCVAL(math_pow)},
-		{LSTRKEY("random"),     LFUNCVAL(math_random)},
-		{LSTRKEY("randomseed"), LFUNCVAL(math_randomseed)},
-		{LSTRKEY("sqrt"),  LFUNCVAL(math_sqrt)},
-		#if LUA_OPTIMIZE_MEMORY > 0
-			{LSTRKEY("huge"),  LNUMVAL(LONG_MAX)},
-		#endif
-	#else
-		{LSTRKEY("abs"),   LFUNCVAL(math_abs)},
-		#ifdef acos
-			{LSTRKEY("acos"),  LFUNCVAL(math_acos)},	
-		#endif
-		#ifdef asin
-			{LSTRKEY("asin"),  LFUNCVAL(math_asin)},
-		#endif
-		#ifdef atan2
-			{LSTRKEY("atan2"), LFUNCVAL(math_atan2)},
-		#endif
-		#ifdef atan
-			{LSTRKEY("atan"),  LFUNCVAL(math_atan)},
-		#endif
-		#ifdef ceil
-			{LSTRKEY("ceil"),  LFUNCVAL(math_ceil)},
-		#endif
-		#ifdef cosh
-			{LSTRKEY("cosh"),  LFUNCVAL(math_cosh)},
-		#endif
-		#ifdef cos
-			{LSTRKEY("cos"),   LFUNCVAL(math_cos)},
-		#endif
-		#ifdef deg
-			{LSTRKEY("deg"),   LFUNCVAL(math_deg)},
-		#endif
-		#ifdef exp
-			{LSTRKEY("exp"),   LFUNCVAL(math_exp)},
-		#endif
-		#ifdef floor
-			{LSTRKEY("floor"), LFUNCVAL(math_floor)},
-		#endif
-		#ifdef fmod
-			{LSTRKEY("fmod"),  LFUNCVAL(math_fmod)},
-		#endif
-		#if defined(mod) && (LUA_OPTIMIZE_MEMORY > 0) && defined(LUA_COMPAT_MOD)
-			{LSTRKEY("mod"),   LFUNCVAL(math_fmod)}, 
-		#endif
-		#ifdef frexp
-		{LSTRKEY("frexp"), LFUNCVAL(math_frexp)},
-		#endif
-		#ifdef ldexp
-		{LSTRKEY("ldexp"), LFUNCVAL(math_ldexp)},
-		#endif
-		#ifdef log10
-			{LSTRKEY("log10"), LFUNCVAL(math_log10)},
-		#endif
-		#ifdef log
-			{LSTRKEY("log"),   LFUNCVAL(math_log)},
-		#endif
-		{LSTRKEY("max"),   LFUNCVAL(math_max)},
-		{LSTRKEY("min"),   LFUNCVAL(math_min)},
-		#ifdef modf
-			{LSTRKEY("modf"),   LFUNCVAL(math_modf)},
-		#endif
-		{LSTRKEY("pow"),   LFUNCVAL(math_pow)},
-		{LSTRKEY("rad"),   LFUNCVAL(math_rad)},
-		{LSTRKEY("random"),     LFUNCVAL(math_random)},
-		{LSTRKEY("randomseed"), LFUNCVAL(math_randomseed)},
-		#ifdef sinh
-			{LSTRKEY("sinh"),   LFUNCVAL(math_sinh)},
-		#endif
-		#ifdef sin
-			{LSTRKEY("sin"),   LFUNCVAL(math_sin)},
-		#endif
-		#ifdef sqrt
-			{LSTRKEY("sqrt"),  LFUNCVAL(math_sqrt)},
-		#endif
-		#ifdef tanh	
-			{LSTRKEY("tanh"),   LFUNCVAL(math_tanh)},
-		#endif
-		#ifdef tan
-			{LSTRKEY("tan"),   LFUNCVAL(math_tan)},
-		#endif
-		#if LUA_OPTIMIZE_MEMORY > 0
-			{LSTRKEY("pi"),    LNUMVAL(PI)},
-			{LSTRKEY("huge"),  LNUMVAL(HUGE_VAL)},
-		#endif // #if LUA_OPTIMIZE_MEMORY > 0
-	#endif // #ifdef LUA_NUMBER_INTEGRAL
+#ifdef LUA_NUMBER_INTEGRAL
+  {LSTRKEY("abs"),   LFUNCVAL(math_abs)},
+  {LSTRKEY("ceil"),  LFUNCVAL(math_identity)},
+  {LSTRKEY("floor"), LFUNCVAL(math_identity)},
+  {LSTRKEY("max"),   LFUNCVAL(math_max)},
+  {LSTRKEY("min"),   LFUNCVAL(math_min)},
+  {LSTRKEY("pow"),   LFUNCVAL(math_pow)},
+  {LSTRKEY("random"),     LFUNCVAL(math_random)},
+  {LSTRKEY("randomseed"), LFUNCVAL(math_randomseed)},
+  {LSTRKEY("sqrt"),  LFUNCVAL(math_sqrt)},
+#if LUA_OPTIMIZE_MEMORY > 0
+  {LSTRKEY("huge"),  LNUMVAL(LONG_MAX)},
+#endif
+#else
+  {LSTRKEY("abs"),   LFUNCVAL(math_abs)},
+  // {LSTRKEY("acos"),  LFUNCVAL(math_acos)},
+  // {LSTRKEY("asin"),  LFUNCVAL(math_asin)},
+  // {LSTRKEY("atan2"), LFUNCVAL(math_atan2)},
+  // {LSTRKEY("atan"),  LFUNCVAL(math_atan)},
+  {LSTRKEY("ceil"),  LFUNCVAL(math_ceil)},
+  // {LSTRKEY("cosh"),  LFUNCVAL(math_cosh)},
+  // {LSTRKEY("cos"),   LFUNCVAL(math_cos)},
+  // {LSTRKEY("deg"),   LFUNCVAL(math_deg)},
+  // {LSTRKEY("exp"),   LFUNCVAL(math_exp)},
+  {LSTRKEY("floor"), LFUNCVAL(math_floor)},
+  // {LSTRKEY("fmod"),  LFUNCVAL(math_fmod)},
+#if LUA_OPTIMIZE_MEMORY > 0 && defined(LUA_COMPAT_MOD)
+  {LSTRKEY("mod"),   LFUNCVAL(math_fmod)}, 
+#endif
+  // {LSTRKEY("frexp"), LFUNCVAL(math_frexp)},
+  // {LSTRKEY("ldexp"), LFUNCVAL(math_ldexp)},
+  // {LSTRKEY("log10"), LFUNCVAL(math_log10)},
+  // {LSTRKEY("log"),   LFUNCVAL(math_log)},
+  {LSTRKEY("max"),   LFUNCVAL(math_max)},
+  {LSTRKEY("min"),   LFUNCVAL(math_min)},
+  // {LSTRKEY("modf"),   LFUNCVAL(math_modf)},
+  {LSTRKEY("pow"),   LFUNCVAL(math_pow)},
+  // {LSTRKEY("rad"),   LFUNCVAL(math_rad)},
+  {LSTRKEY("random"),     LFUNCVAL(math_random)},
+  {LSTRKEY("randomseed"), LFUNCVAL(math_randomseed)},
+  // {LSTRKEY("sinh"),   LFUNCVAL(math_sinh)},
+  // {LSTRKEY("sin"),   LFUNCVAL(math_sin)},
+  {LSTRKEY("sqrt"),  LFUNCVAL(math_sqrt)},
+  // {LSTRKEY("tanh"),   LFUNCVAL(math_tanh)},
+  // {LSTRKEY("tan"),   LFUNCVAL(math_tan)},
+#if LUA_OPTIMIZE_MEMORY > 0
+  {LSTRKEY("pi"),    LNUMVAL(PI)},
+  {LSTRKEY("huge"),  LNUMVAL(HUGE_VAL)},
+#endif // #if LUA_OPTIMIZE_MEMORY > 0
+#endif // #ifdef LUA_NUMBER_INTEGRAL
   {LNILKEY, LNILVAL}
 };
 
