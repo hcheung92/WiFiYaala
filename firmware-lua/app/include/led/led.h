@@ -113,7 +113,15 @@ typedef struct
 	uint16_t count;
 } ledrange_t;
 
+typedef struct
+{
+	uint16_t hue;
+	uint16_t saturation;
+	uint16_t lightness;
+} hsl16_t;
+
 #define min(a,b) ((a)<(b)?(a):(b))  /**< Find the minimum of 2 numbers. */
+#define abs(a)   ((a)<0?(-a):(a))
 
 
 //XXX: 0xffffffff/(80000000/16)=35A
@@ -150,5 +158,8 @@ uint8_t led_setWhiteBehaviour(uint8_t ch0, uint8_t ch1, uint8_t ch2, uint8_t ch3
 uint8_t led_setDim(ledrange_t range, uint8_t value);
 
 void led_checkRange(int32_t from, int32_t to, ledrange_t *range);
+
+void led_hsl2rgb(hsl16_t hsl, rgb8_t *rgb);
+
 
 #endif /* LED_H_ */
