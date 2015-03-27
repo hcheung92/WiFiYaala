@@ -36,153 +36,125 @@ static int math_abs (lua_State *L) {
 
 #ifndef LUA_NUMBER_INTEGRAL
 
-	#ifdef sin
-		static int math_sin (lua_State *L) {
-	 		lua_pushnumber(L, sin(luaL_checknumber(L, 1)));
-	  	return 1;
-		}
-	#endif
+static int math_sin (lua_State *L) {
+  lua_pushnumber(L, sin(luaL_checknumber(L, 1)));
+  return 1;
+}
 
-	#ifdef sinh
-		static int math_sinh (lua_State *L) {
-  		lua_pushnumber(L, sinh(luaL_checknumber(L, 1)));
-  		return 1;
-		}
-	#endif
-	
-	#ifdef cos
-		static int math_cos (lua_State *L) {
-			lua_pushnumber(L, cos(luaL_checknumber(L, 1)));
-			return 1;
-		}
-	#endif
+static int math_sinh (lua_State *L) {
+  lua_pushnumber(L, sinh(luaL_checknumber(L, 1)));
+  return 1;
+}
 
-	#ifdef cosh
-		static int math_cosh (lua_State *L) {
-  		lua_pushnumber(L, cosh(luaL_checknumber(L, 1)));
-  		return 1;
-		}
-	#endif
+static int math_cos (lua_State *L) {
+  lua_pushnumber(L, cos(luaL_checknumber(L, 1)));
+  return 1;
+}
 
-	#ifdef tan
-		static int math_tan (lua_State *L) {
-			lua_pushnumber(L, tan(luaL_checknumber(L, 1)));
-			return 1;
-		}
-	#endif
+static int math_cosh (lua_State *L) {
+  lua_pushnumber(L, cosh(luaL_checknumber(L, 1)));
+  return 1;
+}
 
-	#ifdef tanh
-		static int math_tanh (lua_State *L) {
-  		lua_pushnumber(L, tanh(luaL_checknumber(L, 1)));
-  		return 1;
-		}
-	#endif
+static int math_tan (lua_State *L) {
+  lua_pushnumber(L, tan(luaL_checknumber(L, 1)));
+  return 1;
+}
 
-	#ifdef asin
-		static int math_asin (lua_State *L) {
-  		lua_pushnumber(L, asin(luaL_checknumber(L, 1)));
-  		return 1;
-		}
-	#endif
+static int math_tanh (lua_State *L) {
+  lua_pushnumber(L, tanh(luaL_checknumber(L, 1)));
+  return 1;
+}
 
-	#ifdef acos
-		static int math_acos (lua_State *L) {
-			lua_pushnumber(L, acos(luaL_checknumber(L, 1)));
-			return 1;
-		}
-	#endif
+static int math_asin (lua_State *L) {
+  lua_pushnumber(L, asin(luaL_checknumber(L, 1)));
+  return 1;
+}
 
-	#ifdef atan
-		static int math_atan (lua_State *L) {
-			lua_pushnumber(L, atan(luaL_checknumber(L, 1)));
-			return 1;
-		}
-	#endif
+static int math_acos (lua_State *L) {
+  lua_pushnumber(L, acos(luaL_checknumber(L, 1)));
+  return 1;
+}
 
-	#ifdef atan2
-		static int math_atan2 (lua_State *L) {
-			lua_pushnumber(L, atan2(luaL_checknumber(L, 1), luaL_checknumber(L, 2)));
-			return 1;
-		}
-	#endif
+static int math_atan (lua_State *L) {
+  lua_pushnumber(L, atan(luaL_checknumber(L, 1)));
+  return 1;
+}
 
-	#ifdef ceil
-		static int math_ceil (lua_State *L) {
-			lua_pushnumber(L, ceil(luaL_checknumber(L, 1)));
-			return 1;
-		}
-	#endif
+static int math_atan2 (lua_State *L) {
+  lua_pushnumber(L, atan2(luaL_checknumber(L, 1), luaL_checknumber(L, 2)));
+  return 1;
+}
 
-	#ifdef floor
-		static int math_floor (lua_State *L) {
-			lua_pushnumber(L, floor(luaL_checknumber(L, 1)));
-			return 1;
-		}
-	#endif
+static int math_ceil (lua_State *L) {
+  lua_pushnumber(L, ceil(luaL_checknumber(L, 1)));
+  return 1;
+}
 
-	#ifdef fmod
-		static int math_fmod (lua_State *L) {
-			lua_pushnumber(L, fmod(luaL_checknumber(L, 1), luaL_checknumber(L, 2)));
-			return 1;
-		}
-	#endif
+static int math_floor (lua_State *L) {
+  lua_pushnumber(L, floor(luaL_checknumber(L, 1)));
+  return 1;
+}
 
-	#ifdef modf
-		static int math_modf (lua_State *L) {
-			double ip;
-			double fp = modf(luaL_checknumber(L, 1), &ip);
-			lua_pushnumber(L, ip);
-			lua_pushnumber(L, fp);
-			return 2;
-		}
-	#endif
+static int math_fmod (lua_State *L) {
+  lua_pushnumber(L, fmod(luaL_checknumber(L, 1), luaL_checknumber(L, 2)));
+  return 1;
+}
+
+static int math_modf (lua_State *L) {
+  double ip;
+  double fp = modf(luaL_checknumber(L, 1), &ip);
+  lua_pushnumber(L, ip);
+  lua_pushnumber(L, fp);
+  return 2;
+}
 
 #else  // #ifndef LUA_NUMBER_INTEGRAL
 
-	// In integer math, floor() and ceil() give the same value;
-	// having them in the integer library allows you to write code that
-	// works in both integer and floating point versions of Lua.
-	// This identity function is used for them.
+// In integer math, floor() and ceil() give the same value;
+// having them in the integer library allows you to write code that
+// works in both integer and floating point versions of Lua.
+// This identity function is used for them.
 
-	static int math_identity (lua_State *L) {
-		lua_pushnumber(L, luaL_checknumber(L, 1));
-		return 1;
-	}
+static int math_identity (lua_State *L) {
+  lua_pushnumber(L, luaL_checknumber(L, 1));
+  return 1;
+}
 
 #endif // #ifndef LUA_NUMBER_INTEGRAL
 
 #ifdef LUA_NUMBER_INTEGRAL
-	// Integer square root for integer version
-	static lua_Number isqrt(lua_Number x)
-	{
-		lua_Number op, res, one;
+// Integer square root for integer version
+static lua_Number isqrt(lua_Number x)
+{
+  lua_Number op, res, one;
 
-		op = x; res = 0;
+  op = x; res = 0;
 
-		/* "one" starts at the highest power of four <= than the argument. */
-		one = 1 << 30;  /* second-to-top bit set */
-		while (one > op) one >>= 2;
+  /* "one" starts at the highest power of four <= than the argument. */
+  one = 1 << 30;  /* second-to-top bit set */
+  while (one > op) one >>= 2;
 
-		while (one != 0) {
-		  if (op >= res + one) {
-		    op = op - (res + one);
-		    res = res +  2 * one;
-		  }
-		  res >>= 1;
-		  one >>= 2;
-		}
-		return(res);
-	}
+  while (one != 0) {
+    if (op >= res + one) {
+      op = op - (res + one);
+      res = res +  2 * one;
+    }
+    res >>= 1;
+    one >>= 2;
+  }
+  return(res);
+}
 #endif
 
 static int math_sqrt (lua_State *L) {
-	#ifdef LUA_NUMBER_INTEGRAL
-		lua_Number x = luaL_checknumber(L, 1);
-		luaL_argcheck(L, 0<=x, 1, "negative");
-		lua_pushnumber(L, isqrt(x));
-	#else
-		lua_pushnumber(L, sqrt(luaL_checknumber(L, 1)));
-	#endif
+#ifdef LUA_NUMBER_INTEGRAL
+  lua_Number x = luaL_checknumber(L, 1);
+  luaL_argcheck(L, 0<=x, 1, "negative");
+  lua_pushnumber(L, isqrt(x));
+#else
+  lua_pushnumber(L, sqrt(luaL_checknumber(L, 1)));
+#endif
   return 1;
 }
 
@@ -196,58 +168,48 @@ static int math_pow (lua_State *L) {
 }
 
 #ifdef LUA_NUMBER_INTEGRAL
-	#undef pow
+# undef pow
 #endif
 
 
 #ifndef LUA_NUMBER_INTEGRAL
 
-	#ifdef log
-		static int math_log (lua_State *L) {
-			lua_pushnumber(L, log(luaL_checknumber(L, 1)));
-			return 1;
-		}
-	#endif
+static int math_log (lua_State *L) {
+  lua_pushnumber(L, log(luaL_checknumber(L, 1)));
+  return 1;
+}
 
-	#ifdef log10
-		static int math_log10 (lua_State *L) {
-			lua_pushnumber(L, log10(luaL_checknumber(L, 1)));
-			return 1;
-		}
-	#endif
+static int math_log10 (lua_State *L) {
+  lua_pushnumber(L, log10(luaL_checknumber(L, 1)));
+  return 1;
+}
 
-	#ifdef exp
-		static int math_exp (lua_State *L) {
-			lua_pushnumber(L, exp(luaL_checknumber(L, 1)));
-			return 1;
-		}
-	#endif
+static int math_exp (lua_State *L) {
+  lua_pushnumber(L, exp(luaL_checknumber(L, 1)));
+  return 1;
+}
 
-	static int math_deg (lua_State *L) {
-		lua_pushnumber(L, luaL_checknumber(L, 1)/RADIANS_PER_DEGREE);
-		return 1;
-	}
+static int math_deg (lua_State *L) {
+  lua_pushnumber(L, luaL_checknumber(L, 1)/RADIANS_PER_DEGREE);
+  return 1;
+}
 
-	static int math_rad (lua_State *L) {
-		lua_pushnumber(L, luaL_checknumber(L, 1)*RADIANS_PER_DEGREE);
-		return 1;
-	}
+static int math_rad (lua_State *L) {
+  lua_pushnumber(L, luaL_checknumber(L, 1)*RADIANS_PER_DEGREE);
+  return 1;
+}
 
-	#ifdef frexp
-		static int math_frexp (lua_State *L) {
-			int e;
-			lua_pushnumber(L, frexp(luaL_checknumber(L, 1), &e));
-			lua_pushinteger(L, e);
-			return 2;
-		}
-	#endif
+static int math_frexp (lua_State *L) {
+  int e;
+  lua_pushnumber(L, frexp(luaL_checknumber(L, 1), &e));
+  lua_pushinteger(L, e);
+  return 2;
+}
 
-	#ifdef ldexp
-		static int math_ldexp (lua_State *L) {
-			lua_pushnumber(L, ldexp(luaL_checknumber(L, 1), luaL_checkint(L, 2)));
-			return 1;
-		}
-	#endif
+static int math_ldexp (lua_State *L) {
+  lua_pushnumber(L, ldexp(luaL_checknumber(L, 1), luaL_checkint(L, 2)));
+  return 1;
+}
 
 #endif // #ifdef LUA_NUMBER_INTEGRAL
 

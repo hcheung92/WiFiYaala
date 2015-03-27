@@ -38,7 +38,7 @@ SUBDIRS=    \
 	modules	\
 	spiffs  \
 	led	\
-	httpd
+	httpd \
 	spiffs	\
 	cjson
 
@@ -90,7 +90,6 @@ COMPONENTS_eagle.app.v6 = \
 	spiffs/spiffs.a \
 	led/libled.a		\
 	httpd/libhttpd.a	\
-	modules/libmodules.a 
 	spiffs/spiffs.a 	\
 	cjson/libcjson.a 	\
 	modules/libmodules.a

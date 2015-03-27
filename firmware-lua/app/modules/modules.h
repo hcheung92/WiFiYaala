@@ -183,9 +183,9 @@
         ROM_MODULES_UART    \
         ROM_MODULES_OW      \
         ROM_MODULES_BIT		\
-		ROM_MODULES_WS2812	\
+	ROM_MODULES_WS2812	\
         ROM_MODULES_HOSTNAME 	\
-        ROM_MODULES_LED
+        ROM_MODULES_LED		\
         ROM_MODULES_CJSON
 
 #endif
