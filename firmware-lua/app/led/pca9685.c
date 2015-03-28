@@ -32,7 +32,7 @@ ledWhiteCtl_t led12bWhite[PCA_LEDS] = {
 uint16_t chOff;
 
 
-bool read(uint8_t addr, uint8_t *buf, uint8_t length)
+bool ICACHE_FLASH_ATTR read(uint8_t addr, uint8_t *buf, uint8_t length)
 {
 	i2c_master_start();
 	i2c_master_writeByte(PCA9685_ADDR | I2C_WRITE);
@@ -71,7 +71,7 @@ bool read(uint8_t addr, uint8_t *buf, uint8_t length)
 	return true;
 }
 
-bool write(uint8_t addr, uint8_t *buf, uint8_t length)
+bool ICACHE_FLASH_ATTR write(uint8_t addr, uint8_t *buf, uint8_t length)
 {
 	i2c_master_start();
 	i2c_master_writeByte(PCA9685_ADDR | I2C_WRITE);
@@ -107,7 +107,7 @@ bool write(uint8_t addr, uint8_t *buf, uint8_t length)
 
 
 
-bool pca9685_setPWM(uint8_t num, uint16_t val)
+bool ICACHE_FLASH_ATTR pca9685_setPWM(uint8_t num, uint16_t val)
 {
 	uint8_t buf[4];
 
@@ -154,7 +154,7 @@ bool pca9685_setPWM(uint8_t num, uint16_t val)
 	return write(PCA9685_LED0_ON_L + 4*num, buf, 4);
 }
 
-bool pca9685_setOff(uint8_t num)
+bool ICACHE_FLASH_ATTR pca9685_setOff(uint8_t num)
 {
 	if(num > 15)
 		return false;
@@ -166,7 +166,7 @@ bool pca9685_setOff(uint8_t num)
 }
 
 ////public
-void pca9685_deinit(void)
+void ICACHE_FLASH_ATTR pca9685_deinit(void)
 {
 	i2c_master_gpio_deinit();
 }
@@ -207,7 +207,7 @@ void ICACHE_FLASH_ATTR pca9685_init(void)
 }
 
 
-void pca9685_set32(uint32_t num, uint32_t red, uint32_t grn, uint32_t blu)
+void ICACHE_FLASH_ATTR pca9685_set32(uint32_t num, uint32_t red, uint32_t grn, uint32_t blu)
 {
 	if(num >= PCA_LEDS)
 		return;
@@ -259,7 +259,7 @@ void pca9685_set32(uint32_t num, uint32_t red, uint32_t grn, uint32_t blu)
 	}
 }
 
-void pca9685_setWhite32(uint32_t num, uint32_t intens)
+void ICACHE_FLASH_ATTR pca9685_setWhite32(uint32_t num, uint32_t intens)
 {
 	if(num >= PCA_LEDS)
 		return;

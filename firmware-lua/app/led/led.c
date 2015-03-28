@@ -35,7 +35,7 @@ struct __attribute__((packed))
 
 
 
-void inline led_refresh(void)
+void inline ICACHE_FLASH_ATTR led_refresh(void)
 {
 	uint32_t pcaCh = 0;
 	uint32_t loop;
@@ -127,7 +127,7 @@ void inline led_refresh(void)
 		}
 	}
 #else
-	void timerfunc(void *param)
+	void ICACHE_FLASH_ATTR timerfunc(void *param)
 	{
 		if (leds) led_refresh();
 	}

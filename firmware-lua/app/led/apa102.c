@@ -26,13 +26,13 @@ void ICACHE_FLASH_ATTR apa102_init(int amountLeds)
 	apa102_stop(amountLeds);
 }
 
-void apa102_start(void)
+void ICACHE_FLASH_ATTR apa102_start(void)
 {
 	led_spi_master_16bit_write(HSPI, 0x00, 0x00);
 	led_spi_master_16bit_write(HSPI, 0x00, 0x00);
 }
 
-void apa102_stop(int amountLeds)
+void ICACHE_FLASH_ATTR apa102_stop(int amountLeds)
 {
 	int i = 0;
 	for(i=0; i<(amountLeds>>5)+1;i++)

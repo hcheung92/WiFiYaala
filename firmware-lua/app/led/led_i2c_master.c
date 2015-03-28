@@ -66,7 +66,7 @@ i2c_master_getDC(void)
  * Parameters   : NONE
  * Returns      : NONE
 *******************************************************************************/
-void i2c_master_init(void)
+void ICACHE_FLASH_ATTR i2c_master_init(void)
 {
     uint8 i;
 
@@ -92,7 +92,7 @@ void i2c_master_init(void)
     return;
 }
 
-void i2c_master_gpio_deinit(void)
+void ICACHE_FLASH_ATTR i2c_master_gpio_deinit(void)
 {
 	gpio_output_set(0, 0, 0, 1<<I2C_MASTER_SDA_GPIO | 1<<I2C_MASTER_SCL_GPIO);
 }
@@ -104,7 +104,7 @@ void i2c_master_gpio_deinit(void)
  * Parameters   : NONE
  * Returns      : NONE
 *******************************************************************************/
-void i2c_master_gpio_init(void)
+void ICACHE_FLASH_ATTR i2c_master_gpio_init(void)
 {
     ETS_GPIO_INTR_DISABLE() ;
 //    ETS_INTR_LOCK();
