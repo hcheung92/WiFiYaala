@@ -20,7 +20,7 @@ unsigned int current_led;
 // UartDev is defined and initialized in rom code.
 extern UartDevice UartDev;
 
-void ICACHE_RAM_ATTR ws28xx_color(uint8_t b0, uint8_t b1, uint8_t b2)
+void ICACHE_FLASH_ATTR ws28xx_color(uint8_t b0, uint8_t b1, uint8_t b2)	//ICACHE_RAM_ATTR
 {
 	WRITE_PERI_REG(UART_FIFO(UART1), (b0&0x80?0:0x01) | (b0&0x40?0:0x08) | (b0&0x20?0:0x40) | 0x12);
 	WRITE_PERI_REG(UART_FIFO(UART1), (b0&0x10?0:0x01) | (b0&0x08?0:0x08) | (b0&0x04?0:0x40) | 0x12);
@@ -32,7 +32,7 @@ void ICACHE_RAM_ATTR ws28xx_color(uint8_t b0, uint8_t b1, uint8_t b2)
 	WRITE_PERI_REG(UART_FIFO(UART1), (b2&0x04?0:0x01) | (b2&0x02?0:0x08) | (b2&0x01?0:0x40) | 0x12);
 }
 
-LOCAL void inline ICACHE_RAM_ATTR fill_fifo(void)
+LOCAL void inline ICACHE_FLASH_ATTR fill_fifo(void)	//ICACHE_RAM_ATTR
 {
 	if((WS28XX_FIFO_CNT >= 126 && !current_led) || ws28xx_led == NULL)
 	{
@@ -101,7 +101,7 @@ LOCAL void inline ICACHE_RAM_ATTR fill_fifo(void)
 
 }
 
-LOCAL void ICACHE_RAM_ATTR intr_handler(void *para)
+LOCAL void ICACHE_FLASH_ATTR intr_handler(void *para)	//ICACHE_RAM_ATTR
 {
 	/* uart0 and uart1 intr combine together, when interrupt occur, see reg 0x3ff20020, bit2, bit0 represents
 	 * uart1 and uart0 respectively

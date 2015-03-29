@@ -134,6 +134,24 @@ static int ICACHE_FLASH_ATTR lled_setWhiteBehav( lua_State* L )
 	return 0;
 }
 
+static int ICACHE_FLASH_ATTR lled_hsl2rgb( lua_State* L )
+{
+	hsl16_t hsl;
+	rgb8_t rgb;
+
+	hsl.hue = (uint16_t)luaL_checkinteger( L, 1 );
+	hsl.saturation = (uint16_t)luaL_checkinteger( L, 2 );
+	hsl.lightness = (uint16_t)luaL_checkinteger( L, 3 );
+	
+	led_hsl2rgb(hsl, &rgb);
+
+	lua_pushinteger(L, rgb.red);
+	lua_pushinteger(L, rgb.grn);
+	lua_pushinteger(L, rgb.blu);
+	return 3;
+}
+
+
 // Module function map
 #define MIN_OPT_LEVEL 2
 #include "lrodefs.h"
@@ -144,6 +162,7 @@ const LUA_REG_TYPE led_map[] =
 	{ LSTRKEY( "inited" ), LFUNCVAL( lled_inited ) },
 	{ LSTRKEY( "set" ), LFUNCVAL( lled_set ) },
 	{ LSTRKEY( "get" ), LFUNCVAL( lled_get ) },
+	{ LSTRKEY( "hsl2rgb" ), LFUNCVAL( lled_hsl2rgb ) },
 	{ LSTRKEY( "dim" ), LFUNCVAL( lled_dim ) },
 	{ LSTRKEY( "setType" ), LFUNCVAL( lled_setType ) },
 	{ LSTRKEY( "setWhiteBehav" ), LFUNCVAL( lled_setWhiteBehav ) },

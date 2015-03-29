@@ -35,7 +35,7 @@ struct __attribute__((packed))
 
 
 
-void inline led_refresh(void)
+void inline ICACHE_FLASH_ATTR led_refresh(void)
 {
 	uint32_t pcaCh = 0;
 	uint32_t loop;
@@ -127,7 +127,7 @@ void inline led_refresh(void)
 		}
 	}
 #else
-	void timerfunc(void *param)
+	void ICACHE_FLASH_ATTR timerfunc(void *param)
 	{
 		if (leds) led_refresh();
 	}
@@ -360,5 +360,53 @@ void ICACHE_FLASH_ATTR led_checkRange(int32_t from, int32_t to, ledrange_t *rang
 	range->count = (uint16_t)tmp;
 }
 
+
+void ICACHE_FLASH_ATTR led_hsl2rgb(hsl16_t hsl, rgb8_t *rgb) 
+{
+	int16_t hue, chroma, x, tmp;
+	uint8_t r = 0, g = 0, b = 0;
+
+	hue = hsl.hue % 360;
+	tmp = hsl.lightness - 255;
+	chroma = ((255 - abs(tmp)) * hsl.saturation) / 255; 
+	tmp = (hue % 120) - 60;
+	x = (chroma * (60 - abs(tmp))) / 60;
+
+	if (hue < 60)
+	{
+		r = chroma;
+	  g = x;
+	}
+	else if (hue < 120)
+	{
+		r = x;
+	  g = chroma;
+	}
+  else if (hue < 180)
+	{
+	  g = chroma;
+		b = x;
+	}
+	else if (hue < 240)
+	{
+	  g = x;
+		b = chroma;
+	}
+	else if (hue < 300)
+	{
+		r = x;
+		b = chroma;
+	}
+	else
+	{
+		r = chroma;
+		b = x;
+	}
+
+	uint8_t m = (hsl.lightness - chroma) / 2;
+	rgb->red = r + m;
+	rgb->grn = g + m;
+	rgb->blu = b + m;
+}
 
 
