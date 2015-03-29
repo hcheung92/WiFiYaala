@@ -1,10 +1,24 @@
 var MINI = require('minified');
 var _=MINI._, $=MINI.$, $$=MINI.$$, EE=MINI.EE, HTML=MINI.HTML;
 var downTarget = null, downX = -1, downY = -1, color = {r:0,g:0,b:0},bgAnim=null,newMode=-1,downColor={h:-1,s:-1,l:-1},newColor={h:-1,s:-1,l:-1};
+var requestSince = -1;
 String.prototype.capitalize = function() { return this.charAt(0).toUpperCase() + this.slice(1); }
+function overlay(show, content) {
+	if (show) $('#overlay').fill(content).set('className', 'open');
+	else $('#overlay').set('className', '');
+}
 function run(code,success,error) {
+	requestSince = Date.now();
 	var content = '----BOUNDARY\r\nContent-Disposition: form-data; name="lua"\r\n\r\n'+code+"\r\n----BOUNDARY--\r\n";
-	$.request('POST','/lua',content,{headers:{'Content-Type':"multipart/form-data; boundary=--BOUNDARY"}}).then(success, error);
+	$.request('POST','/lua',content,{headers:{'Content-Type':"multipart/form-data; boundary=--BOUNDARY"}}).then(function(event) {
+		requestSince = -1;
+		overlay(false);
+		success(event);
+	}, function(event) {
+		requestSince = -1;
+		overlay(true, EE('p', 'error during communication...'));
+		error(event);
+	});
 }
 function extractTable(response) {
 	var lines = response.split(/[\n> ]+/);
@@ -81,18 +95,24 @@ run('=unpack(programs.list())', function(response){
 	var prgs = extractArrays(response)[0].sort();
 	for (var prg in prgs) { var id=prgs[prg]; $('#toggle').addAfter(EE("li", {'id': id}, id.substring(2, id.lastIndexOf('.')).capitalize()).onClick(clickProgram)) };
 });
-setInterval(function() {run('=led.get(0,-1)\n=programs.file', function(response) {
-	if (typeof(response) == 'undefined') return;
-	var lines = response.split(/[\n> ]+/);
-	var cols = lines[0].split("\t");
-	color.r=parseInt(cols[0]); color.g=parseInt(cols[1]); color.b=parseInt(cols[2]);
-	newColor.h=-1;
-	 var col = ((1 << 24) + (color.r << 16) + (color.g << 8) + color.b).toString(16).slice(1);
-	 if (downX==-1&&downY==-1) bgAnim = $('html body').animate({$backgroundColor: "#" + col}, 5000);
-	$('*', '.choice', true).filter(function(item){return item.id!=null&&item.id.indexOf("p_") == 0}).set('className', '');
-	if (lines[1]!="") $('#'+lines[1]).set('className', 'active')
-	else $('*', '.prg_settings', true).remove();
-})}, 5000);
+setInterval(function() {
+	if (requestSince > 0) {
+		if (Date.now() - requestSince > 2000) overlay(true, EE('p', 'busy network or WiFiYaala...'));
+		return;
+	}
+	run('=led.get(0,-1)\n=programs.file', function(response) {
+		if (typeof(response) == 'undefined') return;
+		var lines = response.split(/[\n> ]+/);
+		var cols = lines[0].split("\t");
+		color.r=parseInt(cols[0]); color.g=parseInt(cols[1]); color.b=parseInt(cols[2]);
+		newColor.h=-1;
+		 var col = ((1 << 24) + (color.r << 16) + (color.g << 8) + color.b).toString(16).slice(1);
+		 if (downX==-1&&downY==-1) bgAnim = $('html body').animate({$backgroundColor: "#" + col}, 5000);
+		$('*', '.choice', true).filter(function(item){return item.id!=null&&item.id.indexOf("p_") == 0}).set('className', '');
+		if (lines[1]!="") $('#'+lines[1]).set('className', 'active')
+		else $('*', '.prg_settings', true).remove();
+	});
+	}, 5000);
 $('html').on('mousedown',function(event){
 	downTarget=null;
 	downX=event.pageX;
@@ -125,5 +145,7 @@ $('html').on('mousedown',function(event){
 	}
 	return false;
 });
-$('#programs').on('mousedown',function() {return false;});
+function abort() {return false;}
+$('#programs').on('mousedown',abort);
+$('#overlay').on('mousedown',abort);
 });
