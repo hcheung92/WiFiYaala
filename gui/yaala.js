@@ -33,9 +33,9 @@ function clickProgram(event) {
 		list.remove();
 		list = EE('ul', {'@id': 'prg_settings'});
 		var settings = extractTable(response);
-		var regex = /(\d+)-(\d+)(%*)/gi;
 		for (var line in settings) {
 			var key = settings[line][0];
+			var regex = /(\d+)-(\d+)(%*)/gi;
 			var props = regex.exec(settings[line][1]);
 			var setvalue = settings[line][2];
 			if (key==null || props==null || setvalue==null) continue;
@@ -65,6 +65,7 @@ function clickProgram(event) {
 		}
 		$('#'+event.target.id).set('className', 'loading').add(list);
 	}));});
+	return false;
 }
 function RGBToHSL(rgb,hsl) {
 	var r=rgb.r/255, g=rgb.g/255, b=rgb.b/255, min = Math.min(r, g, b), max = Math.max(r, g, b), diff = max - min, h = 0, s = 0, l = (min + max) / 2;
@@ -90,6 +91,7 @@ setInterval(function() {run('=led.get(0,-1)\n=programs.file', function(response)
 	 if (downX==-1&&downY==-1) bgAnim = $('html body').animate({$backgroundColor: "#" + col}, 5000);
 	$('*', '.choice', true).filter(function(item){return item.id!=null&&item.id.indexOf("p_") == 0}).set('className', '');
 	if (lines[1]!="") $('#'+lines[1]).set('className', 'active')
+	else $('*', '.prg_settings', true).remove();
 })}, 5000);
 $('html').on('mousedown',function(event){
 	downTarget=null;
