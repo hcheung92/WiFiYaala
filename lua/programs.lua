@@ -41,7 +41,7 @@ function programs.dofile(file)
 end
 function programs.dounload()
    programs.active=nil
-   tmr.alarm(1, 200, 0, function() end)
+   tmr.alarm(1, 100, 0, function() end)
    collectgarbage()
 end
 function programs.doload()
