@@ -134,6 +134,7 @@ void user_init(void)
     system_set_os_print(0);
     #endif
     
+    //espconn_tcp_set_max_con(2);
     httpdInit(80);
     system_init_done_cb(nodemcu_init);
 }

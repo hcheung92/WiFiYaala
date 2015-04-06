@@ -10,7 +10,7 @@
 #include "httpd/httpd.h"
 #include "flash_fs.h"
 
-spiffs_DIR d;
+spiffs_DIR d;		//parallel fsBrowse is an open issue
 extern spiffs fs;
 
 //This is a catch-all cgi function. It takes the url passed to it, looks up the corresponding

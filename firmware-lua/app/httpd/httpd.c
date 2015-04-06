@@ -34,7 +34,7 @@
 //Max post buffer len
 #define MAX_POST 1024
 //Max send buffer len
-#define MAX_SENDBUFF_LEN 2048
+#define MAX_SENDBUFF_LEN 1500	//2048
 
 /*
 This is the main url->function dispatching data struct.

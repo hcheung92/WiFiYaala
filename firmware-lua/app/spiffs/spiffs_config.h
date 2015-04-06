@@ -30,7 +30,7 @@ typedef uint8_t u8_t;
 
 // Set generic spiffs debug output call.
 #ifndef SPIFFS_DGB
-#define SPIFFS_DBG(...) //printf(__VA_ARGS__)
+#define SPIFFS_DBG(...) NODE_DBG(__VA_ARGS__)
 #endif
 // Set spiffs debug output call for garbage collecting.
 #ifndef SPIFFS_GC_DGB

@@ -8,7 +8,7 @@
 #ifndef HTTPD_H_
 #define HTTPD_H_
 
-#define HTTPDVER "0.2"
+#define HTTPDVER "0.3"
 
 #define HTTPD_CGI_MORE 0
 #define HTTPD_CGI_DONE 1
