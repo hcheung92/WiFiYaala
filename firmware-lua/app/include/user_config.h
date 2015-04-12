@@ -1,8 +1,6 @@
 #ifndef __USER_CONFIG_H__
 #define __USER_CONFIG_H__
 
-// #define DEVKIT_VERSION_0_9 1 	// define this only if you use NodeMCU devkit v0.9
-
 // #define FLASH_512K
 // #define FLASH_1M
 // #define FLASH_2M
@@ -39,7 +37,7 @@
 #define ICACHE_STORE_ATTR __attribute__((aligned(4)))
 #define ICACHE_RAM_ATTR __attribute__((section(".iram0.text")))
 
-#define CLIENT_SSL_ENABLE
+//#define CLIENT_SSL_ENABLE
 #define GPIO_INTERRUPT_ENABLE
 
 // #define BUILD_WOFS		1

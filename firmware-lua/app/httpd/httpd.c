@@ -26,6 +26,7 @@
 #include "fs.h"
 #include "luaexec.h"
 
+#include "led/led.h"
 
 //Max length of request head
 #define MAX_HEAD_LEN 1024
@@ -328,6 +329,7 @@ static void ICACHE_FLASH_ATTR httpdSentCb(void *arg)
 
 	if (conn->sendCb==NULL && conn->postCb==NULL)
 	{ 									//Marked for destruction?
+		led_unpause();
 //		os_printf("Conn %p is done. Closing.\n", conn->conn);
 		espconn_disconnect(conn->conn);
 		httpdRetireConn(conn);
@@ -496,6 +498,7 @@ static void ICACHE_FLASH_ATTR httpdRecvCb(void *arg, char *data, unsigned short 
 	conn->priv->sendBuff=sendBuff;
 	conn->priv->sendBuffLen=0;
 
+
 	for (x=0; x<len; x++)
 	{
 		if (conn->postLen<0)
@@ -597,6 +600,8 @@ static void ICACHE_FLASH_ATTR httpdDisconCb(void *arg) {
 				connData[i].conn=NULL;
 				if (connData[i].sendCb!=NULL)
 					connData[i].sendCb(&connData[i]); //flush cb data
+				if(connData[i].sendCb!=NULL || connData[i].postCb!=NULL)
+					led_unpause();
 				httpdRetireConn(&connData[i]);
 			}
 		}
@@ -620,6 +625,7 @@ static void ICACHE_FLASH_ATTR httpdConnectCb(void *arg)
 		espconn_disconnect(conn);
 		return;
 	}
+
 	connData[i].priv=&connPrivData[i];
 	connData[i].conn=conn;
 	connData[i].priv->headPos=0;
@@ -627,6 +633,8 @@ static void ICACHE_FLASH_ATTR httpdConnectCb(void *arg)
 	connData[i].postLine=NULL;
 	connData[i].priv->postPos=0;
 	connData[i].postLen=-1;
+
+	led_pause();
 
 	espconn_regist_recvcb(conn, httpdRecvCb);
 	espconn_regist_reconcb(conn, httpdReconCb);

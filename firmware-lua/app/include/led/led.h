@@ -161,5 +161,7 @@ void led_checkRange(int32_t from, int32_t to, ledrange_t *range);
 
 void led_hsl2rgb(hsl16_t hsl, rgb8_t *rgb);
 
+void led_pause(void);
+void led_unpause(void);
 
 #endif /* LED_H_ */

@@ -8,7 +8,7 @@
 #include "user_interface.h"
 #include "driver/uart.h"
 // Platform specific includes
-
+/*
 static void pwms_init();
 
 int platform_init()
@@ -20,7 +20,7 @@ int platform_init()
   // All done
   return PLATFORM_OK;
 }
-
+*/
 // ****************************************************************************
 // KEY_LED functions
 uint8_t platform_key_led( uint8_t level){
@@ -51,7 +51,7 @@ int platform_gpio_mode( unsigned pin, unsigned mode, unsigned pull )
     return 1;
   }
 
-  platform_pwm_close(pin);    // closed from pwm module, if it is used in pwm
+ // platform_pwm_close(pin);    // closed from pwm module, if it is used in pwm
 
   switch(pull){
     case PLATFORM_GPIO_PULLUP:
@@ -267,7 +267,7 @@ void platform_uart_send( unsigned id, u8 data )
 
 // ****************************************************************************
 // PWMs
-
+/*
 static uint16_t pwms_duty[NUM_PWM] = {0};
 
 static void pwms_init()
@@ -391,10 +391,10 @@ void platform_pwm_stop( unsigned pin )
     pwm_start();
   }
 }
-
+*/
 // *****************************************************************************
 // I2C platform interface
-
+/*
 uint32_t platform_i2c_setup( unsigned id, uint8_t sda, uint8_t scl, uint32_t speed ){
   if (sda >= NUM_GPIO || scl >= NUM_GPIO)
     return 0;
@@ -442,9 +442,11 @@ int platform_i2c_recv_byte( unsigned id, int ack ){
   i2c_master_setAck( !ack );
   return r;
 }
+*/
 
 // *****************************************************************************
 // SPI platform interface
+/*
 uint32_t platform_spi_setup( unsigned id, int mode, unsigned cpol, unsigned cpha, unsigned databits, uint32_t clock)
 {
   spi_master_init(id, cpol, cpha, databits, clock);
@@ -456,7 +458,7 @@ spi_data_type platform_spi_send_recv( unsigned id, spi_data_type data )
   spi_mast_byte_write(id, &data);
   return data;
 }
-
+*/
 // ****************************************************************************
 // Flash access functions
 

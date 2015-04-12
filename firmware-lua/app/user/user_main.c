@@ -52,13 +52,13 @@ void nodemcu_init(void)
 {
     NODE_ERR("\n");
     // Initialize platform first for lua modules.   
-    if( platform_init() != PLATFORM_OK )
+/*    if( platform_init() != PLATFORM_OK )
     {
         // This should never happen
         NODE_DBG("Can not init platform for modules.\n");
         return;
     }
-
+*/
 #if defined(FLASH_SAFE_API)
     if( flash_safe_get_size_byte() != flash_rom_get_size_byte()) {
         NODE_ERR("Self adjust flash size.\n");

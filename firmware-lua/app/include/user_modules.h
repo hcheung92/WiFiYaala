@@ -33,7 +33,6 @@
 //#define LUA_USE_MODULES_CJSON
 #define LUA_USE_MODULES_HOSTNAME
 #define LUA_USE_MODULES_LED
-#define LUA_USE_MODULES_PROG
 #endif /* LUA_USE_MODULES */
 
 #endif	/* __USER_MODULES_H__ */

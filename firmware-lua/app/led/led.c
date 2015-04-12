@@ -16,6 +16,8 @@
 
 led_t *led = NULL;
 uint16_t leds = 0;
+uint8_t pause = 0;
+
 
 struct __attribute__((packed))
 {
@@ -33,6 +35,17 @@ struct __attribute__((packed))
 	static os_timer_t led_timer;
 #endif
 
+void led_pause(void)
+{
+	pause++;
+	//ws28xx_stopPlayout();
+}
+
+void led_unpause(void)
+{
+	if(pause > 0)
+		pause--;
+}
 
 
 void inline ICACHE_FLASH_ATTR led_refresh(void)
@@ -129,7 +142,10 @@ void inline ICACHE_FLASH_ATTR led_refresh(void)
 #else
 	void ICACHE_FLASH_ATTR timerfunc(void *param)
 	{
-		if (leds) led_refresh();
+		if(pause)
+			return;
+		if (leds)
+			led_refresh();
 	}
 #endif
 
@@ -226,7 +242,7 @@ uint8_t ICACHE_FLASH_ATTR led_setType(ledrange_t range, uint8_t type)
 		if (state.ws281xInit == 1) return false;	// ws281x and WS2801 can't be initialized at same time
 		if (state.ws2801Init == 0) 
 		{
-			ws28xx_init(type);
+			ws28xx_init();
 			state.ws2801Init = 1;
 		}
 	}
@@ -235,7 +251,7 @@ uint8_t ICACHE_FLASH_ATTR led_setType(ledrange_t range, uint8_t type)
 		if (state.ws2801Init == 1) return false;	// ws281x and WS2801 can't be initialized at same time
 		if (state.ws281xInit == 0)
 		{
-			ws28xx_init(type);
+			ws28xx_init();
 			state.ws281xInit = 1;
 		}
 	}
